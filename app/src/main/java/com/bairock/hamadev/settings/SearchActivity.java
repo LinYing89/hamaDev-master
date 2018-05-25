@@ -25,6 +25,7 @@ import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.app.MainActivity;
 import com.bairock.hamadev.app.RouterInfo;
 import com.bairock.hamadev.communication.PadClient;
+import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.database.DeviceDao;
 import com.bairock.hamadev.esptouch.EspTouchAddDevice;
 import com.bairock.iot.intelDev.communication.DevChannelBridgeHelper;
@@ -433,13 +434,11 @@ public class SearchActivity extends AppCompatActivity {
             switch (msg.what){
                 case NO_MESSAGE:
                     theActivity.closeProgressDialog();
-                    Toast.makeText(theActivity, theActivity.getString(R.string.no_feedback),
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(theActivity, theActivity.getString(R.string.no_feedback), Toast.LENGTH_LONG).show();
                     break;
                 case SEARCH_OK:
                     theActivity.closeProgressDialog();
-                    Toast.makeText(theActivity, theActivity.getString(R.string.update_success),
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(theActivity, theActivity.getString(R.string.update_success), Toast.LENGTH_LONG).show();
                     theActivity.adapterEleHolder.notifyDataSetChanged();
                     break;
                 case UPDATE_LIST:
@@ -488,7 +487,7 @@ public class SearchActivity extends AppCompatActivity {
         if(model == CtrlModel.LOCAL) {
             order = device.createTurnLocalModelOrder(IntelDevHelper.getLocalIp(), DevServer.PORT);
         }else{
-            order = device.createTurnRemoteModelOrder(HamaApp.SERVER_IP, HamaApp.SERVER_DEV_PORT);
+            order = device.createTurnRemoteModelOrder(Config.INSTANCE.getServerName(), Config.INSTANCE.getServerDevPort());
         }
 
         if(null!= order){

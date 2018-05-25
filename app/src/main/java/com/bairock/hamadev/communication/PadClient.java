@@ -1,7 +1,7 @@
 package com.bairock.hamadev.communication;
 
-import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.app.MainActivity;
+import com.bairock.hamadev.database.Config;
 
 import java.util.concurrent.TimeUnit;
 
@@ -66,7 +66,7 @@ public class PadClient {
     void link(){
         try {
             // Start the client.
-            ChannelFuture channelFuture = b.connect(HamaApp.SERVER_IP, HamaApp.SERVER_PAD_PORT); // (5)
+            ChannelFuture channelFuture = b.connect(Config.INSTANCE.getServerName(), Config.INSTANCE.getServerPadPort()); // (5)
             // Wait until the connection is closed.
             channelFuture.channel().closeFuture();
         }catch (Exception e){

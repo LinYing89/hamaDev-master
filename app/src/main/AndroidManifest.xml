@@ -27,10 +27,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".settings.SettingsActivity"
-            android:label="设置"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".settings.SearchActivity"
             android:label="设备"
             android:screenOrientation="landscape" />
@@ -51,10 +47,6 @@
             android:label="连锁"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".settings.EsptouchActivity"
-            android:label="网络"
-            android:screenOrientation="landscape" />
         <activity
             android:name=".linkage.EditChainActivity"
             android:label="连锁"
@@ -98,10 +90,6 @@
         <activity
             android:name=".communication.DeviceMsgMonitorActivity"
             android:screenOrientation="landscape" />
-        <activity
-            android:name=".settings.ServerSetActivity"
-            android:label="服务器设置"
-            android:screenOrientation="landscape" />
 
         <receiver
             android:name=".receiver.NetworkConnectChangedReceiver"
@@ -135,10 +123,15 @@
         <activity
             android:name=".settings.BridgeMsgTestActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".settings.DevSwitchAttributeSettingActivity"
+        <activity
+            android:name=".settings.DevSwitchAttributeSettingActivity"
             android:label="参数设置"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".settings.SettingsActivity2"
+            android:screenOrientation="landscape"
+            android:label="@string/title_activity_settings2"/>
     </application>
 
 </manifest>

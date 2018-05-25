@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.communication.ChannelBridgeHelperHeartSendListener;
@@ -22,7 +21,7 @@ import com.bairock.hamadev.communication.MyOnSimulatorChangedListener;
 import com.bairock.hamadev.communication.MyOnSortIndexChangedListener;
 import com.bairock.hamadev.communication.MyOnStateChangedListener;
 import com.bairock.hamadev.communication.MyOnUnitSymbolChangedListener;
-import com.bairock.hamadev.communication.SerialPortHelper;
+import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.database.DevGroupDao;
 import com.bairock.hamadev.database.DeviceDao;
 import com.bairock.hamadev.database.SdDbHelper;
@@ -266,8 +265,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 UdpServer.getIns().setUser(HamaApp.USER);
                 UdpServer.getIns().run();
 
-                SharedHelper sharedHelper = new SharedHelper();
-                sharedHelper.init();
+                Config.INSTANCE.init(mActivity.get());
                 //WelcomeActivity theActivity = mActivity.get();
 //                if(sharedHelper.isSerialOpen(theActivity)){
 //                    try {
@@ -315,7 +313,7 @@ public class WelcomeActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             WelcomeActivity theActivity = mActivity.get();
             if (success) {
-                if(SharedHelper.needLogin || HamaApp.USER == null || HamaApp.USER.getName() == null) {
+                if(Config.INSTANCE.getNeedLogin() || HamaApp.USER == null || HamaApp.USER.getName() == null) {
                     theActivity.startActivity(new Intent(theActivity, LoginActivity.class));
                 }else{
                     MainActivity.IS_ADMIN = HamaApp.USER.getName().equals("admin");

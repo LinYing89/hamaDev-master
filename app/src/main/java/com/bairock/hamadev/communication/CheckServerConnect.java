@@ -2,9 +2,9 @@ package com.bairock.hamadev.communication;
 
 import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.app.MainActivity;
+import com.bairock.hamadev.database.Config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -43,13 +43,19 @@ public class CheckServerConnect extends Thread {
         try {
             Map map = mapper.readValue(s, Map.class);
             int padPort = (int)map.get("padPort");
-            if(padPort != HamaApp.SERVER_PAD_PORT){
-                HamaApp.SERVER_PAD_PORT = padPort;
+            int devPort = (int)map.get("devPort");
+            int upDownloadPort = (int)map.get("upDownloadPort");
+            if(padPort != Config.INSTANCE.getServerPadPort()){
+                Config.INSTANCE.setServerPadPort(padPort);
                 if (!PadClient.getIns().isLinked()) {
                     PadClient.getIns().link();
                 }
-                HamaApp.SERVER_DEV_PORT = (int)map.get("devPort");
-                HamaApp.SERVER_UP_DOWNLOAD_PORT = (int)map.get("upDownloadPort");
+                Config.INSTANCE.setServerDevPort((int)map.get("devPort"));
+                Config.INSTANCE.setServerUpDownloadPort((int)map.get("upDownloadPort"));
+            }
+            if(padPort!= Config.INSTANCE.getServerPadPort() || devPort != Config.INSTANCE.getServerDevPort()
+                    || upDownloadPort != Config.INSTANCE.getServerUpDownloadPort()){
+                Config.INSTANCE.setServerInfo(HamaApp.HAMA_CONTEXT);
             }
         } catch (Exception e) {
             e.printStackTrace();

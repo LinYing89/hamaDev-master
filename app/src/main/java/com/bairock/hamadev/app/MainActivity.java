@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
@@ -20,7 +19,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -29,23 +27,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.adapter.SectionsPagerAdapter;
 import com.bairock.hamadev.communication.CheckServerConnect;
-import com.bairock.hamadev.communication.DeviceMsgMonitorActivity;
 import com.bairock.hamadev.communication.DownloadClient;
 import com.bairock.hamadev.communication.SerialPortHelper;
 import com.bairock.hamadev.communication.UploadClient;
+import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.linkage.LinkageActivity;
 import com.bairock.hamadev.receiver.NetworkConnectChangedReceiver;
 import com.bairock.hamadev.settings.BridgesStateActivity;
-import com.bairock.hamadev.settings.EsptouchActivity;
 import com.bairock.hamadev.settings.SearchActivity;
-import com.bairock.hamadev.settings.SettingsActivity;
-import com.bairock.hamadev.settings.SortActivity;
-import com.bairock.hamadev.settings.UdpLogActivity;
+import com.bairock.hamadev.settings.SettingsActivity2;
 import com.bairock.iot.intelDev.user.IntelDevHelper;
 
 import java.lang.ref.WeakReference;
@@ -54,12 +48,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static boolean IS_ADMIN;
-    //public static boolean FIRST_LOGIN;
     public static String subTitle = "呱呱物联:智能物联网控制器";
-    /**
-     * 本地连接是否可用
-     */
-    public static boolean LOCAL_CONNECTED;
 
     public static final int UPLOAD_FAIL = 3;
     public static final int UPLOAD_OK = 4;
@@ -91,9 +80,8 @@ public class MainActivity extends AppCompatActivity
         }
         toolbar.setTitle(HamaApp.USER.getName() + "-" + HamaApp.DEV_GROUP.getName() + ":" + HamaApp.DEV_GROUP.getPetName());
         toolbar.setSubtitle(subTitle);
-        //setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -101,10 +89,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView =  findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //UserDao userDao = UserDao.get(this);
-
-        View headerView = navigationView.getHeaderView(0);
-        //textUser.setText(UserHelper.getUser().getName());
         strEnsure = "确定";
         strCancel = "取消";
         versionTask = new VersionTask(this);
@@ -113,10 +97,10 @@ public class MainActivity extends AppCompatActivity
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
         handler = new MyHandler(MainActivity.this);
@@ -136,7 +120,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -176,8 +160,8 @@ public class MainActivity extends AppCompatActivity
         } else if(id == R.id.nav_set_chain) {
             startActivity(new Intent(MainActivity.this, LinkageActivity.class));
         }else if(id == R.id.nav_system_set) {
-            //startActivity(new Intent(MainActivity.this, DeviceMsgMonitorActivity.class));
-            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            startActivity(new Intent(MainActivity.this, SettingsActivity2.class));
+//            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         } else if (id == R.id.nav_upload) {
             //上传
             showProgressDialog("上传");
@@ -192,19 +176,15 @@ public class MainActivity extends AppCompatActivity
                     .setMessage("确定退出账号吗")
                     .setNegativeButton(strCancel,null)
                     .setPositiveButton(strEnsure,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int whichButton) {
-                                    new SharedHelper().setNeedLogin(true);
-                                    finish();
-                                }
+                            (dialog, whichButton) -> {
+                                Config.INSTANCE.setNeedLogin(MainActivity.this, true);
+                                finish();
                             }).show();
         }else if(id == R.id.nav_log){
             startActivity(new Intent(MainActivity.this, BridgesStateActivity.class));
-            //startActivity(new Intent(MainActivity.this, UdpLogActivity.class));
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -217,9 +197,7 @@ public class MainActivity extends AppCompatActivity
                     .setMessage("退出程序")
                     .setNegativeButton(strCancel, null)
                     .setPositiveButton(strEnsure,
-                            (dialog, which) -> {
-                                finish();
-                            }).show();
+                            (dialog, which) -> finish()).show();
             return true;
         } else {
             return super.onKeyDown(keyCode, event);
@@ -391,7 +369,7 @@ private static class VersionTask extends AsyncTask<Void, Void, Boolean> {
             request.setVisibleInDownloadsUi(true);
             long refernece = dManager.enqueue(request);
             // 把当前下载的ID保存起来
-            new SharedHelper().setDownloadId(refernece);
+            Config.INSTANCE.setDownloadId(this, refernece);
         }catch (IllegalArgumentException ex){
             Snackbar.make(toolbar, "下载器没有启用", Snackbar.LENGTH_LONG).show();
         }

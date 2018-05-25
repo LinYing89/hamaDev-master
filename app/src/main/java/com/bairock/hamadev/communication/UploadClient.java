@@ -1,7 +1,7 @@
 package com.bairock.hamadev.communication;
 
-import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.app.MainActivity;
+import com.bairock.hamadev.database.Config;
 
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +46,7 @@ public class UploadClient {
             });
 
             // Start the client.
-            channelFuture = b.connect(HamaApp.SERVER_IP, HamaApp.SERVER_UP_DOWNLOAD_PORT).addListener((ChannelFutureListener) future -> {
+            channelFuture = b.connect(Config.INSTANCE.getServerName(), Config.INSTANCE.getServerUpDownloadPort()).addListener((ChannelFutureListener) future -> {
                 if(!future.isSuccess()){
                     if(null != MainActivity.handler){
                         MainActivity.handler.obtainMessage(MainActivity.UPLOAD_FAIL).sendToTarget();

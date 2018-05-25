@@ -28,8 +28,8 @@
 
         <Button
             android:id="@+id/btnState"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_above="@id/textName"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="6dp"

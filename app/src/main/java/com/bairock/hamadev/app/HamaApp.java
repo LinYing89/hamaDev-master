@@ -9,6 +9,7 @@ import android.util.Log;
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.communication.PadClient;
 import com.bairock.hamadev.communication.SerialPortHelper;
+import com.bairock.hamadev.database.Config;
 import com.bairock.iot.intelDev.communication.DevChannelBridgeHelper;
 import com.bairock.iot.intelDev.communication.DevServer;
 import com.bairock.iot.intelDev.communication.FindDevHelper;
@@ -34,11 +35,6 @@ public class HamaApp extends Application {
     public static User USER;
     public static DevGroup DEV_GROUP;
     public static DevServer DEV_SERVER;
-
-    public static String SERVER_IP = "123.206.104.15:8080";
-    public static int SERVER_PAD_PORT = 4045;
-    public static int SERVER_DEV_PORT = 4049;
-    public static int SERVER_UP_DOWNLOAD_PORT = 4046;
 
     @SuppressLint("StaticFieldLeak")
     public static Context HAMA_CONTEXT;
@@ -67,11 +63,11 @@ public class HamaApp extends Application {
     }
 
     public static String getLoginUrl(){
-        return "http://" + SERVER_IP + "/hamaSer/ClientLoginServlet";
+        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/ClientLoginServlet";
     }
 
     public static String getPortUrl(){
-        return "http://" + SERVER_IP + "/hamaSer/GetPortServlet";
+        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/GetPortServlet";
     }
 
     public static void addOfflineDevCoding(Device device){

@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.communication.MyHttpRequest;
+import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.database.DevGroupDao;
 import com.bairock.hamadev.database.LinkageHolderDao;
 import com.bairock.hamadev.database.SdDbHelper;
@@ -209,9 +210,12 @@ public class LoginActivity extends AppCompatActivity {
             ObjectMapper mapper = new ObjectMapper();
             Map map = mapper.readValue(s, Map.class);
             if((int)(map.get("stateCode")) == 200){
-                HamaApp.SERVER_PAD_PORT = (int)map.get("padPort");
-                HamaApp.SERVER_DEV_PORT = (int)map.get("devPort");
-                HamaApp.SERVER_UP_DOWNLOAD_PORT = (int)map.get("upDownloadPort");
+                Config.INSTANCE.setServerPadPort((int)map.get("padPort"));
+                Config.INSTANCE.setServerDevPort((int)map.get("devPort"));
+                Config.INSTANCE.setServerUpDownloadPort((int)map.get("upDownloadPort"));
+
+                Config.INSTANCE.setServerInfo(this);
+
                 String petName = (String)map.get("petName");
 
                 boolean add = null == HamaApp.USER;
@@ -251,7 +255,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 //MainActivity.FIRST_LOGIN = true;
                 MainActivity.IS_ADMIN = false;
-                new SharedHelper().setNeedLogin(false);
+                Config.INSTANCE.setNeedLogin(this, false);
                 return true;
             }
         }catch (Exception e){

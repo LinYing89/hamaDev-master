@@ -16,7 +16,7 @@ import com.bairock.iot.intelDev.device.OrderHelper;
 public class MyOnGearChangedListener implements Device.OnGearChangedListener{
     @Override
     public void onGearChanged(Device device, Gear gear) {
-        PadClient.getIns().send(OrderHelper.getOrderMsg(OrderHelper.FEEDBACK_HEAD  + device.getCoding() + OrderHelper.SEPARATOR + "b" + device.getGear()));
+        PadClient.getIns().send(OrderHelper.getOrderMsg(OrderHelper.FEEDBACK_HEAD  + device.getLongCoding() + OrderHelper.SEPARATOR + "b" + device.getGear()));
         refreshUi(device);
         updateDeviceDao(device);
     }

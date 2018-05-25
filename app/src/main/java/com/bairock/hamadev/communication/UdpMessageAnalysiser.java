@@ -1,7 +1,6 @@
 package com.bairock.hamadev.communication;
 
 import com.bairock.hamadev.esptouch.EspTouchAddDevice;
-import com.bairock.hamadev.settings.EsptouchActivity;
 import com.bairock.hamadev.settings.UdpLogActivity;
 import com.bairock.iot.intelDev.communication.MessageAnalysiser;
 import com.bairock.iot.intelDev.communication.UdpServer;
