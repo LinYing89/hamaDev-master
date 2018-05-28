@@ -43,7 +43,7 @@ class DevSwitchAttributeSettingActivity : AppCompatActivity() {
     }
 
     fun init(){
-            txtDevCoding.text = device!!.coding
+            txtDevCoding.text = device!!.longCoding
             etxtAlisa.setText(device!!.alias)
             etxtName.setText(device!!.name)
             when (device!!.gear) {

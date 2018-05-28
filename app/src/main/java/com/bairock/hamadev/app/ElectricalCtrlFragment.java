@@ -1,11 +1,13 @@
 package com.bairock.hamadev.app;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,8 @@ import android.view.animation.AnimationUtils;
 
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.adapter.RecyclerAdapterElectrical3;
+import com.bairock.hamadev.adapter.RecyclerAdapterElectricalList;
+import com.bairock.hamadev.database.Config;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.IStateDev;
@@ -22,21 +26,25 @@ import com.bairock.iot.intelDev.user.DevGroup;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class ElectricalCtrlFragment extends Fragment {
+
     private static final String ARG_PARAM1 = "param1";
     public static final int REFRESH_ELE_STATE = 1;
     public static final int REFRESH_ELE = 2;
-    public static final int REFRESH_SORT= 3;
-    public static final int SHOW_ALERT_DIALOG= 6;
+    public static final int CHANGE_SHOW_NAME_STYLE = 3;
+    public static final int CHANGE_LAYOUT_MANAGER = 4;
     public static MyHandler handler;
 
     private RecyclerAdapterElectrical3 adapterElectrical;
+    private RecyclerAdapterElectricalList adapterElectricalList;
     private SwipeMenuRecyclerView swipeMenuRecyclerViewElectrical;
 
     private List<Device> listIStateDev = new ArrayList<>();
@@ -59,12 +67,10 @@ public class ElectricalCtrlFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_electrical_ctrl, container, false);
         handler = new MyHandler(this);
         swipeMenuRecyclerViewElectrical = view.findViewById(R.id.swipeMenuRecyclerViewElectrical);
-//        swipeMenuRecyclerViewElectrical.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        swipeMenuRecyclerViewElectrical.setLayoutManager(new GridLayoutManager(this.getContext(), 6));
-//        swipeMenuRecyclerViewElectrical.addItemDecoration(new DefaultItemDecoration(Color.LTGRAY));
-        swipeMenuRecyclerViewElectrical.setLongPressDragEnabled(true); // 长按拖拽，默认关闭。
-        swipeMenuRecyclerViewElectrical.setOnItemMoveListener(onItemMoveListener);// 监听拖拽和侧滑删除，更新UI和数据源。
-        swipeMenuRecyclerViewElectrical.setOnItemStateChangedListener(mOnItemStateChangedListener); // 监听Item的手指状态，拖拽、侧滑、松开。
+        setLayoutManager();
+        swipeMenuRecyclerViewElectrical.setLongPressDragEnabled(true);
+        swipeMenuRecyclerViewElectrical.setOnItemMoveListener(onItemMoveListener);
+        swipeMenuRecyclerViewElectrical.setOnItemStateChangedListener(mOnItemStateChangedListener);
 
         setGridViewElectrical();
         HamaApp.DEV_GROUP.addOnDeviceCollectionChangedListener(onDeviceCollectionChangedListener);
@@ -79,6 +85,39 @@ public class ElectricalCtrlFragment extends Fragment {
         RecyclerAdapterElectrical3.handler = null;
     }
 
+    private void setLayoutManager(){
+        if(Config.INSTANCE.getDevShowStyle().equals("0")) {
+            swipeMenuRecyclerViewElectrical.setLayoutManager(new GridLayoutManager(this.getContext(), 6));
+//            swipeMenuRecyclerViewElectrical.invalidateItemDecorations();
+            for(int i = 0; i < swipeMenuRecyclerViewElectrical.getItemDecorationCount(); i++){
+                swipeMenuRecyclerViewElectrical.removeItemDecorationAt(i);
+            }
+            //swipeMenuRecyclerViewElectrical.addItemDecoration(new DefaultItemDecoration(Color.TRANSPARENT));
+        }else{
+            swipeMenuRecyclerViewElectrical.setLayoutManager(new LinearLayoutManager(this.getContext()));
+//            swipeMenuRecyclerViewElectrical.invalidateItemDecorations();
+            for(int i = 0; i < swipeMenuRecyclerViewElectrical.getItemDecorationCount(); i++){
+                swipeMenuRecyclerViewElectrical.removeItemDecorationAt(i);
+            }
+            swipeMenuRecyclerViewElectrical.addItemDecoration(new DefaultItemDecoration(Color.LTGRAY));
+        }
+    }
+
+    private void setAdapter(){
+        if(Config.INSTANCE.getDevShowStyle().equals("0")) {
+            adapterElectrical = new RecyclerAdapterElectrical3(this.getContext(), listIStateDev);
+            swipeMenuRecyclerViewElectrical.setAdapter(adapterElectrical);
+        }else{
+            adapterElectricalList = new RecyclerAdapterElectricalList(Objects.requireNonNull(this.getContext()), listIStateDev);
+            swipeMenuRecyclerViewElectrical.setAdapter(adapterElectricalList);
+        }
+    }
+
+    private void changeLayout(){
+        setLayoutManager();
+        setAdapter();
+    }
+
     public void setGridViewElectrical() {
         if(null != HamaApp.DEV_GROUP) {
             listIStateDev = HamaApp.DEV_GROUP.findListIStateDev(true);
@@ -86,8 +125,7 @@ public class ElectricalCtrlFragment extends Fragment {
             for(int i = 0; i < listIStateDev.size(); i++){
                 listIStateDev.get(i).setSortIndex(i);
             }
-            adapterElectrical = new RecyclerAdapterElectrical3(this.getContext(), listIStateDev);
-            swipeMenuRecyclerViewElectrical.setAdapter(adapterElectrical);
+            setAdapter();
         }
     }
 
@@ -191,14 +229,24 @@ public class ElectricalCtrlFragment extends Fragment {
             ElectricalCtrlFragment theActivity = mActivity.get();
             switch (msg.what) {
                 case REFRESH_ELE_STATE:
-                    theActivity.adapterElectrical.notifyDataSetChanged();
+                    if(Config.INSTANCE.getDevShowStyle().equals("0")) {
+                        if(null != theActivity.adapterElectrical) {
+                            theActivity.adapterElectrical.notifyDataSetChanged();
+                        }
+                    }else{
+                        if(null != theActivity.adapterElectricalList) {
+                            theActivity.adapterElectricalList.notifyDataSetChanged();
+                        }
+                    }
                     break;
                 case REFRESH_ELE :
                     theActivity.setGridViewElectrical();
                     break;
-                case REFRESH_SORT :
+                case CHANGE_SHOW_NAME_STYLE:
+                    theActivity.setAdapter();
                     break;
-                case SHOW_ALERT_DIALOG:
+                case CHANGE_LAYOUT_MANAGER:
+                    theActivity.changeLayout();
                     break;
             }
         }

@@ -164,10 +164,18 @@ public class MainActivity extends AppCompatActivity
 //            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         } else if (id == R.id.nav_upload) {
             //上传
+            if(IS_ADMIN){
+                Snackbar.make(getWindow().getDecorView(), "未登录，不能上传", Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
             showProgressDialog("上传");
             UploadClient uploadClient = new UploadClient();
             uploadClient.link();
         } else if (id == R.id.nav_download) {
+            if(IS_ADMIN){
+                Snackbar.make(getWindow().getDecorView(), "未登录，不能下载", Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
             showProgressDialog("下载");
             DownloadClient downloadClient = new DownloadClient();
             downloadClient.link();

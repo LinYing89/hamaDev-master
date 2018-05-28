@@ -36,7 +36,7 @@ public class PadClientHandler extends ChannelInboundHandlerAdapter {
     private MyMessageAnalysiser myMessageAnalysiser = new ServerMsgAnalysiser();
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         channel = ctx.channel();
         PadClient.getIns().setPadClientHandler(this);
         HamaApp.SERVER_CONNECTED = true;
@@ -228,7 +228,7 @@ public class PadClientHandler extends ChannelInboundHandlerAdapter {
         //发送挡位信息
         if(device instanceof DevSwitch){
             for(Device device1 : ((DevSwitch) device).getListDev()){
-                PadClient.getIns().send(OrderHelper.getOrderMsg(OrderHelper.FEEDBACK_HEAD  + device1.getCoding() + OrderHelper.SEPARATOR + "b" + device1.getGear()));
+                PadClient.getIns().send(OrderHelper.getOrderMsg(OrderHelper.FEEDBACK_HEAD  + device1.getLongCoding() + OrderHelper.SEPARATOR + "b" + device1.getGear()));
             }
         }
     }

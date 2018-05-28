@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -15,6 +14,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bairock.hamadev.database.Config;
+import com.bairock.hamadev.media.Media;
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.settings.DevSwitchAttributeSettingActivity;
@@ -54,7 +55,6 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
         return listDevice == null ? 0 : listDevice.size();
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -84,38 +84,34 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
                     context.startActivity(new Intent(context, DevSwitchAttributeSettingActivity.class));
                 }
             });
-
             btnState = itemView.findViewById(R.id.btnState);
-            btnState.setOnTouchListener((view, motionEvent) -> {
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-                    Animation animation= AnimationUtils.loadAnimation(HamaApp.HAMA_CONTEXT,R.anim.ele_btn_state_zoomin);
-                    view.startAnimation(animation);
-                }else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-//                    Animation animation= AnimationUtils.loadAnimation(HamaApp.HAMA_CONTEXT,R.anim.ele_btn_state_zoomout);
-//                    view.startAnimation(animation);
-                    IStateDev dev = (IStateDev) device;
-                    switch (device.getGear()) {
-                        case UNKNOW:
-                        case ZIDONG:
-                            if (device.isKaiState()) {
-                                toGuanGear();
-                                HamaApp.sendOrder(device, dev.getTurnOffOrder(), true);
-                            } else {
-                                toKaiGear();
-                                HamaApp.sendOrder(device, dev.getTurnOnOrder(), true);
-                            }
-                            break;
-                        case KAI:
+            btnState.setOnClickListener(view -> {
+                Animation animation= AnimationUtils.loadAnimation(HamaApp.HAMA_CONTEXT,R.anim.ele_btn_state_zoomin);
+                view.startAnimation(animation);
+                if(Config.INSTANCE.getCtrlRing()) {
+                    Media.INSTANCE.playCtrlRing();
+                }
+                IStateDev dev = (IStateDev) device;
+                switch (device.getGear()) {
+                    case UNKNOW:
+                    case ZIDONG:
+                        if (device.isKaiState()) {
                             toGuanGear();
                             HamaApp.sendOrder(device, dev.getTurnOffOrder(), true);
-                            break;
-                        default:
+                        } else {
                             toKaiGear();
                             HamaApp.sendOrder(device, dev.getTurnOnOrder(), true);
-                            break;
-                    }
+                        }
+                        break;
+                    case KAI:
+                        toGuanGear();
+                        HamaApp.sendOrder(device, dev.getTurnOffOrder(), true);
+                        break;
+                    default:
+                        toKaiGear();
+                        HamaApp.sendOrder(device, dev.getTurnOnOrder(), true);
+                        break;
                 }
-                return false;
             });
         }
 
@@ -132,7 +128,6 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
 
         private void toKaiGear(){
             device.setGear(Gear.KAI);
-            refreshBntStateText(device.getGear());
         }
 
         private void toGuanGear(){
@@ -167,35 +162,15 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
                 btnState.setBackgroundResource(R.drawable.sharp_btn_switch_on);
             } else {
                 btnState.setBackgroundResource(R.drawable.sharp_btn_switch_off);
-//                ((GradientDrawable) btnState.getBackground()).setStroke(4, strokeAbnormal);
             }
         }
 
-//        private void setBtnStateStroke(){
-//            if(device.getGear() == Gear.KAI){
-//                if(device.isKaiState()){
-//                    btnState.setTextColor(Color.WHITE);
-//                    //((GradientDrawable) btnState.getBackground()).setStroke(2, strokeNormal);
-//                }else {
-//                    btnState.setTextColor(strokeAbnormal);
-////                    ((GradientDrawable) btnState.getBackground()).setStroke(4, strokeAbnormal);
-//                }
-//            }else if(device.getGear() == Gear.GUAN){
-//                if(device.isKaiState()){
-//                    btnState.setTextColor(strokeAbnormal);
-////                    ((GradientDrawable) btnState.getBackground()).setStroke(4, strokeAbnormal);
-//                }else {
-//                    btnState.setTextColor(Color.WHITE);
-////                    ((GradientDrawable) btnState.getBackground()).setStroke(2, strokeNormal);
-//                }
-//            }else{
-//                    btnState.setTextColor(Color.WHITE);
-//                //((GradientDrawable) btnState.getBackground()).setStroke(2, strokeNormal);
-//            }
-//        }
-
         private void refreshName() {
-            textName.setText(device.getName());
+            if(Config.INSTANCE.getDevNameShowStyle().equals("0")) {
+                textName.setText(device.getName());
+            }else{
+                textName.setText(device.getAlias());
+            }
         }
     }
 

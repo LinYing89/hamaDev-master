@@ -23,7 +23,6 @@ import com.bairock.hamadev.R;
 import com.bairock.hamadev.adapter.RecyclerAdapterDevice;
 import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.app.MainActivity;
-import com.bairock.hamadev.app.RouterInfo;
 import com.bairock.hamadev.communication.PadClient;
 import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.database.DeviceDao;
@@ -115,7 +114,7 @@ public class SearchActivity extends AppCompatActivity {
                 }else {
                     EspTouchAddDevice espTouchAddDevice = new EspTouchAddDevice(this);
                     String ssid = espTouchAddDevice.getSsid();
-                    if (!ssid.equals(RouterInfo.NAME) && !espTouchAddDevice.moniAdd) {
+                    if (!ssid.equals(Config.INSTANCE.getRouteName()) && !espTouchAddDevice.moniAdd) {
                         showMessageDialog();
                     } else {
                         espTouchAddDevice.startConfig();

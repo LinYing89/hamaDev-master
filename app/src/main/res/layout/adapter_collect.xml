@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textSymbol"
+            android:id="@+id/txtSymbol"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -23,11 +23,11 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/text_value"
+            android:id="@+id/txtValue"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/text_name"
-            android:layout_below="@id/textSymbol"
+            android:layout_below="@id/txtSymbol"
             android:layout_centerInParent="true"
             android:gravity="center"
             tools:text="50"
@@ -37,7 +37,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/text_name"
+            android:id="@+id/txtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -48,28 +48,5 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             tools:text="名称" />
-
-        <LinearLayout
-            android:id="@+id/llayoutSrc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/textSrcSignal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="信号源"
-                android:textSize="10sp" />
-
-            <TextView
-                android:id="@+id/textSimulator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textSize="10sp" />
-        </LinearLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

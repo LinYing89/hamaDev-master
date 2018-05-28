@@ -1,12 +1,15 @@
 package com.bairock.hamadev.settings
 
 import android.annotation.TargetApi
+import android.app.AlertDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.preference.*
 import com.bairock.hamadev.R
+import com.bairock.hamadev.app.MainActivity
+import com.bairock.hamadev.communication.PadClient
 import com.bairock.hamadev.database.Config
 import com.bairock.hamadev.esptouch.EspWifiAdminSimple
 
@@ -45,6 +48,7 @@ class SettingsActivity2 : AppCompatPreferenceActivity() {
             setHasOptionsMenu(true)
 
             bindPreferenceSummaryToValue(findPreference(Config.keyDevShowStyle))
+            bindPreferenceSummaryToValue(findPreference(Config.keyDevNameShowStyle))
             bindPreferenceSummaryToValue(findPreference(Config.keyCtrlRing))
         }
     }
@@ -105,9 +109,20 @@ class SettingsActivity2 : AppCompatPreferenceActivity() {
                 preference.summary = stringValue
             }
             when(preference.key){
-                Config.keyServerName -> Config.serverName = stringValue
+                Config.keyServerName -> {
+                    if(Config.serverName != stringValue) {
+                        Config.serverName = stringValue
+                        AlertDialog.Builder(preference.context)
+                                .setMessage("请退出账号重新登录!")
+                                .setPositiveButton(MainActivity.strEnsure, null).show()
+                        MainActivity.IS_ADMIN = true
+                        PadClient.getIns().closeHandler()
+                        Config.setNeedLogin(preference.context, true)
+                    }
+                }
                 Config.keyRoutePsd -> Config.routePsd = stringValue
                 Config.keyDevShowStyle -> Config.devShowStyle = stringValue
+                Config.keyDevNameShowStyle -> Config.devNameShowStyle = stringValue
                 Config.keyCtrlRing -> Config.ctrlRing = value as Boolean
             }
             true

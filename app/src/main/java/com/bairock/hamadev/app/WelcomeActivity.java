@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.bairock.hamadev.media.Media;
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.communication.ChannelBridgeHelperHeartSendListener;
 import com.bairock.hamadev.communication.MyMessageAnalysiser;
@@ -49,6 +50,8 @@ import com.bairock.iot.intelDev.linkage.guagua.GuaguaHelper;
 import com.bairock.iot.intelDev.linkage.timing.WeekHelper;
 import com.bairock.iot.intelDev.user.DevGroup;
 import com.bairock.iot.intelDev.user.User;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -258,23 +261,34 @@ public class WelcomeActivity extends AppCompatActivity {
                 //没有可搜索设备时单机测试用
                 //testDevice();
 //                testDeviceBx();
-                //testCoordinator();
+//                testCoordinator();
+
                 initUser();
 
-                //UdpServer.getIns().setMessageAnalysiser(new UdpMessageAnalysiser());
                 UdpServer.getIns().setUser(HamaApp.USER);
                 UdpServer.getIns().run();
 
+                Media.INSTANCE.init(mActivity.get());
                 Config.INSTANCE.init(mActivity.get());
-                //WelcomeActivity theActivity = mActivity.get();
-//                if(sharedHelper.isSerialOpen(theActivity)){
-//                    try {
-//                        SerialPortHelper.getIns().openSerialPort(theActivity);
-//                        SerialPortHelper.getIns().startReceiveThread();
-//                    }catch (Exception e) {
-//                        theActivity.runOnUiThread(() -> Toast.makeText(theActivity, "串口打开失败", Toast.LENGTH_LONG).show());
-//                    }
-//                }
+
+                //设置宫格/列表切换监听
+                Config.INSTANCE.setOnDevShowStyleChangedListener(style -> {
+                    if(null != ElectricalCtrlFragment.handler){
+                        ElectricalCtrlFragment.handler.obtainMessage(ElectricalCtrlFragment.CHANGE_LAYOUT_MANAGER).sendToTarget();
+                    }
+                    if(null != ClimateFragment.handler){
+                        ClimateFragment.handler.obtainMessage(ClimateFragment.CHANGE_LAYOUT_MANAGER).sendToTarget();
+                    }
+                });
+                //设置名称/位号切换监听
+                Config.INSTANCE.setOnDevNameShowStyleChangedListener(name -> {
+                    if(null != ElectricalCtrlFragment.handler){
+                        ElectricalCtrlFragment.handler.obtainMessage(ElectricalCtrlFragment.CHANGE_SHOW_NAME_STYLE).sendToTarget();
+                    }
+                    if(null != ClimateFragment.handler){
+                        ClimateFragment.handler.obtainMessage(ClimateFragment.CHANGE_SHOW_NAME_STYLE).sendToTarget();
+                    }
+                });
 
                 try {
                     HamaApp.DEV_SERVER = new DevServer();
@@ -292,7 +306,6 @@ public class WelcomeActivity extends AppCompatActivity {
                     if(null != order) {
                         HamaApp.sendOrder(device, order, false);
                     }
-                    //DevChannelBridgeHelper.getIns().sendDevOrder(device, order);
                 });
 
                 LinkageHelper.getIns().stopCheckLinkageThread();
@@ -300,8 +313,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 GuaguaHelper.getIns().stopCheckGuaguaThread();
                 GuaguaHelper.getIns().startCheckGuaguaThread();
                 GuaguaHelper.getIns().setOnOrderSendListener((guagua, s, ctrlModel) -> HamaApp.sendOrder(guagua.findSuperParent(), s, true));
-//                HamaApp.SERVER_IP = "192.168.1.111";
-//                Thread.sleep(2000);
                 return true;
             }catch (Exception e){
                 e.printStackTrace();

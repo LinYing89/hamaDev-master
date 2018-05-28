@@ -1,10 +1,8 @@
 package com.bairock.hamadev.communication
 
-import com.bairock.hamadev.adapter.RecyclerAdapterChildDevice
-import com.bairock.hamadev.adapter.RecyclerAdapterCollect
-import com.bairock.hamadev.adapter.RecyclerAdapterDevice
-import com.bairock.hamadev.adapter.RecyclerAdapterElectrical3
+import com.bairock.hamadev.adapter.*
 import com.bairock.hamadev.app.HamaApp
+import com.bairock.hamadev.database.Config
 import com.bairock.hamadev.database.DeviceDao
 import com.bairock.iot.intelDev.device.Device
 import com.bairock.iot.intelDev.device.IStateDev
@@ -18,8 +16,14 @@ class MyOnNameChangedListener : Device.OnNameChangedListener {
 
     private fun refreshUi(device: Device) {
         if (device is IStateDev) {
-            if (null != RecyclerAdapterElectrical3.handler) {
-                RecyclerAdapterElectrical3.handler.obtainMessage(RecyclerAdapterElectrical3.NAME, device).sendToTarget()
+            if (Config.devShowStyle == "0") {
+                if (null != RecyclerAdapterElectrical3.handler) {
+                    RecyclerAdapterElectrical3.handler.obtainMessage(RecyclerAdapterElectrical3.NAME, device).sendToTarget()
+                }
+            } else {
+                if (null != RecyclerAdapterElectricalList.handler) {
+                    RecyclerAdapterElectricalList.handler!!.obtainMessage(RecyclerAdapterElectricalList.NAME, device).sendToTarget()
+                }
             }
         }else if(device is DevCollect){
             if (null != RecyclerAdapterCollect.handler) {

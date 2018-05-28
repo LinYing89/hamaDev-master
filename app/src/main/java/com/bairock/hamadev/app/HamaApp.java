@@ -72,7 +72,9 @@ public class HamaApp extends Application {
 
     public static void addOfflineDevCoding(Device device){
         if(null != device) {
-            if(!(device.findSuperParent() instanceof Coordinator)) {
+            if(device instanceof Coordinator){
+                FindDevHelper.getIns().findDev(device.getCoding());
+            }else if(!(device.findSuperParent() instanceof Coordinator)) {
                 FindDevHelper.getIns().findDev(device.findSuperParent().getCoding());
             }
         }

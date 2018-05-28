@@ -1,11 +1,13 @@
 package com.bairock.hamadev.app;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.view.animation.AnimationUtils;
 
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.adapter.RecyclerAdapterCollect;
+import com.bairock.hamadev.database.Config;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
@@ -22,6 +25,7 @@ import com.bairock.iot.intelDev.user.DevGroup;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
 import java.lang.ref.WeakReference;
 import java.util.Collections;
@@ -32,7 +36,8 @@ public class ClimateFragment extends Fragment {
 
     public static final int REFRESH_VALUE = 1;
     public static final int REFRESH_DEVICE = 2;
-    public static final int REFRESH_SORT = 3;
+    public static final int CHANGE_SHOW_NAME_STYLE = 3;
+    public static final int CHANGE_LAYOUT_MANAGER = 4;
 
     public static MyHandler handler;
 
@@ -58,7 +63,7 @@ public class ClimateFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_climate, container, false);
         handler = new MyHandler(this);
         swipeMenuRecyclerViewCollector = view.findViewById(R.id.swipeMenuRecyclerViewCollector);
-        swipeMenuRecyclerViewCollector.setLayoutManager(new GridLayoutManager(this.getContext(), 4));
+        setLayoutManager();
         //swipeMenuRecyclerViewCollector.addItemDecoration(new DefaultItemDecoration(Color.LTGRAY));
         swipeMenuRecyclerViewCollector.setLongPressDragEnabled(true); // 长按拖拽，默认关闭。
 
@@ -76,10 +81,35 @@ public class ClimateFragment extends Fragment {
         RecyclerAdapterCollect.handler = null;
     }
 
+    private void setLayoutManager(){
+        if(Config.INSTANCE.getDevShowStyle().equals("0")) {
+            swipeMenuRecyclerViewCollector.setLayoutManager(new GridLayoutManager(this.getContext(), 4));
+            for(int i = 0; i < swipeMenuRecyclerViewCollector.getItemDecorationCount(); i++){
+                swipeMenuRecyclerViewCollector.removeItemDecorationAt(i);
+            }
+            //swipeMenuRecyclerViewCollector.addItemDecoration(new DefaultItemDecoration(Color.TRANSPARENT), 0);
+        }else{
+            swipeMenuRecyclerViewCollector.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            for(int i = 0; i < swipeMenuRecyclerViewCollector.getItemDecorationCount(); i++){
+                swipeMenuRecyclerViewCollector.removeItemDecorationAt(i);
+            }
+            swipeMenuRecyclerViewCollector.addItemDecoration(new DefaultItemDecoration(Color.LTGRAY));
+        }
+    }
+
+    private void setAdapter(){
+        adapterCollect = new RecyclerAdapterCollect(this.getContext(), listDevCollect);
+        swipeMenuRecyclerViewCollector.setAdapter(adapterCollect);
+    }
+
+    private void changeLayout(){
+        setLayoutManager();
+        setAdapter();
+    }
+
     private void setListener() {
-        swipeMenuRecyclerViewCollector.setOnItemMoveListener(onItemMoveListener);// 监听拖拽和侧滑删除，更新UI和数据源。
-        swipeMenuRecyclerViewCollector.setOnItemStateChangedListener(mOnItemStateChangedListener); // 监听Item的手指状态，拖拽、侧滑、松开。
-        //swipeMenuRecyclerViewCollector.setSwipeItemClickListener(swipeItemClickListener);
+        swipeMenuRecyclerViewCollector.setOnItemMoveListener(onItemMoveListener);
+        swipeMenuRecyclerViewCollector.setOnItemStateChangedListener(mOnItemStateChangedListener);
     }
 
     private void setPressueList() {
@@ -88,8 +118,7 @@ public class ClimateFragment extends Fragment {
         for (int i = 0; i < listDevCollect.size(); i++) {
             listDevCollect.get(i).setSortIndex(i);
         }
-        adapterCollect = new RecyclerAdapterCollect(this.getContext(), listDevCollect);
-        swipeMenuRecyclerViewCollector.setAdapter(adapterCollect);
+        setAdapter();
     }
 
     /**
@@ -106,7 +135,6 @@ public class ClimateFragment extends Fragment {
             //ViewCompat.setBackground(viewHolder.itemView, ContextCompat.getDrawable(BaseDragActivity.this, R.drawable.select_white));
             Animation animation = AnimationUtils.loadAnimation(ClimateFragment.this.getContext(), R.anim.drag_zoomin);
             viewHolder.itemView.startAnimation(animation);
-
         }
     };
 
@@ -182,12 +210,18 @@ public class ClimateFragment extends Fragment {
             final ClimateFragment theActivity = mActivity.get();
             switch (msg.what) {
                 case REFRESH_VALUE:
-                    theActivity.adapterCollect.notifyDataSetChanged();
+                    if(null != theActivity.adapterCollect) {
+                        theActivity.adapterCollect.notifyDataSetChanged();
+                    }
                     break;
                 case REFRESH_DEVICE:
                     theActivity.setPressueList();
                     break;
-                case REFRESH_SORT:
+                case CHANGE_SHOW_NAME_STYLE:
+                    theActivity.setAdapter();
+                    break;
+                case CHANGE_LAYOUT_MANAGER:
+                    theActivity.changeLayout();
                     break;
             }
 

@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.app.HamaApp;
+import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.settings.DevCollectSettingActivity;
 import com.bairock.iot.intelDev.device.Device;
-import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.CollectSignalSource;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectSignal;
@@ -59,7 +59,7 @@ public class RecyclerAdapterCollect extends RecyclerView.Adapter<RecyclerAdapter
     @NonNull
     @Override
     public RecyclerAdapterCollect.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RecyclerAdapterCollect.ViewHolder vh = new RecyclerAdapterCollect.ViewHolder(mInflater.inflate(R.layout.adapter_collect, parent, false), context);
+        RecyclerAdapterCollect.ViewHolder vh = new RecyclerAdapterCollect.ViewHolder(mInflater.inflate(getLayout(), parent, false), context);
         listViewHolder.add(vh);
         return vh;
     }
@@ -69,12 +69,18 @@ public class RecyclerAdapterCollect extends RecyclerView.Adapter<RecyclerAdapter
         holder.setData(listDevice.get(position));
     }
 
+    private int getLayout(){
+        if(Config.INSTANCE.getDevShowStyle().equals("0")){
+            return R.layout.adapter_collect;
+        }else{
+            return R.layout.adapter_collect_list;
+        }
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         private Context context;
         private DevCollect device;
-        private TextView textSrcName;
-        private TextView textSimulator;
         private TextView textName;
         private TextView textState;
         private TextView textSymbol;
@@ -82,12 +88,10 @@ public class RecyclerAdapterCollect extends RecyclerView.Adapter<RecyclerAdapter
         public ViewHolder(View itemView, Context context) {
             super(itemView);
             this.context = context;
-            textSrcName = itemView.findViewById(R.id.textSrcSignal);
-            textSimulator = itemView.findViewById(R.id.textSimulator);
-            textName = itemView.findViewById(R.id.text_name);
+            textName = itemView.findViewById(R.id.txtName);
             textName.setSelected(true);
-            textState = itemView.findViewById(R.id.text_value);
-            textSymbol = itemView.findViewById(R.id.textSymbol);
+            textState = itemView.findViewById(R.id.txtValue);
+            textSymbol = itemView.findViewById(R.id.txtSymbol);
         }
 
         public void setData(DevCollect device) {
@@ -103,8 +107,6 @@ public class RecyclerAdapterCollect extends RecyclerView.Adapter<RecyclerAdapter
             refreshName();
             refreshValue();
             refreshState();
-            refreshSrcName();
-            refreshSimulator();
             refreshSymbol();
         }
 
@@ -112,10 +114,8 @@ public class RecyclerAdapterCollect extends RecyclerView.Adapter<RecyclerAdapter
             if (device.getCollectProperty().getCollectSrc() == CollectSignalSource.SWITCH) {
                 if (device.getCollectProperty().getCurrentValue() != null) {
                     if (device.getCollectProperty().getCurrentValue() == 1) {
-                        //rootView.setBackgroundColor(HamaApp.stateKaiColorId);
                         textState.setText("开");
                     } else {
-                        //rootView.setBackgroundColor(Color.TRANSPARENT);
                         textState.setText("关");
                     }
                 } else {
@@ -138,43 +138,12 @@ public class RecyclerAdapterCollect extends RecyclerView.Adapter<RecyclerAdapter
             textSymbol.setText(device.getCollectProperty().getUnitSymbol());
         }
 
-        private void refreshSrcName() {
-            textSrcName.setText(getSrcName());
-        }
-
-        private void refreshSimulator() {
-            textSimulator.setText(String.format("  值:%s", String.valueOf(device.getCollectProperty().getSimulatorValue())));
-        }
-
         private void refreshName() {
-            textName.setText(device.getName());
-        }
-
-        private String getSrcName() {
-            String srcName = "";
-            CollectProperty cp = device.getCollectProperty();
-            switch (cp.getCollectSrc()) {
-                case DIGIT:
-                    srcName = "(数字)";
-                    break;
-                case SWITCH:
-                    srcName = "(开关)";
-                    break;
-                case VOLTAGE:
-                    srcName = "(" + floatTrans1(cp.getLeastValue()) + "-" + floatTrans1(cp.getCrestValue()) + "V" + ")";
-                    break;
-                case ELECTRIC_CURRENT:
-                    srcName = "(" + floatTrans1(cp.getLeastValue()) + "-" + floatTrans1(cp.getCrestValue()) + "mA" + ")";
-                    break;
+            if(Config.INSTANCE.getDevNameShowStyle().equals("0")) {
+                textName.setText(device.getName());
+            }else{
+                textName.setText(device.getAlias());
             }
-            return srcName;
-        }
-
-        private String floatTrans1(float num) {
-            if (num % 1.0 == 0) {
-                return String.valueOf((int) num);
-            }
-            return String.valueOf(num);
         }
     }
 
@@ -200,12 +169,6 @@ public class RecyclerAdapterCollect extends RecyclerView.Adapter<RecyclerAdapter
                             break;
                         case NAME:
                             vh.refreshName();
-                            break;
-                        case SRC_NAME:
-                            vh.refreshSrcName();
-                            break;
-                        case SIMULATOR:
-                            vh.refreshSimulator();
                             break;
                         case SYMBOL:
                             vh.refreshSymbol();
