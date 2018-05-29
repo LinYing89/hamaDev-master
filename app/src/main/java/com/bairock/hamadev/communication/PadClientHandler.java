@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.app.MainActivity;
+import com.bairock.hamadev.database.Config;
+import com.bairock.hamadev.media.Media;
 import com.bairock.hamadev.settings.SearchActivity;
 import com.bairock.iot.intelDev.communication.DevChannelBridgeHelper;
 import com.bairock.iot.intelDev.device.Coordinator;
@@ -178,6 +180,9 @@ public class PadClientHandler extends ChannelInboundHandlerAdapter {
                 Gear.setGearModel(device, gear);
             }else{
                 Gear.setGearModel(dev, gear);
+            }
+            if(Config.INSTANCE.getCtrlRing()) {
+                Media.INSTANCE.playCtrlRing();
             }
         }else if(msg.startsWith("I")){
             //推送或响应命令 like: IB10001:81

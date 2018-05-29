@@ -145,10 +145,31 @@ public class ClimateFragment extends Fragment {
 
             int fromPosition = srcHolder.getAdapterPosition() - swipeMenuRecyclerViewCollector.getHeaderItemCount();
             int toPosition = targetHolder.getAdapterPosition() - swipeMenuRecyclerViewCollector.getHeaderItemCount();
-            listDevCollect.get(fromPosition).setSortIndex(toPosition);
-            listDevCollect.get(toPosition).setSortIndex(fromPosition);
-            Collections.swap(listDevCollect, fromPosition, toPosition);
-            adapterCollect.notifyItemMoved(fromPosition, toPosition);
+
+            if(Config.INSTANCE.getDevShowStyle().equals("0")) {
+                //宫格
+                if (fromPosition < toPosition) {
+                    for (int i = fromPosition; i < toPosition; i++) {
+                        listDevCollect.get(i).setSortIndex(i + 1);
+                        listDevCollect.get(i + 1).setSortIndex(i);
+                        Collections.swap(listDevCollect, i, i + 1);
+                        adapterCollect.notifyItemMoved(i, i+1);
+                    }
+                } else {
+                    for (int i = fromPosition; i > toPosition; i--) {
+                        listDevCollect.get(i).setSortIndex(i - 1);
+                        listDevCollect.get(i - 1).setSortIndex(i);
+                        Collections.swap(listDevCollect, i, i - 1);
+                        adapterCollect.notifyItemMoved(i, i-1);
+                    }
+                }
+            }else{
+                //列表
+                listDevCollect.get(fromPosition).setSortIndex(toPosition);
+                listDevCollect.get(toPosition).setSortIndex(fromPosition);
+                Collections.swap(listDevCollect, fromPosition, toPosition);
+                adapterCollect.notifyItemMoved(fromPosition, toPosition);
+            }
             return true;// 返回true表示处理了并可以换位置，返回false表示你没有处理并不能换位置。
         }
 

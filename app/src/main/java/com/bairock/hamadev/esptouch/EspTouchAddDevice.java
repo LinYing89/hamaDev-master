@@ -9,11 +9,11 @@ import android.util.Log;
 
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.app.HamaApp;
-import com.bairock.hamadev.app.RouterInfo;
 import com.bairock.hamadev.app.WelcomeActivity;
 import com.bairock.hamadev.communication.MyOnCtrlModelChangedListener;
 import com.bairock.hamadev.communication.MyOnGearChangedListener;
 import com.bairock.hamadev.communication.MyOnStateChangedListener;
+import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.database.DeviceDao;
 import com.bairock.hamadev.esptouch.task.EsptouchTask;
 import com.bairock.hamadev.esptouch.task.IEsptouchResult;
@@ -50,14 +50,14 @@ public class EspTouchAddDevice {
 
     private Context context;
 
-    public boolean moniAdd = false;
+    private boolean moniAdd = false;
 
     public EspTouchAddDevice(Context context){
         this.context = context;
         mWifiAdmin = new EspWifiAdminSimple(context);
     }
 
-    public String getSsid(){
+    private String getSsid(){
         String ssid = mWifiAdmin.getWifiConnectedSsid();
         if(ssid == null){
             ssid = "";
@@ -81,7 +81,7 @@ public class EspTouchAddDevice {
 //                if (isSsidHidden){
 //                    isSsidHiddenStr = "YES";
 //                }
-            new EsptouchAsyncTask3(this).execute(RouterInfo.NAME, apBssid, RouterInfo.PSD,
+            new EsptouchAsyncTask3(this).execute(getSsid(), apBssid, Config.INSTANCE.getRoutePsd(),
                     isSsidHiddenStr, taskResultCountStr);
         }
     }
@@ -176,7 +176,7 @@ public class EspTouchAddDevice {
             }
         });
         mProgressDialog.setMax(100);
-        mProgressDialog.setTitle("配置设备");
+        mProgressDialog.setTitle("配置设备,网络名称:" + getSsid());
         mProgressDialog.setIcon(R.drawable.ic_zoom_in_pink_24dp);
         mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE,
                 "稍等...", (dialog, which) -> {

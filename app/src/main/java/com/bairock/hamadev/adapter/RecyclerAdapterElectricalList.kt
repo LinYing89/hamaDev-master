@@ -31,8 +31,9 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
         const val STATE = 2
         const val NAME = 3
         var colorNormal: Int = 0
+        var colorOn: Int = 0
         var colorGear: Int = Color.parseColor("#1E90FF")
-        var colorGearNot: Int = Color.WHITE
+        var colorGearNot: Int = Color.BLACK
         var handler: MyHandler? = null
     }
 
@@ -43,6 +44,7 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
     init {
         handler = MyHandler(this)
         colorNormal = ContextCompat.getColor(context, R.color.back_fort)
+        colorOn = ContextCompat.getColor(context, R.color.state_kai)
     }
 
     override fun getItemCount(): Int {
@@ -62,6 +64,7 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
     class ViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
 
         lateinit var device: Device
+        private val viewRoot = itemView;
         private val textName: TextView = itemView.findViewById(R.id.txtName)
         private val btnOn : Button = itemView.findViewById(R.id.btnOn)
         private val btnAuto : Button = itemView.findViewById(R.id.btnAuto)
@@ -118,13 +121,17 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
 
         internal fun refreshState() {
             if (!device.isNormal) {
-                textName.setTextColor(HamaApp.abnormalColorId)
+                //textName.setTextColor(HamaApp.abnormalColorId)
+                viewRoot.setBackgroundColor(HamaApp.abnormalColorId)
             } else {
-                textName.setTextColor(colorNormal)
+                //textName.setTextColor(colorNormal)
+                viewRoot.setBackgroundColor(Color.TRANSPARENT)
                 if(device.isKaiState){
-                    btnOn.setBackgroundResource(R.drawable.sharp_btn_switch_on)
+                    //btnOn.setBackgroundResource(R.drawable.sharp_btn_switch_on)
+                    viewRoot.setBackgroundColor(colorOn)
                 }else{
-                    btnOn.setBackgroundResource(R.drawable.sharp_btn_switch_off)
+                    viewRoot.setBackgroundColor(Color.TRANSPARENT)
+                    //btnOn.setBackgroundResource(R.drawable.sharp_btn_switch_off)
                 }
             }
         }

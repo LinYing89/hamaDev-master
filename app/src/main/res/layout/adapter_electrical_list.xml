@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/listItemMinHeight"
-    android:orientation="horizontal"
-    android:padding="5dp">
+    android:orientation="horizontal">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,6 +28,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:layout_weight="1"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -38,14 +38,11 @@
 
             <Button
                 android:id="@+id/btnOn"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/sharp_btn_switch_off"
-                android:text="O"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:text="开"
+                android:textAllCaps="false" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -55,16 +52,11 @@
 
             <Button
                 android:id="@+id/btnAuto"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/sharp_btn_switch_off"
-                android:text="A"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:text="自动"
+                android:textAllCaps="false"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -74,16 +66,11 @@
 
             <Button
                 android:id="@+id/btnOff"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/sharp_btn_switch_off"
-                android:text="S"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:text="关"
+                android:textAllCaps="false"/>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

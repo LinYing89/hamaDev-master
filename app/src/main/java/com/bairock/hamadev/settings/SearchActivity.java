@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -108,17 +109,21 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.action_add_device :
+                if(!HamaApp.NET_CONNECTED){
+                    Snackbar.make(getWindow().getDecorView(), "网络未连接", Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
                 if(rootDevice != null && rootDevice instanceof Coordinator){
                     AddDeviceTask addDeviceTask = new AddDeviceTask(this);
                     addDeviceTask.execute();
                 }else {
                     EspTouchAddDevice espTouchAddDevice = new EspTouchAddDevice(this);
-                    String ssid = espTouchAddDevice.getSsid();
-                    if (!ssid.equals(Config.INSTANCE.getRouteName()) && !espTouchAddDevice.moniAdd) {
-                        showMessageDialog();
-                    } else {
+//                    String ssid = espTouchAddDevice.getSsid();
+//                    if (!ssid.equals(Config.INSTANCE.getRouteName()) && !espTouchAddDevice.moniAdd) {
+//                        showMessageDialog();
+//                    } else {
                         espTouchAddDevice.startConfig();
-                    }
+//                    }
                 }
                 break;
         }

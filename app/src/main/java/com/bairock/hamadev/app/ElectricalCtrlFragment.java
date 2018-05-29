@@ -64,17 +64,16 @@ public class ElectricalCtrlFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_electrical_ctrl, container, false);
+        View viewRoot = inflater.inflate(R.layout.fragment_electrical_ctrl, container, false);
         handler = new MyHandler(this);
-        swipeMenuRecyclerViewElectrical = view.findViewById(R.id.swipeMenuRecyclerViewElectrical);
+        swipeMenuRecyclerViewElectrical = viewRoot.findViewById(R.id.swipeMenuRecyclerViewElectrical);
         setLayoutManager();
+        setGridViewElectrical();
         swipeMenuRecyclerViewElectrical.setLongPressDragEnabled(true);
         swipeMenuRecyclerViewElectrical.setOnItemMoveListener(onItemMoveListener);
         swipeMenuRecyclerViewElectrical.setOnItemStateChangedListener(mOnItemStateChangedListener);
-
-        setGridViewElectrical();
         HamaApp.DEV_GROUP.addOnDeviceCollectionChangedListener(onDeviceCollectionChangedListener);
-        return view;
+        return viewRoot;
     }
 
     @Override
@@ -155,21 +154,31 @@ public class ElectricalCtrlFragment extends Fragment {
             int fromPosition = srcHolder.getAdapterPosition() - swipeMenuRecyclerViewElectrical.getHeaderItemCount();
             int toPosition = targetHolder.getAdapterPosition() - swipeMenuRecyclerViewElectrical.getHeaderItemCount();
 
-            if (fromPosition < toPosition) {
-                for (int i = fromPosition; i < toPosition; i++) {
-                    listIStateDev.get(i).setSortIndex(i+1);
-                    listIStateDev.get(i + 1).setSortIndex(i);
-                    Collections.swap(listIStateDev, i, i + 1);
+            if(Config.INSTANCE.getDevShowStyle().equals("0")) {
+                //宫格
+                if (fromPosition < toPosition) {
+                    for (int i = fromPosition; i < toPosition; i++) {
+                        listIStateDev.get(i).setSortIndex(i + 1);
+                        listIStateDev.get(i + 1).setSortIndex(i);
+                        Collections.swap(listIStateDev, i, i + 1);
+                        adapterElectrical.notifyItemMoved(i, i+1);
+                    }
+                } else {
+                    for (int i = fromPosition; i > toPosition; i--) {
+                        listIStateDev.get(i).setSortIndex(i - 1);
+                        listIStateDev.get(i - 1).setSortIndex(i);
+                        Collections.swap(listIStateDev, i, i - 1);
+                        adapterElectrical.notifyItemMoved(i, i-1);
+                    }
                 }
-            }else {
-                for (int i = fromPosition; i > toPosition; i--) {
-                    listIStateDev.get(i).setSortIndex(i-1);
-                    listIStateDev.get(i - 1).setSortIndex(i);
-                    Collections.swap(listIStateDev, i, i - 1);
-                }
+            }else{
+                //列表
+                listIStateDev.get(fromPosition).setSortIndex(toPosition);
+                listIStateDev.get(toPosition).setSortIndex(fromPosition);
+                Collections.swap(listIStateDev, fromPosition, toPosition);
+                adapterElectricalList.notifyItemMoved(fromPosition, toPosition);
             }
 
-            adapterElectrical.notifyItemMoved(fromPosition, toPosition);
             return true;// 返回true表示处理了并可以换位置，返回false表示你没有处理并不能换位置。
         }
 
