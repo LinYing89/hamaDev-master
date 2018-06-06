@@ -11,7 +11,7 @@ object Media{
     private val soundMap = HashMap<Int, Int>()
 
     fun init(context: Context){
-        soundMap[1] = soundPool.load(context, R.raw.ding, 1)
+        soundMap[1] = soundPool.load(context, R.raw.da2, 1)
     }
 
     fun playCtrlRing(){

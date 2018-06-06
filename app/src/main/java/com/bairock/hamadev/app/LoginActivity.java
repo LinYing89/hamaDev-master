@@ -40,6 +40,7 @@ import com.bairock.iot.intelDev.user.DevGroup;
 import com.bairock.iot.intelDev.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -71,6 +72,18 @@ public class LoginActivity extends AppCompatActivity {
         etGroupPsd = findViewById(R.id.etGroupPsd);
         btnLogin = findViewById(R.id.btnLogin);
         btnLoginOffline = findViewById(R.id.btnLoginOffline);
+
+        String userName = "";
+        if(null != HamaApp.USER){
+            userName = HamaApp.USER.getName();
+        }
+        etUserName.setText(userName);
+
+        String groupName = "";
+        if(null != HamaApp.DEV_GROUP){
+            groupName = HamaApp.DEV_GROUP.getName();
+        }
+        etGroupName.setText(groupName);
     }
 
     private void setListener(){
@@ -82,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         switch (v.getId()){
             case R.id.btnLogin:
                 showProgress(true);
-                userLoginTask = new UserLoginTask(etUserName.getText().toString(),
+                userLoginTask = new UserLoginTask(LoginActivity.this, etUserName.getText().toString(),
                         etGroupName.getText().toString(), etGroupPsd.getText().toString());
                 userLoginTask.execute();
                 break;
@@ -140,13 +153,16 @@ public class LoginActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    private static class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+
+        WeakReference<LoginActivity> mActivity;
 
         private final String strName;
         private final String mGroup;
         private final String mPassword;
 
-        UserLoginTask(String userame,String group, String password) {
+        UserLoginTask(LoginActivity activity, String userame,String group, String password) {
+            mActivity = new WeakReference<>(activity);
             strName = userame;
             mGroup = group;
             mPassword = password;
@@ -154,7 +170,8 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            boolean monitor = isMonitor(strName, mGroup , mPassword);
+            LoginActivity activity = mActivity.get();
+            boolean monitor = activity.isMonitor(strName, mGroup , mPassword);
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -165,21 +182,23 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            userLoginTask = null;
-            showProgress(false);
+            LoginActivity activity = mActivity.get();
+            activity.userLoginTask = null;
+            activity.showProgress(false);
 
             if (success) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+                activity.startActivity(new Intent(activity, MainActivity.class));
+                activity.finish();
             } else {
-                Snackbar.make(etUserName, "登陆超时", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(activity.getWindow().getDecorView(), "登陆超时", Snackbar.LENGTH_SHORT).show();
             }
         }
 
         @Override
         protected void onCancelled() {
-            userLoginTask = null;
-            showProgress(false);
+            LoginActivity activity = mActivity.get();
+            activity.userLoginTask = null;
+            activity.showProgress(false);
         }
     }
 

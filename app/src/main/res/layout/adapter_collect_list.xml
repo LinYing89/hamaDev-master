@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:minEms="3"
+            android:textStyle="bold"
             android:text="名称" />
     </RelativeLayout>
 

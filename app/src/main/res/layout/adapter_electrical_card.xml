@@ -24,6 +24,7 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:clickable="true"
+            android:textStyle="bold"
             android:text="名称" />
 
         <Button

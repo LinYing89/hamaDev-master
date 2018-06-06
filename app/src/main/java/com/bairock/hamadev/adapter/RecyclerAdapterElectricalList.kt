@@ -64,7 +64,7 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
     class ViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
 
         lateinit var device: Device
-        private val viewRoot = itemView;
+        private val viewRoot = itemView
         private val textName: TextView = itemView.findViewById(R.id.txtName)
         private val btnOn : Button = itemView.findViewById(R.id.btnOn)
         private val btnAuto : Button = itemView.findViewById(R.id.btnAuto)
@@ -121,11 +121,11 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
 
         internal fun refreshState() {
             if (!device.isNormal) {
-                //textName.setTextColor(HamaApp.abnormalColorId)
-                viewRoot.setBackgroundColor(HamaApp.abnormalColorId)
+                textName.setTextColor(HamaApp.abnormalColorId)
+//                viewRoot.setBackgroundColor(HamaApp.abnormalColorId)
             } else {
-                //textName.setTextColor(colorNormal)
-                viewRoot.setBackgroundColor(Color.TRANSPARENT)
+                textName.setTextColor(colorNormal)
+//                viewRoot.setBackgroundColor(Color.TRANSPARENT)
                 if(device.isKaiState){
                     //btnOn.setBackgroundResource(R.drawable.sharp_btn_switch_on)
                     viewRoot.setBackgroundColor(colorOn)
