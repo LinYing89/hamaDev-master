@@ -84,6 +84,9 @@ class SettingsActivity2 : AppCompatPreferenceActivity() {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.pref_about)
             setHasOptionsMenu(true)
+
+            val prefVersion = findPreference("prefVersion")
+            prefVersion.summary = MainActivity.VERSION_NAME
         }
     }
 

@@ -70,6 +70,14 @@ public class HamaApp extends Application {
         return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/GetPortServlet";
     }
 
+    public static String getCompareVersionUrl(int appVc){
+        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/CompareAppVersion?appVc=" + appVc;
+    }
+
+    public static String getDownloadAppUrl(String appName){
+        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/Download?appName=" + appName;
+    }
+
     public static void addOfflineDevCoding(Device device){
         if(null != device) {
             if(device instanceof Coordinator){

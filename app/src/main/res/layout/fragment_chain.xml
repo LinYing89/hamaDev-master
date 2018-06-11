@@ -37,7 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:drawableLeft="@drawable/ic_add_circle_outline_black_24dp"
             android:text="添加"/>
         <View
             android:layout_width="match_parent"

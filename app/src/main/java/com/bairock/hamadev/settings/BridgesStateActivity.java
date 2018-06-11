@@ -19,6 +19,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 所有连接收发次数监视
+ */
 public class BridgesStateActivity extends AppCompatActivity {
 
     public static MyHandler myHandler;
@@ -91,15 +94,12 @@ public class BridgesStateActivity extends AppCompatActivity {
 
     private void setListener(){
         lvBridge.setOnItemClickListener((parent, view, position, id) -> {
-//            BridgeMsgActivity.bridgeState = listBridgeState.get(position);
-//            startActivity(new Intent(BridgesStateActivity.this, BridgeMsgActivity.class));
-
             BridgeMsgTestActivity.bridgeState = listBridgeState.get(position);
             startActivity(new Intent(BridgesStateActivity.this, BridgeMsgTestActivity.class));
         });
     }
 
-    public static void  sendCountAnd(String channelId, int count, String msg){
+    public static void sendCountAnd(String channelId, int count, String msg){
         for(BridgeState bridgeState : listBridgeState){
             if(bridgeState.getChannelId().equals(channelId)){
                 bridgeState.setSendCount(count);

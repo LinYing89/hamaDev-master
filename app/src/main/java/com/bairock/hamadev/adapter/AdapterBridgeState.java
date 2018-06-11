@@ -46,10 +46,10 @@ public class AdapterBridgeState extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = mInflater.inflate(R.layout.layout_bridge_state, null);
-        TextView tvDevice = (TextView)convertView.findViewById(R.id.tvDevice);
-        TextView tvChannelId = (TextView)convertView.findViewById(R.id.tvChannelId);
-        TextView tvSendCount = (TextView)convertView.findViewById(R.id.tvSendCount);
-        TextView tvReceivedCount = (TextView)convertView.findViewById(R.id.tvReceivedCount);
+        TextView tvDevice = convertView.findViewById(R.id.tvDevice);
+        TextView tvChannelId = convertView.findViewById(R.id.tvChannelId);
+        TextView tvSendCount = convertView.findViewById(R.id.tvSendCount);
+        TextView tvReceivedCount = convertView.findViewById(R.id.tvReceivedCount);
         BridgeState bridge = listDevChannelBridge.get(position);
         if(null != bridge.getDevCoding()) {
             tvDevice.setText(bridge.getDevCoding());

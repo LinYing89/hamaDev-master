@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -32,6 +33,7 @@ import com.bairock.hamadev.R;
 import com.bairock.hamadev.adapter.SectionsPagerAdapter;
 import com.bairock.hamadev.communication.CheckServerConnect;
 import com.bairock.hamadev.communication.DownloadClient;
+import com.bairock.hamadev.communication.MyHttpRequest;
 import com.bairock.hamadev.communication.SerialPortHelper;
 import com.bairock.hamadev.communication.UploadClient;
 import com.bairock.hamadev.database.Config;
@@ -41,14 +43,17 @@ import com.bairock.hamadev.settings.BridgesStateActivity;
 import com.bairock.hamadev.settings.SearchActivity;
 import com.bairock.hamadev.settings.SettingsActivity2;
 import com.bairock.iot.intelDev.user.IntelDevHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.lang.ref.WeakReference;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static boolean IS_ADMIN;
     public static String subTitle = "呱呱物联:智能物联网控制器";
+    public static String VERSION_NAME = "";
 
     public static final int UPLOAD_FAIL = 3;
     public static final int UPLOAD_OK = 4;
@@ -71,28 +76,29 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar =  findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setLogo(R.mipmap.ic_logo_white);
         packageInfo = getAppVersionCode(this);
         //toolbar.setTitle(UserHelper.getUser().getName() + UserHelper.getUser().getPetName());
-        if(null != packageInfo){
-            subTitle += " v" + packageInfo.versionName;
+        if (null != packageInfo) {
+            VERSION_NAME = packageInfo.versionName;
+            subTitle += " v" + VERSION_NAME;
         }
         toolbar.setTitle(HamaApp.USER.getName() + "-" + HamaApp.DEV_GROUP.getName() + ":" + HamaApp.DEV_GROUP.getPetName());
         toolbar.setSubtitle(subTitle);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView =  findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         strEnsure = "确定";
         strCancel = "取消";
         versionTask = new VersionTask(this);
-        versionTask.execute((Void)null);
+        versionTask.execute((Void) null);
 
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -110,9 +116,9 @@ public class MainActivity extends AppCompatActivity
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filter.addAction("android.net.wifi.STATE_CHANGE");
-        registerReceiver(networkConnectChangedReceiver,filter);
+        registerReceiver(networkConnectChangedReceiver, filter);
 
-        if(!IS_ADMIN) {
+        if (!IS_ADMIN) {
             //尝试连接服务器
             IntelDevHelper.executeThread(new CheckServerConnect());
         }
@@ -138,7 +144,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.action_reset:
                 //DeviceChainHelper.getIns().init();
                 break;
@@ -157,14 +163,14 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_search) {
             startActivity(new Intent(MainActivity.this, SearchActivity.class));
-        } else if(id == R.id.nav_set_chain) {
+        } else if (id == R.id.nav_set_chain) {
             startActivity(new Intent(MainActivity.this, LinkageActivity.class));
-        }else if(id == R.id.nav_system_set) {
+        } else if (id == R.id.nav_system_set) {
             startActivity(new Intent(MainActivity.this, SettingsActivity2.class));
 //            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         } else if (id == R.id.nav_upload) {
             //上传
-            if(IS_ADMIN){
+            if (IS_ADMIN) {
                 Snackbar.make(getWindow().getDecorView(), "未登录，不能上传", Snackbar.LENGTH_SHORT).show();
                 return true;
             }
@@ -172,23 +178,23 @@ public class MainActivity extends AppCompatActivity
             UploadClient uploadClient = new UploadClient();
             uploadClient.link();
         } else if (id == R.id.nav_download) {
-            if(IS_ADMIN){
+            if (IS_ADMIN) {
                 Snackbar.make(getWindow().getDecorView(), "未登录，不能下载", Snackbar.LENGTH_SHORT).show();
                 return true;
             }
             showProgressDialog("下载");
             DownloadClient downloadClient = new DownloadClient();
             downloadClient.link();
-        }else if (id == R.id.nav_exit) {
+        } else if (id == R.id.nav_exit) {
             new AlertDialog.Builder(MainActivity.this)
                     .setMessage("确定退出账号吗")
-                    .setNegativeButton(strCancel,null)
+                    .setNegativeButton(strCancel, null)
                     .setPositiveButton(strEnsure,
                             (dialog, whichButton) -> {
                                 Config.INSTANCE.setNeedLogin(MainActivity.this, true);
                                 finish();
                             }).show();
-        }else if(id == R.id.nav_log){
+        } else if (id == R.id.nav_log) {
             startActivity(new Intent(MainActivity.this, BridgesStateActivity.class));
         }
 
@@ -252,11 +258,11 @@ public class MainActivity extends AppCompatActivity
                     theActivity.closeProgressDialog();
                     break;
                 case REFRESH_TITLE:
-                    if(!HamaApp.NET_CONNECTED){
+                    if (!HamaApp.NET_CONNECTED) {
                         theActivity.toolbar.setSubtitle(subTitle + "(网络未连接)");
-                    }else if(!HamaApp.SERVER_CONNECTED){
+                    } else if (!HamaApp.SERVER_CONNECTED) {
                         theActivity.toolbar.setSubtitle(subTitle + "(服务器未连接)");
-                    }else{
+                    } else {
                         theActivity.toolbar.setSubtitle(subTitle);
                     }
                     break;
@@ -264,7 +270,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void showProgressDialog(String title){
+    private void showProgressDialog(String title) {
         //创建ProgressDialog对象
         progressFileDialog = new ProgressDialog(
                 MainActivity.this);
@@ -291,60 +297,62 @@ public class MainActivity extends AppCompatActivity
         progressFileDialog.show();
     }
 
-    private void closeProgressDialog(){
-        if(null != progressFileDialog && progressFileDialog.isShowing()){
+    private void closeProgressDialog() {
+        if (null != progressFileDialog && progressFileDialog.isShowing()) {
             progressFileDialog.dismiss();
         }
     }
 
-private static class VersionTask extends AsyncTask<Void, Void, Boolean> {
-    WeakReference<MainActivity> mActivity;
+    private static class VersionTask extends AsyncTask<Void, Void, Boolean> {
+        WeakReference<MainActivity> mActivity;
+        String appName = "";
 
-    VersionTask(MainActivity activity) {
-        mActivity = new WeakReference<>(activity);
-    }
-    @Override
-    protected Boolean doInBackground(Void... params) {
-        try {
-            MainActivity theActivity = mActivity.get();
-            if(theActivity.packageInfo != null){
-                int version = theActivity.packageInfo.versionCode;
-                String s = "";
-                //String s = HttpRequest.sendGet(WebClient.getVersionUrl(), "version=" + version);
-                Log.e("MainActivity: ", "get:" + s);
-                return s.contains("YES");
+        VersionTask(MainActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                MainActivity theActivity = mActivity.get();
+                if (theActivity.packageInfo != null) {
+                    int version = theActivity.packageInfo.versionCode;
+                    String s = MyHttpRequest.sendGet(HamaApp.getCompareVersionUrl(version), null);
+                    ObjectMapper mapper = new ObjectMapper();
+                    Map map = mapper.readValue(s, Map.class);
+                    boolean update = Boolean.parseBoolean(map.get("update").toString());
+                    appName = map.get("appName").toString();
+                    return update;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
             }
-        }catch (Exception e){
-            e.printStackTrace();
             return false;
         }
-        return false;
-    }
 
-    @Override
-    protected void onPostExecute(final Boolean success) {
-        MainActivity theActivity = mActivity.get();
-        theActivity.versionTask = null;
-        if (success) {
-            new AlertDialog.Builder(theActivity)
-                    .setMessage("有新版本，是否下载更新")
-                    .setNegativeButton(strCancel, null)
-                    .setPositiveButton(strEnsure,
-                            (dialog, whichButton) -> {
-                                //下载
-                                theActivity.intoDownloadManager();
-                                    /*Intent i = new Intent(Intent.ACTION_VIEW , Uri.parse("http://192.168.1.104:8080/ZSHWeb/download/smarthome.apk"));
-                                    startActivity(i);*/
-                            }).show();
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            MainActivity theActivity = mActivity.get();
+            theActivity.versionTask = null;
+            if (success) {
+                new AlertDialog.Builder(theActivity)
+                        .setMessage("有新版本，是否下载更新")
+                        .setNegativeButton(strCancel, null)
+                        .setPositiveButton(strEnsure,
+                                (dialog, whichButton) -> {
+                                    //下载
+                                    theActivity.intoDownloadManager(appName);
+                                }).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            MainActivity theActivity = mActivity.get();
+            theActivity.versionTask = null;
         }
     }
-
-    @Override
-    protected void onCancelled() {
-        MainActivity theActivity = mActivity.get();
-        theActivity.versionTask = null;
-    }
-}
 
     /**
      * 返回当前程序版本名
@@ -361,13 +369,13 @@ private static class VersionTask extends AsyncTask<Void, Void, Boolean> {
         return pi;
     }
 
-    private void intoDownloadManager(){
+    private void intoDownloadManager(String appName) {
         try {
             DownloadManager dManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-            Uri uri = Uri.parse("");
+            Uri uri = Uri.parse(HamaApp.getDownloadAppUrl(appName));
             DownloadManager.Request request = new DownloadManager.Request(uri);
             // 设置下载路径和文件名
-            request.setDestinationInExternalPublicDir(MyFileHelper.getZhiBoFile(), "hama.apk");
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, appName);
             request.setDescription("智能物联网控制器新版本下载");
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setMimeType("application/vnd.android.package-archive");
@@ -375,10 +383,11 @@ private static class VersionTask extends AsyncTask<Void, Void, Boolean> {
             request.allowScanningByMediaScanner();
             // 设置为可见和可管理
             request.setVisibleInDownloadsUi(true);
+            assert dManager != null;
             long refernece = dManager.enqueue(request);
             // 把当前下载的ID保存起来
             Config.INSTANCE.setDownloadId(this, refernece);
-        }catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException ex) {
             Snackbar.make(toolbar, "下载器没有启用", Snackbar.LENGTH_LONG).show();
         }
     }

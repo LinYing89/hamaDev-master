@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,11 +18,14 @@ import com.bairock.hamadev.communication.NetMsgType;
 
 import java.lang.ref.WeakReference;
 
+/**
+ * 单路连接信息监视
+ */
 public class BridgeMsgTestActivity extends AppCompatActivity {
 
     private TextView tvLogs;
 
-    public static MyHandler myHandler;
+    public MyHandler myHandler;
 
     public static BridgeState bridgeState;
 
@@ -40,7 +42,7 @@ public class BridgeMsgTestActivity extends AppCompatActivity {
             }
         }
 
-        tvLogs = (TextView)findViewById(R.id.tvLogs);
+        tvLogs = findViewById(R.id.tvLogs);
 
         StringBuilder sb = new StringBuilder();
         for(NetMsgType netMsgType : bridgeState.getListBridgeMsgType()){
@@ -122,6 +124,13 @@ public class BridgeMsgTestActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        bridgeState.setOnCollectionChangedMsgListener(null);
+        bridgeState.setDevCoding(null);
     }
 
     public static class MyHandler extends Handler {
