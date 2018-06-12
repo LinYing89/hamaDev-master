@@ -9,7 +9,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="abnormal">#FFE9967A</color>
+    <color name="abnormal">#e9967a</color>
     <color name="state_kai">#43CD80</color>
     <color name="state_kai2">#B0E2FF</color>
 

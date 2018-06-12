@@ -30,6 +30,7 @@ import java.util.List;
 public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAdapterElectrical3.ViewHolder> {
 
     public static final int AUTO = 0;
+    public static final int GEAR_NEED_TO_AUTO = 1;
     public static final int STATE = 2;
     public static final int NAME = 3;
     private static int colorNoraml;
@@ -72,11 +73,14 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
 
         private Device device;
         private TextView textName;
+        private TextView txtGearToAuto;
         private Button btnState;
 
         public ViewHolder(View itemView, Context context) {
             super(itemView);
             textName = itemView.findViewById(R.id.textName);
+            txtGearToAuto = itemView.findViewById(R.id.txtGearToAuto);
+            txtGearToAuto.setOnClickListener(v -> device.setGear(Gear.ZIDONG));
             textName.setSelected(true);
             textName.setOnClickListener(view -> {
                 if(DevSwitchAttributeSettingActivity.Companion.getDevice() == null) {
@@ -124,6 +128,7 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
             refreshName();
             refreshState();
             refreshBntStateText(device.getGear());
+            refreshGearToAuto();
         }
 
         private void toKaiGear(){
@@ -172,6 +177,14 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
                 textName.setText(device.getAlias());
             }
         }
+
+        private void refreshGearToAuto() {
+            if(device.isGearNeedToAuto()) {
+                txtGearToAuto.setVisibility(View.VISIBLE);
+            }else{
+                txtGearToAuto.setVisibility(View.GONE);
+            }
+        }
     }
 
     public static class MyHandler extends Handler {
@@ -196,6 +209,9 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
                             break;
                         case NAME:
                             vh.refreshName();
+                            break;
+                        case GEAR_NEED_TO_AUTO:
+                            vh.refreshGearToAuto();
                             break;
                     }
                     break;
