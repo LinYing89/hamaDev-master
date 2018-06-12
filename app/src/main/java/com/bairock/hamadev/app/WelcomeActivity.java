@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.bairock.hamadev.communication.MyOnGearNeedToAutoListener;
 import com.bairock.hamadev.media.Media;
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.communication.ChannelBridgeHelperHeartSendListener;
@@ -44,6 +45,7 @@ import com.bairock.iot.intelDev.device.MainCodeHelper;
 import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectSignalContainer;
+import com.bairock.iot.intelDev.device.devcollect.Pressure;
 import com.bairock.iot.intelDev.linkage.LinkageHelper;
 import com.bairock.iot.intelDev.linkage.LinkageTab;
 import com.bairock.iot.intelDev.linkage.guagua.GuaguaHelper;
@@ -137,6 +139,7 @@ public class WelcomeActivity extends AppCompatActivity {
         device.setOnSortIndexChangedListener(new MyOnSortIndexChangedListener());
         device.addOnAliasChangedListener(new MyOnAliasChangedListener());
         device.addOnNameChangedListener(new MyOnNameChangedListener());
+        device.setOnGearNeedToAutoListener(new MyOnGearNeedToAutoListener());
 
         if(device instanceof DevHaveChild){
             DevHaveChild devHaveChild = (DevHaveChild)device;
@@ -242,7 +245,9 @@ public class WelcomeActivity extends AppCompatActivity {
         devGroupDao.add(devGroup);
 
         Coordinator coordinator = (Coordinator)DeviceAssistent.createDeviceByMcId(MainCodeHelper.XIE_TIAO_QI, "9999");
+        Pressure pressure = (Pressure)DeviceAssistent.createDeviceByMcId(MainCodeHelper.YE_WEI, "9999");
 
+        coordinator.addChildDev(pressure);
         devGroup.addDevice(coordinator);
 
         SdDbHelper.replaceDbUser(user);
