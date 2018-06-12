@@ -3,6 +3,8 @@ package com.bairock.hamadev.app;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
+import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
@@ -57,6 +59,11 @@ public class HamaApp extends Application {
         //Stetho.initializeWithDefaults(this);
 //        DebugDB.getAddressLog();
         HAMA_CONTEXT = this.getApplicationContext();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
 
         abnormalColorId = getResources().getColor(R.color.abnormal);
         stateKaiColorId = getResources().getColor(R.color.state_kai);

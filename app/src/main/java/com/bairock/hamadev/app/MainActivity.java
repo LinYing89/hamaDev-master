@@ -38,6 +38,7 @@ import com.bairock.hamadev.communication.SerialPortHelper;
 import com.bairock.hamadev.communication.UploadClient;
 import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.linkage.LinkageActivity;
+import com.bairock.hamadev.receiver.DownloadReceiver;
 import com.bairock.hamadev.receiver.NetworkConnectChangedReceiver;
 import com.bairock.hamadev.settings.BridgesStateActivity;
 import com.bairock.hamadev.settings.SearchActivity;
@@ -371,11 +372,14 @@ public class MainActivity extends AppCompatActivity
 
     private void intoDownloadManager(String appName) {
         try {
+
             DownloadManager dManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
             Uri uri = Uri.parse(HamaApp.getDownloadAppUrl(appName));
             DownloadManager.Request request = new DownloadManager.Request(uri);
             // 设置下载路径和文件名
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, appName);
+            String downloadFileName = System.currentTimeMillis() + appName;
+            DownloadReceiver.Companion.setAPP_NAME(downloadFileName);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, downloadFileName);
             request.setDescription("智能物联网控制器新版本下载");
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setMimeType("application/vnd.android.package-archive");
