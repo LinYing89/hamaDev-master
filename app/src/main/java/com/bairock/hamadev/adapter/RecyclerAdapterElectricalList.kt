@@ -28,8 +28,10 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
 
     companion object {
         const val AUTO = 0
+        const val GEAR_NEED_TO_AUTO = 1
         const val STATE = 2
         const val NAME = 3
+
         var colorNormal: Int = 0
         var colorOn: Int = 0
         var colorGear: Int = Color.parseColor("#1E90FF")
@@ -66,6 +68,7 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
         lateinit var device: Device
         private val viewRoot = itemView
         private val textName: TextView = itemView.findViewById(R.id.txtName)
+        private val txtGearToAuto: TextView = itemView.findViewById(R.id.txtGearToAuto)
         private val btnOn : Button = itemView.findViewById(R.id.btnOn)
         private val btnAuto : Button = itemView.findViewById(R.id.btnAuto)
         private val btnOff : Button = itemView.findViewById(R.id.btnOff)
@@ -77,6 +80,7 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
                     context.startActivity(Intent(context, DevSwitchAttributeSettingActivity::class.java))
                 }
             }
+            txtGearToAuto.setOnClickListener{device.gear = Gear.ZIDONG}
 
             btnOn.setOnClickListener{
                 startAnim(it)
@@ -117,6 +121,7 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
             refreshName()
             refreshState()
             refreshGear()
+            refreshGearToAuto()
         }
 
         internal fun refreshState() {
@@ -141,6 +146,14 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
                 textName.text = device.name
             }else{
                 textName.text = device.alias
+            }
+        }
+
+        internal fun refreshGearToAuto() {
+            if (device.isGearNeedToAuto) {
+                txtGearToAuto.visibility = View.VISIBLE
+            } else {
+                txtGearToAuto.visibility = View.GONE
             }
         }
 
@@ -177,6 +190,7 @@ class RecyclerAdapterElectricalList(private var context: Context, listDevice: Mu
                         AUTO -> vh.refreshGear()
                         STATE -> vh.refreshState()
                         NAME -> vh.refreshName()
+                        GEAR_NEED_TO_AUTO -> vh.refreshGearToAuto()
                     }
                     break
                 }
