@@ -85,21 +85,27 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         HamaApp.DEV_GROUP = HamaApp.USER.getListDevGroup().get(0);
 
-        FindDevHelper.getIns().setOnSendListener(new FindDevHelper.OnSendListener() {
-            @Override
-            public void create() {
 
-            }
 
-            @Override
-            public void send(String s) {
-                UdpLogActivity.addSend(s);
-            }
-        });
 
         //本地tcp网络数据监听器名称
-        DevChannelBridgeHelper.BRIDGE_COMMUNICATION_LISTENER_NAME = MyOnCommunicationListener.class.getName();
-        DevChannelBridgeHelper.getIns().setOnBridgesChangedListener(new MyOnBridgesChangedListener());
+        //调试模式下监听网络数据
+        if(LogUtils.INSTANCE.getAPP_DBG()) {
+            FindDevHelper.getIns().setOnSendListener(new FindDevHelper.OnSendListener() {
+                @Override
+                public void create() {
+
+                }
+
+                @Override
+                public void send(String s) {
+                    UdpLogActivity.addSend(s);
+                }
+            });
+
+            DevChannelBridgeHelper.BRIDGE_COMMUNICATION_LISTENER_NAME = MyOnCommunicationListener.class.getName();
+            DevChannelBridgeHelper.getIns().setOnBridgesChangedListener(new MyOnBridgesChangedListener());
+        }
 
         MyOnStateChangedListener onStateChangedListener = new MyOnStateChangedListener();
         MyOnGearChangedListener onGearChangedListener = new MyOnGearChangedListener();

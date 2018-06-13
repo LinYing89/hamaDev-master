@@ -8,8 +8,8 @@ android {
         applicationId "com.bairock.hamadev"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 2
-        versionName "3.2"
+        versionCode 1
+        versionName "3.1debug"
         multiDexEnabled true //Add this
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

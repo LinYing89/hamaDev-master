@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.communication.PadClient;
@@ -67,6 +68,8 @@ public class HamaApp extends Application {
 
         abnormalColorId = getResources().getColor(R.color.abnormal);
         stateKaiColorId = getResources().getColor(R.color.state_kai);
+
+        LogUtils.INSTANCE.init(this);
     }
 
     public static String getLoginUrl(){
@@ -78,11 +81,11 @@ public class HamaApp extends Application {
     }
 
     public static String getCompareVersionUrl(int appVc){
-        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/CompareAppVersion?appVc=" + appVc;
+        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/CompareAppVersion?appVc=" + appVc + "&debug=" + LogUtils.INSTANCE.getAPP_DBG();
     }
 
     public static String getDownloadAppUrl(String appName){
-        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/Download?appName=" + appName;
+        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/Download?appName=" + appName + "&debug=" + LogUtils.INSTANCE.getAPP_DBG();
     }
 
     public static void addOfflineDevCoding(Device device){

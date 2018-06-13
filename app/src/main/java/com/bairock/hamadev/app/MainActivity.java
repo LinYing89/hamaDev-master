@@ -95,6 +95,11 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        if(LogUtils.INSTANCE.getAPP_DBG()) {
+            navigationView.inflateMenu(R.menu.activity_main_drawer_debug);
+        }else{
+            navigationView.inflateMenu(R.menu.activity_main_drawer_release);
+        }
         navigationView.setNavigationItemSelectedListener(this);
         strEnsure = "确定";
         strCancel = "取消";

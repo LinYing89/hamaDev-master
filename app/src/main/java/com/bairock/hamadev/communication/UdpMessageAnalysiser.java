@@ -1,5 +1,6 @@
 package com.bairock.hamadev.communication;
 
+import com.bairock.hamadev.app.LogUtils;
 import com.bairock.hamadev.esptouch.EspTouchAddDevice;
 import com.bairock.hamadev.settings.UdpLogActivity;
 import com.bairock.iot.intelDev.communication.MessageAnalysiser;
@@ -16,7 +17,9 @@ public class UdpMessageAnalysiser extends MessageAnalysiser {
     @Override
     public void receivedMsg(String msg) {
         super.receivedMsg(msg);
-        UdpLogActivity.addRec(msg);
+        if(LogUtils.INSTANCE.getAPP_DBG()) {
+            UdpLogActivity.addRec(msg);
+        }
     }
 
     @Override
