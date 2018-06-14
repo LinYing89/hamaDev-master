@@ -63,7 +63,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                     <Spinner
-                        android:id="@+id/spinnerDevice"
+                        android:id="@+id/spinnerDevices"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1" />

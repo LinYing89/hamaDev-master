@@ -39,11 +39,12 @@ public class ConditionActivity extends AppCompatActivity {
     private Spinner spinnerLogic;
     private Spinner spinnerDevice;
     private Spinner spinnerSymbol;
+    //spinnerTriggerStyle = (Spinner)findViewById(R.id.spinnerTriggerStyle);
     //private Spinner spinnerTriggerStyle;
-    private Spinner spinnerValue;
+    private Spinner spinnerValue = (Spinner)findViewById(R.id.spinnerValue);
     private EditText editValue;
     private Button btnSave;
-    private Button btnCancel;
+    private Button btnCancel = (Button)findViewById(R.id.btn_cancel);
 
     private List<Device> listDevice;
 
@@ -82,16 +83,13 @@ public class ConditionActivity extends AppCompatActivity {
     }
 
     private void findViews(){
-        tabrowTriggerValueSpinner = (TableRow) findViewById(R.id.tabrowTriggerValueSpinner);
-        tabrowTriggerValueEdit = (TableRow) findViewById(R.id.tabrowTriggerValueEdit);
-        spinnerLogic = (Spinner)findViewById(R.id.spinnerLogic);
-        spinnerDevice = (Spinner)findViewById(R.id.spinnerDevice);
-        spinnerSymbol = (Spinner)findViewById(R.id.spinnerSymbol);
-        //spinnerTriggerStyle = (Spinner)findViewById(R.id.spinnerTriggerStyle);
-        spinnerValue = (Spinner)findViewById(R.id.spinnerValue);
-        editValue = (EditText)findViewById(R.id.etxtValue);
-        btnSave = (Button)findViewById(R.id.btn_save);
-        btnCancel = (Button)findViewById(R.id.btn_cancel);
+        tabrowTriggerValueSpinner =  findViewById(R.id.tabrowTriggerValueSpinner);
+        tabrowTriggerValueEdit = findViewById(R.id.tabrowTriggerValueEdit);
+        spinnerLogic = findViewById(R.id.spinnerLogic);
+        spinnerDevice = findViewById(R.id.spinnerDevices);
+        spinnerSymbol = findViewById(R.id.spinnerSymbol);
+        editValue = findViewById(R.id.etxtValue);
+        btnSave = findViewById(R.id.btn_save);
     }
 
     private void setSpinners(){

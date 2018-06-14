@@ -2,42 +2,54 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'zhibo'
+            keyPassword 'lygzbkj007'
+            storeFile file('E:/AndroidStudioProjects/androidkeystore/zhibo.jks')
+            storePassword 'lygzbkj007'
+        }
+    }
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.bairock.hamadev"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
-        versionName "3.1debug"
+        versionName '3.1'
         multiDexEnabled true //Add this
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
         android.compileOptions.sourceCompatibility 1.8
         android.compileOptions.targetCompatibility 1.8
         vectorDrawables.useSupportLibrary = true
+        signingConfig signingConfigs.config
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+            versionNameSuffix 'release'
         }
         sourceSets {
             main {
                 jni.srcDirs = []
             }
         }
+        debug {
+            versionNameSuffix 'debug'
+        }
     }
-
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
-//    packagingOptions {
-//        exclude 'META-INF/maven/com.bairock.iot/intelDev/pom.xml'
-//        exclude 'META-INF/maven/com.bairock.iot/intelDev/pom.properties'
-//    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    productFlavors {
+    }
+    packagingOptions {
+        pickFirst 'META-INF/*'
+    }
 }
 
 dependencies {
@@ -52,12 +64,13 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.yanzhenjie:recyclerview-swipe:1.1.4'
+    implementation 'com.hikvision.ezviz:ezviz-sdk:4.8.3'
     testImplementation 'junit:junit:4.12'
-//    debugApi 'com.amitshekhar.android:debug-db:1.0.0'
+    //    debugApi 'com.amitshekhar.android:debug-db:1.0.0'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.0.pr4'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core

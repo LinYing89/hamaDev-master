@@ -3,6 +3,7 @@
     <color name="break_line">#d9d9d9</color>
     <color name="back_ground">#e9e9e9</color>
     <color name="back">#000000</color>
+    <color name="back_tra">#bb222222</color>
     <color name="back_fort">#4a4a4a</color>
     <color name="cube_back">#554a4a4a</color>
     <color name="colorPrimary">#3F51B5</color>
@@ -20,7 +21,11 @@
     <color name="yellow_switch_on_stroke">#CD9B1D</color>
     <color name="yellow_switch_off">#ADADAD</color>
     <color name="yellow_switch_off_stroke">#8B8682</color>
+    <color name="gray_text">#adadad</color>
     <color name="orange">#EE9A00</color>
     <color name="menu_blue">#4F94CD</color>
     <color name="drag_background">#884F94CD</color>
+
+    <color name="white">#ffffff</color>
+    <color name="quality_focused_color">#448cf3</color>
 </resources>

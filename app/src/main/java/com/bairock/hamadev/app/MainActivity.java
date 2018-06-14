@@ -43,8 +43,10 @@ import com.bairock.hamadev.receiver.NetworkConnectChangedReceiver;
 import com.bairock.hamadev.settings.BridgesStateActivity;
 import com.bairock.hamadev.settings.SearchActivity;
 import com.bairock.hamadev.settings.SettingsActivity2;
+import com.bairock.hamadev.video.VideoPlayActivity;
 import com.bairock.iot.intelDev.user.IntelDevHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.videogo.openapi.EZOpenSDK;
 
 import java.lang.ref.WeakReference;
 import java.util.Map;
@@ -171,6 +173,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, SearchActivity.class));
         } else if (id == R.id.nav_set_chain) {
             startActivity(new Intent(MainActivity.this, LinkageActivity.class));
+        } else if (id == R.id.nav_video) {
+            EZOpenSDK.getInstance().openLoginPage();
+            //startActivity(new Intent(MainActivity.this, VideoPlayActivity.class));
         } else if (id == R.id.nav_system_set) {
             startActivity(new Intent(MainActivity.this, SettingsActivity2.class));
 //            startActivity(new Intent(MainActivity.this, SettingsActivity.class));

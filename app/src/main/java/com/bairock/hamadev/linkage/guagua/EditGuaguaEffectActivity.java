@@ -85,11 +85,11 @@ public class EditGuaguaEffectActivity extends AppCompatActivity {
     }
 
     private void findViews(){
-        spinnerDevices = (Spinner)findViewById(R.id.spinnerDevice);
-        etxtSpeakCount = (EditText)findViewById(R.id.etxtSpeakCount);
-        etxtSpeakContent = (EditText)findViewById(R.id.etxtSpeakContent);
-        btnOk = (Button)findViewById(R.id.btnOk);
-        btnCancel = (Button)findViewById(R.id.btnCancel);
+        spinnerDevices = findViewById(R.id.spinnerDevices);
+        etxtSpeakCount = findViewById(R.id.etxtSpeakCount);
+        etxtSpeakContent = findViewById(R.id.etxtSpeakContent);
+        btnOk = findViewById(R.id.btnOk);
+        btnCancel = findViewById(R.id.btnCancel);
     }
 
     private void setListeners(){
@@ -104,12 +104,12 @@ public class EditGuaguaEffectActivity extends AppCompatActivity {
             Device device = listOtherDevice.get(i);
             names[i] = device.getName();
         }
-        spinnerDevices.setAdapter(new ArrayAdapter(this,android.R.layout.simple_list_item_1,android.R.id.text1,names));
+        spinnerDevices.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, names));
     }
 
     /**
      * 获取trigger中没有的呱呱嘴设备
-     * @return
+     * @return List<Device>
      */
     public List<Device> getListOtherGuanguanMouth(){
         List<GuaguaMouth> listEleAll = HamaApp.DEV_GROUP.findListGuaguaMouth(true);
