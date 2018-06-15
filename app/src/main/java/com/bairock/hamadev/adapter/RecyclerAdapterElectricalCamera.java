@@ -2,6 +2,7 @@ package com.bairock.hamadev.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -14,10 +15,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.bairock.hamadev.database.Config;
-import com.bairock.hamadev.media.Media;
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.app.HamaApp;
+import com.bairock.hamadev.database.Config;
+import com.bairock.hamadev.media.Media;
 import com.bairock.hamadev.settings.DevSwitchAttributeSettingActivity;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.Gear;
@@ -27,14 +28,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAdapterElectrical3.ViewHolder> {
+public class RecyclerAdapterElectricalCamera extends RecyclerView.Adapter<RecyclerAdapterElectricalCamera.ViewHolder> {
 
-    public static final int AUTO = 0;
-    public static final int GEAR_NEED_TO_AUTO = 1;
-    public static final int STATE = 2;
-    public static final int NAME = 3;
-
-    public static int colorNoraml;
     private Context context;
 
     public static MyHandler handler;
@@ -43,13 +38,12 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
     private List<Device> listDevice;
     private List<ViewHolder> listViewHolder;
 
-    public RecyclerAdapterElectrical3(Context context, List<Device> listDevice) {
+    public RecyclerAdapterElectricalCamera(Context context, List<Device> listDevice) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.listDevice = listDevice;
         listViewHolder = new ArrayList<>();
         handler = new MyHandler(this);
-        colorNoraml = context.getResources().getColor(R.color.back_fort);
     }
 
     @Override
@@ -61,13 +55,13 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        ViewHolder vh = new ViewHolder(mInflater.inflate(R.layout.adapter_electrical_card, parent, false), context);
+        ViewHolder vh = new ViewHolder(mInflater.inflate(R.layout.adapter_electrical_camera, parent, false), context);
         listViewHolder.add(vh);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerAdapterElectricalCamera.ViewHolder holder, int position) {
         holder.setData(listDevice.get(position));
     }
 
@@ -145,7 +139,7 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
             if (!device.isNormal()) {
                 textName.setTextColor(HamaApp.abnormalColorId);
             } else {
-                textName.setTextColor(colorNoraml);
+                textName.setTextColor(Color.WHITE);
                 refreshBtnState();
             }
         }
@@ -190,32 +184,29 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
     }
 
     public static class MyHandler extends Handler {
-        WeakReference<RecyclerAdapterElectrical3> mActivity;
+        WeakReference<RecyclerAdapterElectricalCamera> mActivity;
 
-        MyHandler(RecyclerAdapterElectrical3 activity) {
+        MyHandler(RecyclerAdapterElectricalCamera activity) {
             mActivity = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            if(null != RecyclerAdapterElectricalCamera.handler){
-                RecyclerAdapterElectricalCamera.handler.obtainMessage(msg.what, msg.obj).sendToTarget();
-            }
-            RecyclerAdapterElectrical3 theActivity = mActivity.get();
+            RecyclerAdapterElectricalCamera theActivity = mActivity.get();
             Device dev = (Device) msg.obj;
             for (ViewHolder vh : theActivity.listViewHolder) {
                 if (vh.device == dev) {
                     switch (msg.what) {
-                        case AUTO:
+                        case RecyclerAdapterElectrical3.AUTO:
                             vh.refreshBntStateText(dev.getGear());
                             break;
-                        case STATE:
+                        case RecyclerAdapterElectrical3.STATE:
                             vh.refreshState();
                             break;
-                        case NAME:
+                        case RecyclerAdapterElectrical3.NAME:
                             vh.refreshName();
                             break;
-                        case GEAR_NEED_TO_AUTO:
+                        case RecyclerAdapterElectrical3.GEAR_NEED_TO_AUTO:
                             vh.refreshGearToAuto();
                             break;
                     }

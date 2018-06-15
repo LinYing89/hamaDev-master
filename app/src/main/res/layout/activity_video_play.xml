@@ -64,5 +64,27 @@
                 android:textColor="@color/white"
                 android:text="均衡"/>
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true">
+
+            <ImageButton
+                android:id="@+id/imgBtnCtrlLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="?android:attr/homeAsUpIndicator" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listViewElectrical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@id/imgBtnCtrlLayout"
+                android:layout_toRightOf="@id/imgBtnCtrlLayout"
+                android:background="@color/black_camera_electrical"
+                android:visibility="gone"/>
+        </RelativeLayout>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

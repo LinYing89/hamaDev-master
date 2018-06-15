@@ -2,20 +2,24 @@ package com.bairock.hamadev.video
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.drawable.BitmapDrawable
 import android.os.*
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.*
 import com.bairock.hamadev.R
 import com.bairock.hamadev.adapter.AdapterVideoDevice
+import com.bairock.hamadev.adapter.RecyclerAdapterElectricalCamera
 import com.bairock.hamadev.app.HamaApp
 import com.videogo.constant.Constant
 import com.videogo.errorlayer.ErrorInfo
+import com.videogo.exception.BaseException
 import com.videogo.exception.ErrorCode
 import com.videogo.openapi.EZConstants
 import com.videogo.openapi.EZPlayer
@@ -36,6 +40,11 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         const val MSG_AUTO_START_PLAY = 202
         const val MSG_PLAY_UI_REFRESH = 206
         const val MSG_PREVIEW_START_PLAY = 207
+        const val MSG_SET_VEDIOMODE_SUCCESS = 105
+        /**
+         * 设置视频质量成功
+         */
+        const val MSG_SET_VEDIOMODE_FAIL = 106
     }
 
     /**
@@ -45,13 +54,18 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
 
     lateinit var llTitleBar : LinearLayout
     lateinit var llCtrl : LinearLayout
-    lateinit var btnBack : ImageButton
+    private lateinit var btnBack : ImageButton
     lateinit var spinnerDevices : Spinner
-    lateinit var mRealPlaySv :SurfaceView
+    private lateinit var mRealPlaySv :SurfaceView
     private lateinit var mRealPlaySh: SurfaceHolder
     private lateinit var btnPtz: ImageButton
     private lateinit var btnQuality: Button
+    private lateinit var imgBtnCtrlLayout : ImageButton
 
+    private lateinit var listViewElectrical: RecyclerView
+
+    private var mPtzPopupWindow: PopupWindow? = null
+    var mPtzControlLy : LinearLayout? = null
     private var mQualityPopupWindow: PopupWindow? = null
 
     //loading控件
@@ -59,7 +73,7 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
     private lateinit var mRealPlayTipTv: TextView
     private lateinit var mRealPlayPlayLoading: LoadingTextView
 
-    //private lateinit var adapterDevices : ArrayAdapter<String>
+    //var adapterElectrical : RecyclerAdapterElectricalCamera? = null
     private lateinit var adapterDevices : AdapterVideoDevice
     private var listDeviceName = ArrayList<String>()
     var listDevices = ArrayList<EZDeviceInfo>()
@@ -80,20 +94,12 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_play)
+        initLocalInfo()
         findViews()
         setDeviceAdapter()
         setListener()
         getCameraInfoList()
         mHandler = Handler(this)
-
-        // 获取本地信息
-        // 获取配置信息操作对象
-        mLocalInfo = LocalInfo.getInstance()
-        // 获取屏幕参数
-        val metric = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(metric)
-        mLocalInfo.setScreenWidthHeight(metric.widthPixels, metric.heightPixels)
-        mLocalInfo.navigationBarHeight = Math.ceil((25 * resources.displayMetrics.density).toDouble()).toInt()
     }
 
     override fun onDestroy() {
@@ -102,6 +108,18 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         if (mEZPlayer != null) {
             mEZPlayer!!.release()
         }
+        RecyclerAdapterElectricalCamera.handler = null
+    }
+
+    fun initLocalInfo(){
+        // 获取本地信息
+        // 获取配置信息操作对象
+        mLocalInfo = LocalInfo.getInstance()
+        // 获取屏幕参数
+        val metric = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(metric)
+        mLocalInfo.setScreenWidthHeight(metric.widthPixels, metric.heightPixels)
+        mLocalInfo.navigationBarHeight = Math.ceil((25 * resources.displayMetrics.density).toDouble()).toInt()
     }
 
     fun findViews(){
@@ -113,6 +131,14 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         mRealPlaySh = mRealPlaySv.holder
         btnPtz = findViewById(R.id.btnPtz)
         btnQuality = findViewById(R.id.btnQuality)
+        imgBtnCtrlLayout = findViewById(R.id.imgBtnCtrlLayout)
+        listViewElectrical = findViewById(R.id.listViewElectrical)
+        listViewElectrical.layoutManager = LinearLayoutManager(this)
+        val listIStateDev = HamaApp.DEV_GROUP.findListIStateDev(true)
+        listIStateDev.sort()
+        val adapterElectrical = RecyclerAdapterElectricalCamera(this, listIStateDev)
+        listViewElectrical.adapter = adapterElectrical
+        //swipeMenuRecyclerViewElectrical. = mLocalInfo.screenWidth / 4
         initLoadingUI()
     }
 
@@ -136,6 +162,21 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         }
         btnBack.setOnClickListener{
             finish()
+        }
+        btnPtz.setOnClickListener{
+            llTitleBar.visibility = View.GONE
+            llCtrl.visibility = View.GONE
+            openPtzPopupWindow()
+        }
+        imgBtnCtrlLayout.setOnClickListener{
+            if(listViewElectrical.visibility == View.GONE){
+                listViewElectrical.visibility = View.VISIBLE
+            }else{
+                listViewElectrical.visibility = View.GONE
+            }
+        }
+        btnQuality.setOnClickListener{
+            openQualityPopupWindow(it)
         }
     }
 
@@ -370,15 +411,9 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
     }
 
     private fun handleSetVedioModeSuccess() {
-        closeQualityPopupWindow()
         setVideoLevel()
-        try {
-//            mWaitDialog.setWaitText(null)
-//            mWaitDialog.dismiss()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
+        mRealPlayTipTv.visibility = View.GONE
+        mRealPlayTipTv.text = ""
         if (mStatus == RealPlayStatus.STATUS_PLAY) {
             // 停止播放
             stopRealPlay()
@@ -390,20 +425,26 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         }
     }
 
+    private fun handleSetVedioModeFail() {
+        setVideoLevel()
+        mRealPlayTipTv.visibility = View.GONE
+        mRealPlayTipTv.text = ""
+        Snackbar.make(btnQuality, "视频质量切换失败", Snackbar.LENGTH_SHORT).show()
+    }
+
     private fun openQualityPopupWindow(anchor: View) {
         if (mEZPlayer == null) {
             return
         }
-        closeQualityPopupWindow()
         val layoutInflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val layoutView = layoutInflater.inflate(R.layout.realplay_quality_items, null, true) as ViewGroup
 
         val qualityHdBtn = layoutView.findViewById(R.id.quality_hd_btn) as Button
-        //qualityHdBtn.setOnClickListener(mOnPopWndClickListener)
+        qualityHdBtn.setOnClickListener(mOnPopWndClickListener)
         val qualityBalancedBtn = layoutView.findViewById(R.id.quality_balanced_btn) as Button
-        //qualityBalancedBtn.setOnClickListener(mOnPopWndClickListener)
+        qualityBalancedBtn.setOnClickListener(mOnPopWndClickListener)
         val qualityFlunetBtn = layoutView.findViewById(R.id.quality_flunet_btn) as Button
-        //qualityFlunetBtn.setOnClickListener(mOnPopWndClickListener)
+        qualityFlunetBtn.setOnClickListener(mOnPopWndClickListener)
 
         // 视频质量，2-高清，1-标清，0-流畅
         when {
@@ -412,7 +453,7 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
             cameraInfo!!.videoLevel == EZConstants.EZVideoLevel.VIDEO_LEVEL_HD -> qualityHdBtn.isEnabled = false
         }
 
-        var height = 105
+        var height = 150
 
         qualityFlunetBtn.visibility = View.VISIBLE
         qualityBalancedBtn.visibility = View.VISIBLE
@@ -428,6 +469,7 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         try {
             mQualityPopupWindow!!.showAsDropDown(anchor, -Utils.dip2px(this, 5f),
                     -(height + anchor.height + Utils.dip2px(this, 8f)))
+//            mQualityPopupWindow!!.showAsDropDown(btnPtz)
         } catch (e: Exception) {
             e.printStackTrace()
             closeQualityPopupWindow()
@@ -436,9 +478,82 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
 
     private fun closeQualityPopupWindow() {
         if (mQualityPopupWindow != null) {
-            //dismissPopWindow(mQualityPopupWindow)
+            dismissPopWindow(mQualityPopupWindow)
             mQualityPopupWindow = null
         }
+    }
+
+    /**
+     * 打开云台控制窗口
+     *
+     * @see
+     * @since V1.8.3
+     */
+    private fun openPtzPopupWindow() {
+        closePtzPopupWindow()
+
+        val layoutInflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val layoutView = layoutInflater.inflate(R.layout.realplay_ptz_wnd, null, true) as ViewGroup
+
+        mPtzControlLy = layoutView.findViewById(R.id.ptz_control_ly)
+        val ptzTopBtn = layoutView.findViewById(R.id.ptz_top_btn) as ImageButton
+        ptzTopBtn.setOnTouchListener(mOnTouchListener)
+        val ptzBottomBtn = layoutView.findViewById(R.id.ptz_bottom_btn) as ImageButton
+        ptzBottomBtn.setOnTouchListener(mOnTouchListener)
+        val ptzLeftBtn = layoutView.findViewById(R.id.ptz_left_btn) as ImageButton
+        ptzLeftBtn.setOnTouchListener(mOnTouchListener)
+        val ptzRightBtn = layoutView.findViewById(R.id.ptz_right_btn) as ImageButton
+        ptzRightBtn.setOnTouchListener(mOnTouchListener)
+        //val ptzFlipBtn = layoutView.findViewById(R.id.ptz_flip_btn) as ImageButton
+        //ptzFlipBtn.setOnClickListener(mOnPopWndClickListener)
+        val width = mLocalInfo.screenHeight / 3
+        mPtzPopupWindow = PopupWindow(layoutView, width, width, true)
+        mPtzPopupWindow!!.setBackgroundDrawable(BitmapDrawable())
+        mPtzPopupWindow!!.isFocusable = true
+        mPtzPopupWindow!!.isOutsideTouchable = true
+        mPtzPopupWindow!!.showAsDropDown(btnPtz, 0, -btnPtz.height)
+        //mPtzPopupWindow!!.showAtLocation(btnPtz, Gravity.LEFT, 0, 0);
+        //mPtzPopupWindow!!.showAtLocation(this.window.decorView, Gravity.BOTTOM, 0, 0);
+        mPtzPopupWindow!!.setOnDismissListener {
+            mPtzPopupWindow = null
+            mPtzControlLy = null
+            closePtzPopupWindow()
+        }
+        mPtzPopupWindow!!.update()
+    }
+
+    private fun closePtzPopupWindow() {
+        if (mPtzPopupWindow != null) {
+            dismissPopWindow(mPtzPopupWindow)
+            mPtzPopupWindow = null
+            mPtzControlLy = null
+        }
+    }
+
+    private fun dismissPopWindow(popupWindow: PopupWindow?) {
+        if (popupWindow != null && !isFinishing) {
+            try {
+                popupWindow.dismiss()
+            } catch (e: Exception) {
+            }
+        }
+    }
+
+    /**
+     * 云台操作
+     *
+     * @param command ptz控制命令
+     * @param action  控制启动/停止
+     */
+    private fun ptzOption(command: EZConstants.EZPTZCommand, action: EZConstants.EZPTZAction) {
+        Thread(Runnable {
+            try {
+                HamaApp.getOpenSDK().controlPTZ(cameraInfo!!.deviceSerial, cameraInfo!!.cameraNo, command,
+                        action, EZConstants.PTZ_SPEED_DEFAULT)
+            } catch (e: BaseException) {
+                e.printStackTrace()
+            }
+        }).start()
     }
 
     private fun handlePtzControlFail(msg: Message) {
@@ -475,6 +590,47 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
             ErrorCode.ERROR_CAS_PTZ_TTSING_FAILED// 设备处于语音对讲状态(区别以前的语音对讲错误码，云台单独列一个）
             -> Utils.showToast(this@VideoPlayActivity, R.string.ptz_mirroring_failed, msg.arg1)
             else -> Utils.showToast(this@VideoPlayActivity, R.string.ptz_operation_failed, msg.arg1)
+        }
+    }
+
+    /**
+     * 码流配置 清晰度 2-高清，1-标清，0-流畅
+     *
+     * @see
+     * @since V2.0
+     */
+    private fun setQualityMode(mode: EZConstants.EZVideoLevel) {
+        // 检查网络是否可用
+        if (!ConnectionDetector.isNetworkAvailable(this@VideoPlayActivity)) {
+            // 提示没有连接网络
+            return
+        }
+        if(mode == mCurrentQulityMode){
+            return
+        }
+        if (mEZPlayer != null) {
+            mRealPlayTipTv.visibility = View.VISIBLE
+            mRealPlayTipTv.text = "视频质量切换中"
+            closeQualityPopupWindow()
+            val thr = object : Thread(Runnable {
+                try {
+                    // need to modify by yudan at 08-11
+                    HamaApp.getOpenSDK().setVideoLevel(cameraInfo!!.deviceSerial, cameraInfo!!.cameraNo, mode.videoLevel)
+                    mCurrentQulityMode = mode
+                    val msg = Message.obtain()
+                    msg.what = MSG_SET_VEDIOMODE_SUCCESS
+                    mHandler!!.sendMessage(msg)
+                    LogUtil.i(TAG, "setQualityMode success")
+                } catch (e: BaseException) {
+                    mCurrentQulityMode = EZConstants.EZVideoLevel.VIDEO_LEVEL_FLUNET
+                    e.printStackTrace()
+                    val msg = Message.obtain()
+                    msg.what = MSG_SET_VEDIOMODE_FAIL
+                    mHandler!!.sendMessage(msg)
+                    LogUtil.i(TAG, "setQualityMode fail")
+                }
+            }) {}
+            thr.start()
         }
     }
 
@@ -526,15 +682,15 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         }
     }
 
-//    private val mOnPopWndClickListener = View.OnClickListener { v ->
-//        when (v.id) {
-//            R.id.quality_hd_btn -> setQualityMode(EZConstants.EZVideoLevel.VIDEO_LEVEL_HD)
-//            R.id.quality_balanced_btn -> setQualityMode(EZConstants.EZVideoLevel.VIDEO_LEVEL_BALANCED)
-//            R.id.quality_flunet_btn -> setQualityMode(EZConstants.EZVideoLevel.VIDEO_LEVEL_FLUNET)
-//            else -> {
-//            }
-//        }
-//    }
+    private val mOnPopWndClickListener = View.OnClickListener { v ->
+        when (v.id) {
+            R.id.quality_hd_btn -> setQualityMode(EZConstants.EZVideoLevel.VIDEO_LEVEL_HD)
+            R.id.quality_balanced_btn -> setQualityMode(EZConstants.EZVideoLevel.VIDEO_LEVEL_BALANCED)
+            R.id.quality_flunet_btn -> setQualityMode(EZConstants.EZVideoLevel.VIDEO_LEVEL_FLUNET)
+            else -> {
+            }
+        }
+    }
 
     private var surfaceViewCallback = object : SurfaceHolder.Callback{
         override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
@@ -555,6 +711,55 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         }
     }
 
+    private val mOnTouchListener = View.OnTouchListener { view, motionevent ->
+        val action = motionevent.action
+        when (action) {
+            MotionEvent.ACTION_DOWN -> when (view.id) {
+                R.id.ptz_top_btn -> {
+                    mPtzControlLy!!.setBackgroundResource(R.drawable.ptz_up_sel)
+                    ptzOption(EZConstants.EZPTZCommand.EZPTZCommandUp, EZConstants.EZPTZAction.EZPTZActionSTART)
+                }
+                R.id.ptz_bottom_btn -> {
+                    mPtzControlLy!!.setBackgroundResource(R.drawable.ptz_bottom_sel)
+                    ptzOption(EZConstants.EZPTZCommand.EZPTZCommandDown, EZConstants.EZPTZAction.EZPTZActionSTART)
+                }
+                R.id.ptz_left_btn -> {
+                    mPtzControlLy!!.setBackgroundResource(R.drawable.ptz_left_sel)
+                    ptzOption(EZConstants.EZPTZCommand.EZPTZCommandLeft, EZConstants.EZPTZAction.EZPTZActionSTART)
+                }
+                R.id.ptz_right_btn -> {
+                    mPtzControlLy!!.setBackgroundResource(R.drawable.ptz_right_sel)
+                    ptzOption(EZConstants.EZPTZCommand.EZPTZCommandRight, EZConstants.EZPTZAction.EZPTZActionSTART)
+                }
+                else -> {
+                }
+            }
+            MotionEvent.ACTION_UP -> when (view.id) {
+                R.id.ptz_top_btn -> {
+                    mPtzControlLy!!.setBackgroundResource(R.drawable.ptz_bg)
+                    ptzOption(EZConstants.EZPTZCommand.EZPTZCommandUp, EZConstants.EZPTZAction.EZPTZActionSTOP)
+                }
+                R.id.ptz_bottom_btn -> {
+                    mPtzControlLy!!.setBackgroundResource(R.drawable.ptz_bg)
+                    ptzOption(EZConstants.EZPTZCommand.EZPTZCommandDown, EZConstants.EZPTZAction.EZPTZActionSTOP)
+                }
+                R.id.ptz_left_btn -> {
+                    mPtzControlLy!!.setBackgroundResource(R.drawable.ptz_bg)
+                    ptzOption(EZConstants.EZPTZCommand.EZPTZCommandLeft, EZConstants.EZPTZAction.EZPTZActionSTOP)
+                }
+                R.id.ptz_right_btn -> {
+                    mPtzControlLy!!.setBackgroundResource(R.drawable.ptz_bg)
+                    ptzOption(EZConstants.EZPTZCommand.EZPTZCommandRight, EZConstants.EZPTZAction.EZPTZActionSTOP)
+                }
+                else -> {
+                }
+            }
+            else -> {
+            }
+        }
+        false
+    }
+
     @SuppressLint("NewApi")
     override fun handleMessage(msg: Message): Boolean {
         if (this.isFinishing) {
@@ -570,8 +775,8 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
             EZConstants.EZRealPlayConstants.MSG_REALPLAY_CONNECTION_SUCCESS -> updateLoadingProgress(80)
             EZConstants.EZRealPlayConstants.MSG_REALPLAY_PLAY_SUCCESS -> handlePlaySuccess()
             EZConstants.EZRealPlayConstants.MSG_REALPLAY_PLAY_FAIL -> handlePlayFail(msg.obj)
-            //EZConstants.EZRealPlayConstants.MSG_SET_VEDIOMODE_SUCCESS -> handleSetVedioModeSuccess()
-            //EZConstants.EZRealPlayConstants.MSG_SET_VEDIOMODE_FAIL -> handleSetVedioModeFail(msg.arg1)
+            EZConstants.EZRealPlayConstants.MSG_SET_VEDIOMODE_SUCCESS -> handleSetVedioModeSuccess()
+            EZConstants.EZRealPlayConstants.MSG_SET_VEDIOMODE_FAIL -> handleSetVedioModeFail()
             EZConstants.EZRealPlayConstants.MSG_PTZ_SET_FAIL -> handlePtzControlFail(msg)
             EZConstants.EZRealPlayConstants.MSG_REALPLAY_VOICETALK_FAIL -> {
                 msg.obj as ErrorInfo
