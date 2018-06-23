@@ -6,7 +6,7 @@
     <string name="action_refresh">刷新</string>
     <string name="action_reset">复位</string>
     <string name="action_set_chain">连锁</string>
-    <string name="action_video">视频</string>
+    <string name="action_video">监控</string>
     <string name="action_net">网络</string>
     <string name="action_search">设备</string>
     <string name="action_sort">排序</string>

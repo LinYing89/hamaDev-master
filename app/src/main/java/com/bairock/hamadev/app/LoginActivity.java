@@ -22,6 +22,8 @@ import com.bairock.iot.intelDev.communication.UdpServer;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
+import com.bairock.iot.intelDev.device.remoter.Remoter;
+import com.bairock.iot.intelDev.device.remoter.RemoterKey;
 import com.bairock.iot.intelDev.linkage.ChainHolder;
 import com.bairock.iot.intelDev.linkage.Effect;
 import com.bairock.iot.intelDev.linkage.Linkage;
@@ -349,6 +351,10 @@ public class LoginActivity extends AppCompatActivity {
         }
         if(device instanceof DevCollect){
             ((DevCollect) device).getCollectProperty().setId(UUID.randomUUID().toString());
+        }else if(device instanceof Remoter){
+            for(RemoterKey remoterKey : ((Remoter)device).getListRemoterKey()){
+                remoterKey.setId(UUID.randomUUID().toString());
+            }
         }
     }
 

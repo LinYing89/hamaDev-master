@@ -71,7 +71,7 @@ public class HamaApp extends Application {
 
         LogUtils.INSTANCE.init(this);
 
-        initSDK();
+        //initSDK();
         //AudioPlayUtil.init(this);
     }
 

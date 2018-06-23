@@ -111,7 +111,7 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         RecyclerAdapterElectricalCamera.handler = null
     }
 
-    fun initLocalInfo(){
+    private fun initLocalInfo(){
         // 获取本地信息
         // 获取配置信息操作对象
         mLocalInfo = LocalInfo.getInstance()
@@ -171,8 +171,10 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         imgBtnCtrlLayout.setOnClickListener{
             if(listViewElectrical.visibility == View.GONE){
                 listViewElectrical.visibility = View.VISIBLE
+                imgBtnCtrlLayout.setImageResource(R.drawable.btn_left_to_right)
             }else{
                 listViewElectrical.visibility = View.GONE
+                imgBtnCtrlLayout.setImageResource(R.drawable.btn_right_to_left)
             }
         }
         btnQuality.setOnClickListener{
@@ -605,9 +607,9 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
             // 提示没有连接网络
             return
         }
-        if(mode == mCurrentQulityMode){
-            return
-        }
+//        if(mode == mCurrentQulityMode){
+//            return
+//        }
         if (mEZPlayer != null) {
             mRealPlayTipTv.visibility = View.VISIBLE
             mRealPlayTipTv.text = "视频质量切换中"
@@ -676,6 +678,8 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
             deviceInfo = listDevices[p2]
             if(deviceInfo!!.status == 1){
                 cameraInfo = getCameraInfoFromDevice(deviceInfo, 0)
+                mCurrentQulityMode = cameraInfo!!.videoLevel
+                setVideoLevel()
                 stopRealPlay()
                 startRealPlay()
             }

@@ -240,6 +240,46 @@ public class DbSb {
     }
 
     /**
+     * collect property 采集设备属性数据表
+     */
+    public static final class TabRemoterKey {
+        /**
+         * 数据表表名
+         */
+        public static final String NAME = "remoterKey";
+
+        /**
+         * 数据表列
+         */
+        public static final class Cols {
+            /**
+             * 主键，uuid
+             */
+            public static final String ID = "id";
+            /**
+             * 遥控器id
+             */
+            public static final String REMOTE_ID = "remote_id";
+            /**
+             * 按键名称
+             */
+            public static final String NAME = "name";
+            /**
+             * 按键编号
+             */
+            public static final String NUMBER = "number";
+            /**
+             * 按键X轴位置
+             */
+            public static final String LOCATION_X = "locationX";
+            /**
+             * 按键Y轴位置
+             */
+            public static final String LOCATION_Y = "locationY";
+        }
+    }
+
+    /**
      * linkage holder 根连锁数据表
      */
     public static final class TabLinkageHolder {

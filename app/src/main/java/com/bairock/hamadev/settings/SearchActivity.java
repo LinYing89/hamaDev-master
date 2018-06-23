@@ -35,11 +35,14 @@ import com.bairock.iot.intelDev.device.Coordinator;
 import com.bairock.iot.intelDev.device.CtrlModel;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
+import com.bairock.iot.intelDev.device.DeviceAssistent;
 import com.bairock.iot.intelDev.device.OrderHelper;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectSignal;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectSignalContainer;
 import com.bairock.iot.intelDev.device.devswitch.DevSwitch;
+import com.bairock.iot.intelDev.device.remoter.Remoter;
+import com.bairock.iot.intelDev.device.remoter.RemoterContainer;
 import com.bairock.iot.intelDev.user.DevGroup;
 import com.bairock.iot.intelDev.user.ErrorCodes;
 import com.bairock.iot.intelDev.user.IntelDevHelper;
@@ -113,9 +116,14 @@ public class SearchActivity extends AppCompatActivity {
                     Snackbar.make(getWindow().getDecorView(), "网络未连接", Snackbar.LENGTH_SHORT).show();
                     return true;
                 }
-                if(rootDevice != null && rootDevice instanceof Coordinator){
-                    AddDeviceTask addDeviceTask = new AddDeviceTask(this);
-                    addDeviceTask.execute();
+                if(rootDevice != null){
+                    if(rootDevice instanceof Coordinator) {
+                        AddDeviceTask addDeviceTask = new AddDeviceTask(this);
+                        addDeviceTask.execute();
+                    }else if(rootDevice instanceof RemoterContainer){
+                        Intent intent = new Intent(SearchActivity.this, SelectRemoterActivity.class);
+                        startActivityForResult(intent, 1);
+                    }
                 }else {
                     EspTouchAddDevice espTouchAddDevice = new EspTouchAddDevice(this);
 //                    String ssid = espTouchAddDevice.getSsid();
@@ -139,12 +147,29 @@ public class SearchActivity extends AppCompatActivity {
         tSendModel = null;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == 1){
+                //选择遥控器界面返回
+                int code = data.getIntExtra("remoterCode", 1);
+                String name = data.getStringExtra("remoterName");
+                RemoterContainer rc = (RemoterContainer)rootDevice;
+                Remoter remoter = rc.createRemoter(String.valueOf(code));
+                remoter.setName(name + remoter.getSubCode());
+                rc.addChildDev(remoter);
+                DeviceDao.get(this).add(remoter);
+                adapterEleHolder.notifyDataSetChanged();
+            }
+        }
+    }
+
     private void findViews() {
         swipeMenuRecyclerViewDevice = findViewById(R.id.swipeMenuRecyclerViewDevice);
         swipeMenuRecyclerViewDevice.setLayoutManager(new LinearLayoutManager(this));
         swipeMenuRecyclerViewDevice.addItemDecoration(new DefaultItemDecoration(Color.LTGRAY));
         swipeMenuRecyclerViewDevice.setSwipeMenuCreator(swipeMenuConditionCreator);
-
     }
 
     private void setListener() {

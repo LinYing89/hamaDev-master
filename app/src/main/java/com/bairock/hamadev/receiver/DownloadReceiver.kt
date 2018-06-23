@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.app.DownloadManager
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
-import android.support.v4.content.FileProvider
 import com.bairock.hamadev.database.Config
 import java.io.File
 
@@ -25,23 +23,12 @@ class DownloadReceiver : BroadcastReceiver() {
             val refernece = Config.getDownloadId(context)
             if (refernece == myDwonloadID) {
                 //val dManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-                val install = Intent(Intent.ACTION_VIEW)
+                //val install = Intent(Intent.ACTION_VIEW)
 
 //                val downloadFileUri = dManager.getUriForDownloadedFile(myDwonloadID)
                 val file = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS + File.separator +APP_NAME)
                 if (file != null) {
-                    if(Build.VERSION.SDK_INT>=24) {//判读版本是否在7.0以上
-                        //File file= new File(fileName);
-                        //在AndroidManifest中的android:authorities值
-                        val apkUri = FileProvider.getUriForFile(context, "com.bairock.hamadev.fileprovider", file)
-                        //Intent install = new Intent(Intent.ACTION_VIEW);
-                        install.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)//添加这一句表示对目标应用临时授权该Uri所代表的文件
-                        install.setDataAndType(apkUri, "application/vnd.android.package-archive")
-                        context.startActivity(install)
-                    } else {
-                        install(context)
-                    }
+                    install(context)
                 }
             }
         }

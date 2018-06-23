@@ -16,8 +16,8 @@ android {
         applicationId "com.bairock.hamadev"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 1
-        versionName '3.1'
+        versionCode 3
+        versionName '3.21'
         multiDexEnabled true //Add this
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.compileOptions.sourceCompatibility 1.8

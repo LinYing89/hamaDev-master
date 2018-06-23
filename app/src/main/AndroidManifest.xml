@@ -154,18 +154,13 @@
             </intent-filter>
         </receiver>
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.bairock.hamadev.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-        <activity android:name=".video.VideoPlayActivity"
+        <activity
+            android:name=".video.VideoPlayActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".settings.SelectRemoterActivity" />
+        <activity android:name=".zview.DrActivity" />
+        <activity android:name=".settings.DragRemoteSetLayoutActivity"></activity>
     </application>
 
 </manifest>

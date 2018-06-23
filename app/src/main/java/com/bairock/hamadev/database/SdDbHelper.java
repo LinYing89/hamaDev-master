@@ -96,6 +96,18 @@ public class SdDbHelper extends SQLiteOpenHelper {
                 TabCollectProperty.Cols.DEV_COLLECT_ID +
                 ")"
         );
+
+        //创建remote key表
+        db.execSQL("create table " + TabRemoterKey.NAME + "(" +
+                TabRemoterKey.Cols.ID + " PRIMARY KEY NOT NULL, " +
+                TabRemoterKey.Cols.REMOTE_ID + ", " +
+                TabRemoterKey.Cols.NAME + ", " +
+                TabRemoterKey.Cols.NUMBER + ", " +
+                TabRemoterKey.Cols.LOCATION_X + ", " +
+                TabRemoterKey.Cols.LOCATION_Y +
+                ")"
+        );
+
         //创建linkage holder表
         db.execSQL("create table " + TabLinkageHolder.NAME + "(" +
                 TabLinkageHolder.Cols.ID + " PRIMARY KEY NOT NULL, " +
@@ -333,6 +345,7 @@ public class SdDbHelper extends SQLiteOpenHelper {
 
     private static void cleanDb(){
         CollectPropertyDao.get(HamaApp.HAMA_CONTEXT).clean();
+        RemoterKeyDao.Companion.get(HamaApp.HAMA_CONTEXT).clean();
         DevGroupDao.get(HamaApp.HAMA_CONTEXT).clean();
         DeviceDao.get(HamaApp.HAMA_CONTEXT).clean();
         EffectDao.get(HamaApp.HAMA_CONTEXT).clean();

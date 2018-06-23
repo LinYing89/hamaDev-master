@@ -11,6 +11,8 @@ import com.bairock.iot.intelDev.device.DevStateHelper;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
+import com.bairock.iot.intelDev.device.remoter.Remoter;
+import com.bairock.iot.intelDev.device.remoter.RemoterKey;
 import com.bairock.iot.intelDev.user.DevGroup;
 
 import java.util.ArrayList;
@@ -118,6 +120,11 @@ public class DeviceDao {
         }else if(device instanceof DevCollect){
             CollectPropertyDao collectPropertyDao = CollectPropertyDao.get(mContext);
             collectPropertyDao.add(((DevCollect)device).getCollectProperty());
+        }else if(device instanceof Remoter){
+            RemoterKeyDao remoterKeyDao = RemoterKeyDao.Companion.get(mContext);
+            for(RemoterKey remoterKey : ((Remoter)device).getListRemoterKey()){
+                remoterKeyDao.add(remoterKey);
+            }
         }
     }
 
@@ -128,6 +135,11 @@ public class DeviceDao {
             }
         }else if(device instanceof DevCollect){
             CollectPropertyDao.get(mContext).delete(((DevCollect)device).getCollectProperty());
+        }else if(device instanceof Remoter){
+            RemoterKeyDao remoterKeyDao = RemoterKeyDao.Companion.get(mContext);
+            for(RemoterKey remoterKey : ((Remoter)device).getListRemoterKey()){
+                remoterKeyDao.delete(remoterKey);
+            }
         }
         mDatabase.delete(DbSb.TabDevice.NAME, DbSb.TabDevice.Cols.ID + "=?", new String[]{device.getId()});
     }
@@ -199,11 +211,12 @@ public class DeviceDao {
             devHaveChild.getListDev().clear();
             for(Device device1 : listChildDevice){
                 initDevice(device1);
-                initDevCollect(device1);
+                //initDevCollect(device1);
                 devHaveChild.addChildDev(device1);
             }
         }
         initDevCollect(device);
+        initRemoter(device);
     }
 
     private void initDevCollect(Device device){
@@ -213,6 +226,13 @@ public class DeviceDao {
             devCollect.setCollectProperty(collectPropertyDao.find(devCollect));
         }
     }
+    private void initRemoter(Device device){
+        if(device instanceof Remoter){
+            Remoter remoter = (Remoter)device;
+            RemoterKeyDao remoterKeyDao = RemoterKeyDao.Companion.get(mContext);
+            remoter.setListRemoterKey(remoterKeyDao.find(remoter));
+        }
+    }
 
     private DeviceCursorWrapper query(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
@@ -220,19 +240,6 @@ public class DeviceDao {
                 null, // Columns - null selects all columns
                 whereClause,
                 whereArgs,
-                null, // groupBy
-                null, // having
-                null // orderBy
-        );
-        return new DeviceCursorWrapper(cursor);
-    }
-
-    private DeviceCursorWrapper query() {
-        Cursor cursor = mDatabase.query(
-                DbSb.TabDevice.NAME,
-                null, // Columns - null selects all columns
-                null,
-                null,
                 null, // groupBy
                 null, // having
                 null // orderBy

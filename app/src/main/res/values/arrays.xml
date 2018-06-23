@@ -25,5 +25,14 @@
         <item>开关</item>
     </string-array>
 
+    <string-array name="array_remoter">
+        <item>电视</item>
+        <item>空调</item>
+        <item>窗帘</item>
+        <item>投影仪</item>
+        <item>升降架</item>
+        <item>投影幕布</item>
+    </string-array>
+
 
 </resources>

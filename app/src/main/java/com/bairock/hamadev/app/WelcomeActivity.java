@@ -46,6 +46,7 @@ import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectSignalContainer;
 import com.bairock.iot.intelDev.device.devcollect.Pressure;
+import com.bairock.iot.intelDev.device.remoter.RemoterContainer;
 import com.bairock.iot.intelDev.linkage.LinkageHelper;
 import com.bairock.iot.intelDev.linkage.LinkageTab;
 import com.bairock.iot.intelDev.linkage.guagua.GuaguaHelper;
@@ -84,9 +85,6 @@ public class WelcomeActivity extends AppCompatActivity {
             return;
         }
         HamaApp.DEV_GROUP = HamaApp.USER.getListDevGroup().get(0);
-
-
-
 
         //本地tcp网络数据监听器名称
         //调试模式下监听网络数据
@@ -259,6 +257,28 @@ public class WelcomeActivity extends AppCompatActivity {
         SdDbHelper.replaceDbUser(user);
     }
 
+    private static void testRemoterContainer(){
+        User user = new User();
+        user.setName("test123");
+        user.setPsd("a123456");
+        UserDao userDao = UserDao.get(HamaApp.HAMA_CONTEXT);
+        userDao.clean();
+        userDao.addUser(user);
+
+        DevGroup devGroup = new DevGroup("1", "a123", "g1");
+        devGroup.setId(UUID.randomUUID().toString());
+        user.addGroup(devGroup);
+        DevGroupDao devGroupDao = DevGroupDao.get(HamaApp.HAMA_CONTEXT);
+        devGroupDao.clean();
+        devGroupDao.add(devGroup);
+
+        RemoterContainer remoterContainer = (RemoterContainer)DeviceAssistent.createDeviceByMcId(MainCodeHelper.YAO_KONG, "9999");
+
+        devGroup.addDevice(remoterContainer);
+
+        SdDbHelper.replaceDbUser(user);
+    }
+
     private static class ToMainTask extends AsyncTask<Void, Void, Boolean> {
 
         WeakReference<WelcomeActivity> mActivity;
@@ -273,7 +293,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 //testDevice();
 //                testDeviceBx();
 //                testCoordinator();
-
+//                testRemoterContainer();
                 initUser();
 
                 UdpServer.getIns().setUser(HamaApp.USER);
