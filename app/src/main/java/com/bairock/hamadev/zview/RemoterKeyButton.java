@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.bairock.hamadev.R;
+import com.bairock.hamadev.app.Constant;
 import com.bairock.iot.intelDev.device.remoter.RemoterKey;
 
 public class RemoterKeyButton extends android.support.v7.widget.AppCompatButton {
@@ -25,10 +26,14 @@ public class RemoterKeyButton extends android.support.v7.widget.AppCompatButton 
     }
 
     private void init(){
-        setWidth(100);
-        setHeight(100);
+        int width = Constant.INSTANCE.getRemoterKeyWidth();
+        setWidth(width);
+        setHeight(width);
         setTextColor(Color.WHITE);
         setBackgroundResource(R.drawable.sharp_btn_switch_off);
+        if(null != remoterKey){
+            setText(remoterKey.getName());
+        }
     }
 
     public RemoterKey getRemoterKey() {
@@ -37,5 +42,8 @@ public class RemoterKeyButton extends android.support.v7.widget.AppCompatButton 
 
     public void setRemoterKey(RemoterKey remoterKey) {
         this.remoterKey = remoterKey;
+        if(null != remoterKey){
+            setText(remoterKey.getName());
+        }
     }
 }

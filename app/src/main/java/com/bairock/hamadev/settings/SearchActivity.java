@@ -360,6 +360,9 @@ public class SearchActivity extends AppCompatActivity {
             }else if(IntelDevHelper.OPERATE_DEVICE instanceof DevCollect){
                 DevCollectSettingActivity.devCollectSignal = (DevCollectSignal) IntelDevHelper.OPERATE_DEVICE;
                 SearchActivity.this.startActivity(new Intent(SearchActivity.this, DevCollectSettingActivity.class));
+            }else if(IntelDevHelper.OPERATE_DEVICE instanceof Remoter){
+                DragRemoteSetLayoutActivity.Companion.setREMOTER((Remoter)IntelDevHelper.OPERATE_DEVICE);
+                startActivity(new Intent(SearchActivity.this, DragRemoteSetLayoutActivity.class));
             }
         }
     };

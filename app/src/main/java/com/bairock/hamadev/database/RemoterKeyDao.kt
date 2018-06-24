@@ -36,11 +36,11 @@ class RemoterKeyDao(context: Context) {
 
     fun add(remoterKey: RemoterKey) {
         val values = getContentValues(remoterKey)
-        mDatabase.insert(DbSb.TabCollectProperty.NAME, null, values)
+        mDatabase.insert(DbSb.TabRemoterKey.NAME, null, values)
     }
 
     fun delete(remoterKey: RemoterKey) {
-        mDatabase.delete(DbSb.TabCollectProperty.NAME, DbSb.TabRemoterKey.Cols.ID + "=?", arrayOf(remoterKey.id))
+        mDatabase.delete(DbSb.TabRemoterKey.NAME, DbSb.TabRemoterKey.Cols.ID + "=?", arrayOf(remoterKey.id))
     }
 
     fun find(remoter: Remoter): List<RemoterKey> {

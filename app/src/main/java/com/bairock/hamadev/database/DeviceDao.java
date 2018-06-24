@@ -7,13 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.bairock.iot.intelDev.device.Coordinator;
 import com.bairock.iot.intelDev.device.DevHaveChild;
-import com.bairock.iot.intelDev.device.DevStateHelper;
 import com.bairock.iot.intelDev.device.Device;
-import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 import com.bairock.iot.intelDev.device.remoter.Remoter;
 import com.bairock.iot.intelDev.device.remoter.RemoterKey;
-import com.bairock.iot.intelDev.user.DevGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -230,7 +227,10 @@ public class DeviceDao {
         if(device instanceof Remoter){
             Remoter remoter = (Remoter)device;
             RemoterKeyDao remoterKeyDao = RemoterKeyDao.Companion.get(mContext);
-            remoter.setListRemoterKey(remoterKeyDao.find(remoter));
+            List<RemoterKey> listKey = remoterKeyDao.find(remoter);
+            for(RemoterKey remoterKey : listKey){
+                remoter.addRemoterKey(remoterKey);
+            }
         }
     }
 

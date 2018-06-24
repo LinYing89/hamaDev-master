@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bairock.hamadev.app.DragRemoterActivity;
 import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.media.Media;
 import com.bairock.hamadev.R;
@@ -22,6 +23,7 @@ import com.bairock.hamadev.settings.DevSwitchAttributeSettingActivity;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.Gear;
 import com.bairock.iot.intelDev.device.IStateDev;
+import com.bairock.iot.intelDev.device.remoter.Remoter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
     public static final int STATE = 2;
     public static final int NAME = 3;
 
-    public static int colorNoraml;
+    static int colorNoraml;
     private Context context;
 
     public static MyHandler handler;
@@ -97,6 +99,11 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
                 if(Config.INSTANCE.getCtrlRing()) {
                     Media.INSTANCE.playCtrlRing();
                 }
+                if(device instanceof Remoter){
+                    DragRemoterActivity.Companion.setREMOTER((Remoter)device);
+                    context.startActivity(new Intent(context, DragRemoterActivity.class));
+                    return;
+                }
                 IStateDev dev = (IStateDev) device;
                 switch (device.getGear()) {
                     case UNKNOW:
@@ -123,14 +130,20 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
 
         public void setData(Device device) {
             this.device = device;
+            if(device instanceof Remoter){
+                txtGearToAuto.setVisibility(View.GONE);
+                btnState.setText("");
+            }
             init();
         }
 
         private void init() {
             refreshName();
             refreshState();
-            refreshBntStateText(device.getGear());
-            refreshGearToAuto();
+            if(!(device instanceof Remoter)){
+                refreshBntStateText(device.getGear());
+                refreshGearToAuto();
+            }
         }
 
         private void toKaiGear(){
@@ -165,10 +178,12 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
         }
 
         private void refreshBtnState() {
-            if (device.isKaiState()) {
-                btnState.setBackgroundResource(R.drawable.sharp_btn_switch_on);
-            } else {
-                btnState.setBackgroundResource(R.drawable.sharp_btn_switch_off);
+            if(!(device instanceof Remoter)) {
+                if (device.isKaiState()) {
+                    btnState.setBackgroundResource(R.drawable.sharp_btn_switch_on);
+                } else {
+                    btnState.setBackgroundResource(R.drawable.sharp_btn_switch_off);
+                }
             }
         }
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 import com.bairock.hamadev.communication.MyOnGearNeedToAutoListener;
 import com.bairock.hamadev.media.Media;
@@ -44,6 +45,7 @@ import com.bairock.iot.intelDev.device.GuaguaMouth;
 import com.bairock.iot.intelDev.device.MainCodeHelper;
 import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
+import com.bairock.iot.intelDev.device.devcollect.DevCollectClimateContainer;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectSignalContainer;
 import com.bairock.iot.intelDev.device.devcollect.Pressure;
 import com.bairock.iot.intelDev.device.remoter.RemoterContainer;
@@ -251,7 +253,10 @@ public class WelcomeActivity extends AppCompatActivity {
         Coordinator coordinator = (Coordinator)DeviceAssistent.createDeviceByMcId(MainCodeHelper.XIE_TIAO_QI, "9999");
         Pressure pressure = (Pressure)DeviceAssistent.createDeviceByMcId(MainCodeHelper.YE_WEI, "9999");
 
+        DevCollectClimateContainer climateContainer = (DevCollectClimateContainer)DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_CLIMATE_CONTAINER, "9999");
+
         coordinator.addChildDev(pressure);
+        coordinator.addChildDev(climateContainer);
         devGroup.addDevice(coordinator);
 
         SdDbHelper.replaceDbUser(user);
@@ -288,7 +293,14 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         @Override
         protected Boolean doInBackground(Void... params) {
-            try {
+            //try {
+
+                //获取屏幕宽高
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                mActivity.get().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                Constant.INSTANCE.setDisplayWidth(displayMetrics.widthPixels);
+                Constant.INSTANCE.setDisplayHeight(displayMetrics.heightPixels);
+
                 //没有可搜索设备时单机测试用
                 //testDevice();
 //                testDeviceBx();
@@ -345,10 +357,10 @@ public class WelcomeActivity extends AppCompatActivity {
                 GuaguaHelper.getIns().startCheckGuaguaThread();
                 GuaguaHelper.getIns().setOnOrderSendListener((guagua, s, ctrlModel) -> HamaApp.sendOrder(guagua.findSuperParent(), s, true));
                 return true;
-            }catch (Exception e){
-                e.printStackTrace();
-                return false;
-            }
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                return false;
+//            }
         }
 
         @Override

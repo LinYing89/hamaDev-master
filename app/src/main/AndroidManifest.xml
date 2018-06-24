@@ -158,9 +158,13 @@
             android:name=".video.VideoPlayActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".settings.SelectRemoterActivity" />
-        <activity android:name=".zview.DrActivity" />
-        <activity android:name=".settings.DragRemoteSetLayoutActivity"></activity>
+        <activity
+            android:name=".settings.SelectRemoterActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".settings.DragRemoteSetLayoutActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".app.DragRemoterActivity"></activity>
     </application>
 
 </manifest>
