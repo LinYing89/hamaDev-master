@@ -33,7 +33,7 @@ public class RecyclerAdapterCollect extends RecyclerView.Adapter<RecyclerAdapter
     public static final int SIMULATOR = 5;
     public static final int SYMBOL = 6;
 
-    public static RecyclerAdapterCollect.MyHandler handler;
+    public RecyclerAdapterCollect.MyHandler handler;
 
     private LayoutInflater mInflater;
     private List<DevCollect> listDevice;

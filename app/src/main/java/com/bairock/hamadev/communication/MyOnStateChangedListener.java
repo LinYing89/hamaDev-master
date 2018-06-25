@@ -4,6 +4,8 @@ import com.bairock.hamadev.adapter.RecyclerAdapterCollect;
 import com.bairock.hamadev.adapter.RecyclerAdapterDevice;
 import com.bairock.hamadev.adapter.RecyclerAdapterElectrical3;
 import com.bairock.hamadev.adapter.RecyclerAdapterElectricalList;
+import com.bairock.hamadev.app.ClimateFragment;
+import com.bairock.hamadev.app.ElectricalCtrlFragment;
 import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.database.Config;
 import com.bairock.iot.intelDev.communication.RefreshCollectorValueHelper;
@@ -77,8 +79,8 @@ public class MyOnStateChangedListener implements Device.OnStateChangedListener {
         synchronized (syno) {
             if (device instanceof IStateDev) {
                 if(Config.INSTANCE.getDevShowStyle().equals("0")) {
-                    if (null != RecyclerAdapterElectrical3.handler) {
-                        RecyclerAdapterElectrical3.handler.obtainMessage(RecyclerAdapterElectrical3.STATE, device).sendToTarget();
+                    if(null != ElectricalCtrlFragment.handler){
+                        ElectricalCtrlFragment.handler.obtainMessage(ElectricalCtrlFragment.NOTIFY_ADAPTER, RecyclerAdapterElectrical3.STATE, RecyclerAdapterElectrical3.STATE, device).sendToTarget();
                     }
                 }else{
                     if (null != RecyclerAdapterElectricalList.Companion.getHandler()) {
@@ -86,8 +88,8 @@ public class MyOnStateChangedListener implements Device.OnStateChangedListener {
                     }
                 }
             }else if(device instanceof DevCollect){
-                if (null != RecyclerAdapterCollect.handler) {
-                    RecyclerAdapterCollect.handler.obtainMessage(RecyclerAdapterCollect.STATE, device).sendToTarget();
+                if(null != ClimateFragment.handler){
+                    ClimateFragment.handler.obtainMessage(ClimateFragment.NOTIFY_ADAPTER, RecyclerAdapterCollect.STATE, RecyclerAdapterCollect.STATE, device).sendToTarget();
                 }
             }
         }

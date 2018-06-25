@@ -5,8 +5,11 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.BitmapDrawable
 import android.os.*
+import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.Snackbar
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
@@ -16,6 +19,7 @@ import android.widget.*
 import com.bairock.hamadev.R
 import com.bairock.hamadev.adapter.AdapterVideoDevice
 import com.bairock.hamadev.adapter.RecyclerAdapterElectricalCamera
+import com.bairock.hamadev.adapter.VideoDevicePagerAdapter
 import com.bairock.hamadev.app.HamaApp
 import com.videogo.constant.Constant
 import com.videogo.errorlayer.ErrorInfo
@@ -60,9 +64,11 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
     private lateinit var mRealPlaySh: SurfaceHolder
     private lateinit var btnPtz: ImageButton
     private lateinit var btnQuality: Button
-    private lateinit var imgBtnCtrlLayout : ImageButton
 
     private lateinit var listViewElectrical: RecyclerView
+
+    private lateinit var vpDevices : ViewPager
+    private lateinit var bottomNavigationView : BottomNavigationView
 
     private var mPtzPopupWindow: PopupWindow? = null
     var mPtzControlLy : LinearLayout? = null
@@ -131,14 +137,17 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         mRealPlaySh = mRealPlaySv.holder
         btnPtz = findViewById(R.id.btnPtz)
         btnQuality = findViewById(R.id.btnQuality)
-        imgBtnCtrlLayout = findViewById(R.id.imgBtnCtrlLayout)
         listViewElectrical = findViewById(R.id.listViewElectrical)
-        listViewElectrical.layoutManager = LinearLayoutManager(this)
+        listViewElectrical.layoutManager = GridLayoutManager(this, 2)
         val listIStateDev = HamaApp.DEV_GROUP.findListIStateDev(true)
         listIStateDev.sort()
         val adapterElectrical = RecyclerAdapterElectricalCamera(this, listIStateDev)
         listViewElectrical.adapter = adapterElectrical
         //swipeMenuRecyclerViewElectrical. = mLocalInfo.screenWidth / 4
+        vpDevices = findViewById(R.id.vpDevices)
+        val videoDevicePagerAdapter = VideoDevicePagerAdapter(supportFragmentManager)
+        vpDevices.adapter = videoDevicePagerAdapter
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
         initLoadingUI()
     }
 
@@ -168,18 +177,35 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
             llCtrl.visibility = View.GONE
             openPtzPopupWindow()
         }
-        imgBtnCtrlLayout.setOnClickListener{
-            if(listViewElectrical.visibility == View.GONE){
-                listViewElectrical.visibility = View.VISIBLE
-                imgBtnCtrlLayout.setImageResource(R.drawable.btn_left_to_right)
-            }else{
-                listViewElectrical.visibility = View.GONE
-                imgBtnCtrlLayout.setImageResource(R.drawable.btn_right_to_left)
-            }
-        }
         btnQuality.setOnClickListener{
             openQualityPopupWindow(it)
         }
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.electrical -> vpDevices.currentItem = 0
+                R.id.collector -> vpDevices.currentItem = 1
+                R.id.message -> vpDevices.currentItem = 2
+            }
+            true
+        }
+        var menuItem : MenuItem? = null
+        vpDevices.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                if (menuItem != null) {
+                    menuItem!!.isChecked = false
+                } else {
+                    bottomNavigationView.menu.getItem(0).isChecked = false
+                }
+                menuItem = bottomNavigationView.menu.getItem(position)
+                menuItem!!.isChecked = true
+            }
+
+            override fun onPageSelected(position: Int) {
+            }
+        })
     }
 
     private fun setDeviceAdapter(){
@@ -548,14 +574,16 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
      * @param action  控制启动/停止
      */
     private fun ptzOption(command: EZConstants.EZPTZCommand, action: EZConstants.EZPTZAction) {
-        Thread(Runnable {
-            try {
-                HamaApp.getOpenSDK().controlPTZ(cameraInfo!!.deviceSerial, cameraInfo!!.cameraNo, command,
-                        action, EZConstants.PTZ_SPEED_DEFAULT)
-            } catch (e: BaseException) {
-                e.printStackTrace()
-            }
-        }).start()
+        if(null != cameraInfo) {
+            Thread(Runnable {
+                try {
+                    HamaApp.getOpenSDK().controlPTZ(cameraInfo!!.deviceSerial, cameraInfo!!.cameraNo, command,
+                            action, EZConstants.PTZ_SPEED_DEFAULT)
+                } catch (e: BaseException) {
+                    e.printStackTrace()
+                }
+            }).start()
+        }
     }
 
     private fun handlePtzControlFail(msg: Message) {
@@ -602,6 +630,9 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
      * @since V2.0
      */
     private fun setQualityMode(mode: EZConstants.EZVideoLevel) {
+        if(null == cameraInfo){
+            return
+        }
         // 检查网络是否可用
         if (!ConnectionDetector.isNetworkAvailable(this@VideoPlayActivity)) {
             // 提示没有连接网络

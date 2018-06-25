@@ -71,8 +71,8 @@ public class HamaApp extends Application {
 
         LogUtils.INSTANCE.init(this);
 
-        //initSDK();
-        //AudioPlayUtil.init(this);
+        initSDK();
+//        AudioPlayUtil.init(this);
     }
 
     public static String getLoginUrl() {

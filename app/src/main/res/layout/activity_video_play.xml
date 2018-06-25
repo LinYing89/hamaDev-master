@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     tools:context=".video.VideoPlayActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_weight="1"
         android:background="@android:color/black">
 
         <SurfaceView
@@ -19,6 +21,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerInParent="false"
             android:background="@android:color/transparent" />
+
         <include layout="@layout/realplay_loading_layout" />
 
         <LinearLayout
@@ -33,7 +36,7 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_arrow_back_white_24dp"/>
+                app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
 
             <Spinner
                 android:id="@+id/spinnerDevices"
@@ -41,51 +44,60 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/llCtrl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
-            <ImageButton
-                android:id="@+id/btnPtz"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginLeft="6dp"
-                android:background="@drawable/yuntai_normal"/>
-            <Button
-                android:id="@+id/btnQuality"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginLeft="6dp"
-                android:background="@android:color/transparent"
-                android:textColor="@color/white"
-                android:text="均衡"/>
-        </LinearLayout>
-        <RelativeLayout
+
+        <ImageButton
+            android:id="@+id/btnPtz"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/yuntai_normal" />
+
+        <Button
+            android:id="@+id/btnQuality"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:background="@android:color/transparent"
+            android:text="标清"
+            android:textColor="@color/white" />
 
-            <ImageButton
-                android:id="@+id/imgBtnCtrlLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                android:src="@drawable/btn_right_to_left" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/listViewElectrical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toEndOf="@id/imgBtnCtrlLayout"
-                android:layout_toRightOf="@id/imgBtnCtrlLayout"
-                android:background="@color/black_camera_electrical"
-                android:visibility="gone"/>
-        </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="2">
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vpDevices"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemIconTint="@drawable/video_device_pager_selector"
+            app:itemTextColor="@drawable/video_device_pager_selector"
+            app:itemBackground="@null"
+            app:menu="@menu/video_device_pager_title" />
+
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listViewElectrical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:visibility="gone"/>
+</LinearLayout>

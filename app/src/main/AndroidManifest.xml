@@ -157,7 +157,7 @@
         <activity
             android:name=".video.VideoPlayActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".settings.SelectRemoterActivity"
             android:screenOrientation="landscape" />

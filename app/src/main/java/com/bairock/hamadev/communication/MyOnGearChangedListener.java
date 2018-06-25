@@ -2,6 +2,7 @@ package com.bairock.hamadev.communication;
 
 import com.bairock.hamadev.adapter.RecyclerAdapterElectrical3;
 import com.bairock.hamadev.adapter.RecyclerAdapterElectricalList;
+import com.bairock.hamadev.app.ElectricalCtrlFragment;
 import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.database.DeviceDao;
@@ -26,8 +27,8 @@ public class MyOnGearChangedListener implements Device.OnGearChangedListener{
     private void refreshUi(Device device){
         if (device instanceof IStateDev) {
             if(Config.INSTANCE.getDevShowStyle().equals("0")) {
-                if (null != RecyclerAdapterElectrical3.handler) {
-                    RecyclerAdapterElectrical3.handler.obtainMessage(RecyclerAdapterElectrical3.AUTO, device).sendToTarget();
+                if (null != ElectricalCtrlFragment.handler) {
+                    ElectricalCtrlFragment.handler.obtainMessage(ElectricalCtrlFragment.NOTIFY_ADAPTER, RecyclerAdapterElectrical3.AUTO, RecyclerAdapterElectrical3.AUTO, device).sendToTarget();
                 }
             }else{
                 if (null != RecyclerAdapterElectricalList.Companion.getHandler()) {

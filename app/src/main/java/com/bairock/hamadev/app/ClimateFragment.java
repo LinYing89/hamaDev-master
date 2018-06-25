@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.adapter.RecyclerAdapterCollect;
 import com.bairock.hamadev.database.Config;
+import com.bairock.hamadev.video.VideoCollectorFragment;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
@@ -38,6 +39,7 @@ public class ClimateFragment extends Fragment {
     public static final int REFRESH_DEVICE = 2;
     public static final int CHANGE_SHOW_NAME_STYLE = 3;
     public static final int CHANGE_LAYOUT_MANAGER = 4;
+    public static final int NOTIFY_ADAPTER = 5;
 
     public static MyHandler handler;
 
@@ -78,7 +80,6 @@ public class ClimateFragment extends Fragment {
         super.onDestroyView();
         handler = null;
         HamaApp.DEV_GROUP.removeOnDeviceCollectionChangedListener(onDeviceCollectionChangedListener);
-        RecyclerAdapterCollect.handler = null;
     }
 
     private void setLayoutManager(){
@@ -244,6 +245,11 @@ public class ClimateFragment extends Fragment {
                 case CHANGE_LAYOUT_MANAGER:
                     theActivity.changeLayout();
                     break;
+                case NOTIFY_ADAPTER:
+                    theActivity.adapterCollect.handler.obtainMessage(msg.arg1, msg.obj).sendToTarget();
+                    if(null != VideoCollectorFragment.Companion.getHandler()){
+                        VideoCollectorFragment.Companion.getHandler().handleMessage(msg);
+                    }
             }
 
         }

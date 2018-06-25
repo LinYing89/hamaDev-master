@@ -39,7 +39,7 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
     static int colorNoraml;
     private Context context;
 
-    public static MyHandler handler;
+    public MyHandler handler;
 
     private LayoutInflater mInflater;
     private List<Device> listDevice;
@@ -213,9 +213,6 @@ public class RecyclerAdapterElectrical3 extends RecyclerView.Adapter<RecyclerAda
 
         @Override
         public void handleMessage(Message msg) {
-            if(null != RecyclerAdapterElectricalCamera.handler){
-                RecyclerAdapterElectricalCamera.handler.obtainMessage(msg.what, msg.obj).sendToTarget();
-            }
             RecyclerAdapterElectrical3 theActivity = mActivity.get();
             Device dev = (Device) msg.obj;
             for (ViewHolder vh : theActivity.listViewHolder) {

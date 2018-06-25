@@ -220,17 +220,17 @@ public class WelcomeActivity extends AppCompatActivity {
         Device device = DeviceAssistent.createDeviceByMcId(MainCodeHelper.KG_3LU_2TAI, "9999");
         devGroup.addDevice(device);
 
-        DevCollectSignalContainer devCollectSignalContainer = (DevCollectSignalContainer)DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_SIGNAL_CONTAINER, "9996");
-        devGroup.addDevice(devCollectSignalContainer);
+        Device device1 = DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_CLIMATE_CONTAINER, "9999");
+        devGroup.addDevice(device1);
 
-        GuaguaMouth guaguaMouth = (GuaguaMouth)DeviceAssistent.createDeviceByMcId(MainCodeHelper.GUAGUA_MOUTH, "9999");
-        devGroup.addDevice(guaguaMouth);
+//        DevCollectSignalContainer devCollectSignalContainer = (DevCollectSignalContainer)DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_SIGNAL_CONTAINER, "9996");
+//        devGroup.addDevice(devCollectSignalContainer);
+
+//        GuaguaMouth guaguaMouth = (GuaguaMouth)DeviceAssistent.createDeviceByMcId(MainCodeHelper.GUAGUA_MOUTH, "9999");
+//        devGroup.addDevice(guaguaMouth);
 //        DevCollectSignal devCollectSignal4 = (DevCollectSignal)DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_SIGNAL, "9996");
 //        devCollectSignal4.getCollectProperty().setCollectSrc(CollectSignalSource.SWITCH);
 //        devGroup.addDevice(devCollectSignal4);
-
-        Device devicex = DeviceAssistent.createDeviceByMcId(MainCodeHelper.KG_XLU_2TAI, "0001");
-        devGroup.addDevice(devicex);
 
         SdDbHelper.replaceDbUser(user);
     }
@@ -302,7 +302,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 Constant.INSTANCE.setDisplayHeight(displayMetrics.heightPixels);
 
                 //没有可搜索设备时单机测试用
-                //testDevice();
+                testDevice();
 //                testDeviceBx();
 //                testCoordinator();
 //                testRemoterContainer();
