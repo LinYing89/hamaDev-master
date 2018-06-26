@@ -9,6 +9,7 @@ import com.bairock.iot.intelDev.device.Coordinator;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
+import com.bairock.iot.intelDev.device.devcollect.ValueTrigger;
 import com.bairock.iot.intelDev.device.remoter.Remoter;
 import com.bairock.iot.intelDev.device.remoter.RemoterKey;
 
@@ -221,8 +222,12 @@ public class DeviceDao {
             DevCollect devCollect = (DevCollect)device;
             CollectPropertyDao collectPropertyDao = CollectPropertyDao.get(mContext);
             devCollect.setCollectProperty(collectPropertyDao.find(devCollect));
+
+            List<ValueTrigger> list = ValueTriggerDao.Companion.get(mContext).find(devCollect);
+            devCollect.getCollectProperty().setListValueTrigger(list);
         }
     }
+
     private void initRemoter(Device device){
         if(device instanceof Remoter){
             Remoter remoter = (Remoter)device;

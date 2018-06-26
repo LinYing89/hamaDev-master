@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
+import com.bairock.iot.intelDev.device.devcollect.ValueTrigger;
+
+import java.util.List;
 
 /**
  *
@@ -59,10 +62,19 @@ public class CollectPropertyDao {
         }
         ContentValues values = getContentValues(collectProperty);
         mDatabase.insert(DbSb.TabCollectProperty.NAME, null, values);
+
+        ValueTriggerDao valueTriggerDao = ValueTriggerDao.Companion.get(mContext);
+        for(ValueTrigger trigger : collectProperty.getListValueTrigger()){
+            valueTriggerDao.add(trigger);
+        }
     }
 
     public void delete(CollectProperty collectProperty){
         mDatabase.delete(DbSb.TabCollectProperty.NAME, DbSb.TabCollectProperty.Cols.ID + "=?", new String[]{collectProperty.getId()});
+        ValueTriggerDao valueTriggerDao = ValueTriggerDao.Companion.get(mContext);
+        for(ValueTrigger trigger : collectProperty.getListValueTrigger()){
+            valueTriggerDao.delete(trigger);
+        }
     }
 
     public CollectProperty find(DevCollect devCollect) {

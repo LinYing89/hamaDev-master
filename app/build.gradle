@@ -79,6 +79,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.tencent.tac:tac-core:1.1.2'
+    implementation 'com.tencent.tac:tac-messaging:1.1.2'
+    implementation 'com.tencent.tac:tac-crash:1.1.2'
 }
 repositories {
     mavenCentral()

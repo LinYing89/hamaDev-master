@@ -1,0 +1,30 @@
+{
+    "version": "1.0.0",
+    "warning": "请不要修改这个文件中的内容",
+    "project": {
+        "projectId": 102768
+    },
+    "application": {
+        "appId": 102503,
+        "packageId": "com.bairock.hamadev"
+    },
+    "services": {
+        "analytics": {
+            "appKey": "Aqcloud102503"
+        },
+        "messaging": {
+            "appId": "2100297444",
+            "appKey": "AVA5D5P647DY"
+        },
+        "crash": {
+            "appId": "264e1f0db7"
+        },
+        "payment": {
+            "offerId": "TC102503"
+        },
+        "storage": {
+            "bucket": "tac-hamadev-st-1253472959",
+            "region": "ap-shanghai"
+        }
+    }
+}

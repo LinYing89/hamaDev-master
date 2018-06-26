@@ -1,5 +1,6 @@
 package com.bairock.hamadev.settings;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class DevCollectSettingActivity extends AppCompatActivity {
     private EditText etxtFormula;
     private EditText etxtCalibration;
     private Button btnCalibration;
+    private Button btnValueTrigged;
     private Button btnSave;
     private Button btnCancel;
 
@@ -97,6 +99,7 @@ public class DevCollectSettingActivity extends AppCompatActivity {
         etxtCalibration = findViewById(R.id.etxtCalibration);
         spinnerSignalSource = findViewById(R.id.spinnerSignalSource);
         btnCalibration = findViewById(R.id.btnCalibration);
+        btnValueTrigged = findViewById(R.id.btnValueTrigged);
         btnSave = findViewById(R.id.btnSave);
         btnCancel = findViewById(R.id.btnCancel);
 
@@ -107,6 +110,7 @@ public class DevCollectSettingActivity extends AppCompatActivity {
     private void setListener(){
         spinnerSignalSource.setOnItemSelectedListener(onItemSelectedListener);
         btnCalibration.setOnClickListener(onClickListener);
+        btnValueTrigged.setOnClickListener(onClickListener);
         btnSave.setOnClickListener(onClickListener);
         btnCancel.setOnClickListener(onClickListener);
     }
@@ -265,6 +269,9 @@ public class DevCollectSettingActivity extends AppCompatActivity {
                     Snackbar.make(btnCalibration, "标定值包含非法字符!", Snackbar.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.btnValueTrigged:
+                ValueTriggerListActivity.Companion.setCollectProperty(collectProperty);
+                startActivity(new Intent(this, ValueTriggerListActivity.class));
             case R.id.btnSave:
                 save();
                 finish();

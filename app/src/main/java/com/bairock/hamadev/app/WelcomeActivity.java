@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 
 import com.bairock.hamadev.communication.MyOnGearNeedToAutoListener;
+import com.bairock.hamadev.communication.MyOnValueTriggedListener;
 import com.bairock.hamadev.media.Media;
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.communication.ChannelBridgeHelperHeartSendListener;
@@ -163,6 +164,7 @@ public class WelcomeActivity extends AppCompatActivity {
             cp.setOnSignalSourceChangedListener(new MyOnSignalSourceChangedListener());
             cp.setOnSimulatorChangedListener(new MyOnSimulatorChangedListener());
             cp.setOnUnitSymbolChangedListener(new MyOnUnitSymbolChangedListener());
+            cp.setOnValueTriggedListener(new MyOnValueTriggedListener());
         }
     }
 
@@ -302,7 +304,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 Constant.INSTANCE.setDisplayHeight(displayMetrics.heightPixels);
 
                 //没有可搜索设备时单机测试用
-                testDevice();
+//                testDevice();
 //                testDeviceBx();
 //                testCoordinator();
 //                testRemoterContainer();
