@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.bairock.hamadev.app.HamaApp;
 import com.bairock.iot.intelDev.linkage.Effect;
 
 import java.util.ArrayList;

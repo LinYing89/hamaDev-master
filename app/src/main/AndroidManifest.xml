@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
         android:name=".app.HamaApp"
@@ -137,11 +138,6 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".settings.SerialSetActivity"
-            android:label="串口设置"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".settings.DevCollectSettingActivity"
             android:label="参数设置"
             android:configChanges="orientation|screenSize"
@@ -179,6 +175,12 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.bairock.hamadev.receiver.MessageReceiver">
+            <intent-filter>
+                <action android:name="com.tencent.tac.messaging.action.CALLBACK" />
             </intent-filter>
         </receiver>
 

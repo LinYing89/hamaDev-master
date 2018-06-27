@@ -24,6 +24,10 @@ android {
         android.compileOptions.targetCompatibility 1.8
         vectorDrawables.useSupportLibrary = true
         signingConfig signingConfigs.config
+
+        ndk {
+            abiFilters "armeabi-v7a", "x86", "armeabi"
+        }
     }
     buildTypes {
         release {

@@ -222,9 +222,6 @@ public class DeviceDao {
             DevCollect devCollect = (DevCollect)device;
             CollectPropertyDao collectPropertyDao = CollectPropertyDao.get(mContext);
             devCollect.setCollectProperty(collectPropertyDao.find(devCollect));
-
-            List<ValueTrigger> list = ValueTriggerDao.Companion.get(mContext).find(devCollect);
-            devCollect.getCollectProperty().setListValueTrigger(list);
         }
     }
 

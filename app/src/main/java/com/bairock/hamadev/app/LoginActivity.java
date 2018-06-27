@@ -41,6 +41,7 @@ import com.bairock.iot.intelDev.linkage.timing.ZTimer;
 import com.bairock.iot.intelDev.user.DevGroup;
 import com.bairock.iot.intelDev.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tencent.tac.TACApplication;
 
 import java.lang.ref.WeakReference;
 import java.util.Date;
@@ -277,6 +278,10 @@ public class LoginActivity extends AppCompatActivity {
                 //MainActivity.FIRST_LOGIN = true;
                 MainActivity.IS_ADMIN = false;
                 Config.INSTANCE.setNeedLogin(this, false);
+
+                String userId = HamaApp.USER.getName() + "_" +HamaApp.DEV_GROUP.getName();
+                TACApplication.bindUserId(userId);
+
                 return true;
             }
         }catch (Exception e){

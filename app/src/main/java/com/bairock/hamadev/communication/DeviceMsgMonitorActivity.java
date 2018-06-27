@@ -5,10 +5,8 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bairock.hamadev.R;
-import com.bairock.hamadev.settings.SearchActivity;
 
 import java.lang.ref.WeakReference;
 

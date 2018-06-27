@@ -2,7 +2,6 @@ package com.bairock.hamadev.database;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
-import android.provider.ContactsContract;
 
 import com.bairock.hamadev.database.DbSb.TabUser;
 import com.bairock.iot.intelDev.user.User;

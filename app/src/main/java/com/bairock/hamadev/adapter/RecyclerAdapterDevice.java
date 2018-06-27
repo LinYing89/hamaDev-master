@@ -20,9 +20,6 @@ import com.bairock.hamadev.database.DeviceDao;
 import com.bairock.iot.intelDev.device.CtrlModel;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
-import com.bairock.iot.intelDev.device.IStateDev;
-import com.bairock.iot.intelDev.device.devcollect.DevCollect;
-import com.bairock.iot.intelDev.device.devcollect.DevCollectSignalContainer;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

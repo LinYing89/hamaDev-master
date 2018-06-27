@@ -1,22 +1,11 @@
 package com.bairock.hamadev.communication;
 
-import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.app.MainActivity;
-import com.bairock.hamadev.database.DevGroupDao;
-import com.bairock.hamadev.database.DeviceDao;
-import com.bairock.hamadev.database.LinkageDao;
-import com.bairock.hamadev.database.LinkageHolderDao;
 import com.bairock.hamadev.database.SdDbHelper;
-import com.bairock.hamadev.database.UserDao;
-import com.bairock.iot.intelDev.device.Device;
-import com.bairock.iot.intelDev.linkage.Linkage;
-import com.bairock.iot.intelDev.linkage.LinkageHolder;
-import com.bairock.iot.intelDev.user.DevGroup;
 import com.bairock.iot.intelDev.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.netty.buffer.ByteBuf;

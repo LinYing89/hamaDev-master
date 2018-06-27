@@ -279,7 +279,7 @@ public class DbSb {
             /**
              * 采集设备外键
              */
-            public static final String DEV_COLLECT_ID = "devCollect_id";
+            public static final String COLLECT_PROPERTY_ID = "collectProperty_id";
         }
     }
 

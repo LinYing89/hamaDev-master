@@ -9,11 +9,6 @@ import com.bairock.iot.intelDev.device.DevCategory;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.DeviceAssistent;
 import com.bairock.iot.intelDev.device.Gear;
-import com.bairock.iot.intelDev.linkage.ChainHolder;
-import com.bairock.iot.intelDev.linkage.guagua.GuaguaHolder;
-import com.bairock.iot.intelDev.linkage.loop.LoopHolder;
-import com.bairock.iot.intelDev.linkage.timing.TimingHolder;
-import com.bairock.iot.intelDev.user.DevGroup;
 
 /**
  *

@@ -35,7 +35,6 @@ import com.bairock.iot.intelDev.device.Coordinator;
 import com.bairock.iot.intelDev.device.CtrlModel;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
-import com.bairock.iot.intelDev.device.DeviceAssistent;
 import com.bairock.iot.intelDev.device.OrderHelper;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectSignal;

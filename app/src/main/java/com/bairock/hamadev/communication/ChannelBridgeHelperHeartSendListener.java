@@ -17,7 +17,6 @@ public class ChannelBridgeHelperHeartSendListener implements DevChannelBridgeHel
     @Override
     public void onHeartSend() {
         noResponsePlus();
-        SerialPortHelper.getIns().send(OrderHelper.getOrderMsg("h2"));
     }
 
     private void noResponsePlus(){

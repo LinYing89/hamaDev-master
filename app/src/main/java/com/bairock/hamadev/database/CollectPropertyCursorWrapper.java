@@ -3,12 +3,6 @@ package com.bairock.hamadev.database;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import com.bairock.iot.intelDev.device.Coordinator;
-import com.bairock.iot.intelDev.device.CtrlModel;
-import com.bairock.iot.intelDev.device.DevCategory;
-import com.bairock.iot.intelDev.device.Device;
-import com.bairock.iot.intelDev.device.DeviceAssistent;
-import com.bairock.iot.intelDev.device.Gear;
 import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.CollectSignalSource;
 

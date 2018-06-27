@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import com.bairock.iot.intelDev.device.Device
+import com.bairock.iot.intelDev.device.devcollect.CollectProperty
 import com.bairock.iot.intelDev.device.devcollect.ValueTrigger
 
 class ValueTriggerDao(context: Context) {
@@ -31,7 +32,7 @@ class ValueTriggerDao(context: Context) {
         values.put(DbSb.TabValueTrigger.Cols.TRIGGER_VALUE, valueTrigger.triggerValue)
         values.put(DbSb.TabValueTrigger.Cols.COMPARE_SYMBOL, valueTrigger.compareSymbol.toString())
         values.put(DbSb.TabValueTrigger.Cols.MESSAGE, valueTrigger.message)
-        values.put(DbSb.TabValueTrigger.Cols.DEV_COLLECT_ID, valueTrigger.device.id)
+        values.put(DbSb.TabValueTrigger.Cols.COLLECT_PROPERTY_ID, valueTrigger.collectProperty.id)
         return values
     }
 
@@ -44,8 +45,8 @@ class ValueTriggerDao(context: Context) {
         mDatabase.delete(DbSb.TabValueTrigger.NAME, DbSb.TabValueTrigger.Cols.ID + "=?", arrayOf(valueTrigger.id))
     }
 
-    fun find(device : Device): List<ValueTrigger> {
-        return find(DbSb.TabValueTrigger.Cols.DEV_COLLECT_ID + " = ?", arrayOf(device.id))
+    fun find(collectProperty: CollectProperty): List<ValueTrigger> {
+        return find(DbSb.TabValueTrigger.Cols.COLLECT_PROPERTY_ID + " = ?", arrayOf(collectProperty.id))
     }
 
     fun find(whereClause: String, whereArgs: Array<String>): List<ValueTrigger> {

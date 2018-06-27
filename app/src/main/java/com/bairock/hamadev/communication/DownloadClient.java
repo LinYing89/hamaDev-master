@@ -1,6 +1,5 @@
 package com.bairock.hamadev.communication;
 
-import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.app.MainActivity;
 import com.bairock.hamadev.database.Config;
 

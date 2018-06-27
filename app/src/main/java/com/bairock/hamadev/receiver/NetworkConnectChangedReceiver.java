@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 
 import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.app.MainActivity;
-import com.bairock.iot.intelDev.device.CtrlModel;
 import com.bairock.iot.intelDev.device.DevStateHelper;
 import com.bairock.iot.intelDev.device.Device;
 

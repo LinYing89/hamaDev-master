@@ -6,26 +6,21 @@
     <color name="back_tra">#bb222222</color>
     <color name="black_camera_electrical">#cc222222</color>
     <color name="back_fort">#4a4a4a</color>
-    <color name="cube_back">#554a4a4a</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="abnormal">#e9967a</color>
     <color name="state_kai">#43CD80</color>
-    <color name="state_kai2">#B0E2FF</color>
 
     <color name="red_normal">#FF0000</color>
     <color name="green_normal">#37C000</color>
     <color name="green_normal_stroke">#37a800</color>
-    <color name="yellow_switch_on">#EEC900</color>
-    <color name="yellow_switch_on_stroke">#CD9B1D</color>
     <color name="yellow_switch_off">#ADADAD</color>
     <color name="yellow_switch_off_stroke">#8B8682</color>
     <color name="gray_text">#adadad</color>
     <color name="orange">#EE9A00</color>
     <color name="menu_blue">#4F94CD</color>
-    <color name="drag_background">#884F94CD</color>
 
     <color name="white">#ffffff</color>
     <color name="quality_focused_color">#448cf3</color>

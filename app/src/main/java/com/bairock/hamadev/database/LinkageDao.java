@@ -13,7 +13,6 @@ import com.bairock.iot.intelDev.linkage.loop.LoopDuration;
 import com.bairock.iot.intelDev.linkage.loop.ZLoop;
 import com.bairock.iot.intelDev.linkage.timing.Timing;
 import com.bairock.iot.intelDev.linkage.timing.ZTimer;
-import com.bairock.iot.intelDev.user.DevGroup;
 
 import java.util.ArrayList;
 import java.util.List;

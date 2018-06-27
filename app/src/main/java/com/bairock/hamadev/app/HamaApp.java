@@ -7,11 +7,9 @@ import android.os.Build;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.communication.PadClient;
-import com.bairock.hamadev.communication.SerialPortHelper;
 import com.bairock.hamadev.database.Config;
 import com.bairock.iot.intelDev.communication.DevChannelBridgeHelper;
 import com.bairock.iot.intelDev.communication.DevServer;
@@ -123,7 +121,6 @@ public class HamaApp extends Application {
                 if (rootDev.canSend()) {
                     rootDev.noResponsePlus();
                     rootDev.resetLastCommunicationTime();
-                    SerialPortHelper.getIns().send(order);
                 }
                 break;
             case NET:

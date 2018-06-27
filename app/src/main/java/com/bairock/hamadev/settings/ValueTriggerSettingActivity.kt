@@ -78,7 +78,7 @@ class ValueTriggerSettingActivity : AppCompatActivity() {
     }
 
     fun init(){
-        txtDevice.text = valueTrigger!!.device.name
+        txtDevice.text = valueTrigger!!.collectProperty.devCollect.name
         spinner.setSelection(valueTrigger!!.compareSymbol.ordinal)
         etxtValue.setText(valueTrigger!!.triggerValue.toString())
         etxtMessage.setText(valueTrigger!!.message)

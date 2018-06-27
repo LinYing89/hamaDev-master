@@ -29,7 +29,6 @@
             tools:layout_editor_absoluteY="459dp">
 
             <ImageView
-                android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"

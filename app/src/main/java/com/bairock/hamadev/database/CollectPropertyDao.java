@@ -92,6 +92,10 @@ public class CollectPropertyDao {
         } finally {
             cursor.close();
         }
+        if(null != collectProperty) {
+            List<ValueTrigger> list = ValueTriggerDao.Companion.get(mContext).find(collectProperty);
+            collectProperty.setListValueTrigger(list);
+        }
         return collectProperty;
     }
 

@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.bairock.iot.intelDev.linkage.timing.MyTime;
-import com.bairock.iot.intelDev.linkage.timing.Timing;
 import com.bairock.iot.intelDev.linkage.timing.ZTimer;
 
 import java.util.ArrayList;

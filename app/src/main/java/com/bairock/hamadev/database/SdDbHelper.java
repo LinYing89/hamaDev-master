@@ -105,7 +105,7 @@ public class SdDbHelper extends SQLiteOpenHelper {
                 TabValueTrigger.Cols.TRIGGER_VALUE + ", " +
                 TabValueTrigger.Cols.COMPARE_SYMBOL + ", " +
                 TabValueTrigger.Cols.MESSAGE + ", " +
-                TabValueTrigger.Cols.DEV_COLLECT_ID +
+                TabValueTrigger.Cols.COLLECT_PROPERTY_ID +
                 ")"
         );
 

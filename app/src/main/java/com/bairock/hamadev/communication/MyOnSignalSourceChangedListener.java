@@ -1,6 +1,5 @@
 package com.bairock.hamadev.communication;
 
-import com.bairock.hamadev.adapter.RecyclerAdapterCollect;
 import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 

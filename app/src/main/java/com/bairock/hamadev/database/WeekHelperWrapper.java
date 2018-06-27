@@ -1,12 +1,9 @@
 package com.bairock.hamadev.database;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import com.bairock.iot.intelDev.linkage.timing.MyTime;
 import com.bairock.iot.intelDev.linkage.timing.WeekHelper;
-import com.bairock.iot.intelDev.linkage.timing.ZTimer;
 
 /**
  * Created by 44489 on 2017/9/26.

@@ -34,7 +34,6 @@ import com.bairock.hamadev.adapter.SectionsPagerAdapter;
 import com.bairock.hamadev.communication.CheckServerConnect;
 import com.bairock.hamadev.communication.DownloadClient;
 import com.bairock.hamadev.communication.MyHttpRequest;
-import com.bairock.hamadev.communication.SerialPortHelper;
 import com.bairock.hamadev.communication.UploadClient;
 import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.linkage.LinkageActivity;
@@ -43,7 +42,6 @@ import com.bairock.hamadev.receiver.NetworkConnectChangedReceiver;
 import com.bairock.hamadev.settings.BridgesStateActivity;
 import com.bairock.hamadev.settings.SearchActivity;
 import com.bairock.hamadev.settings.SettingsActivity2;
-import com.bairock.hamadev.video.VideoPlayActivity;
 import com.bairock.iot.intelDev.user.IntelDevHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.videogo.openapi.EZOpenSDK;
@@ -235,8 +233,6 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(networkConnectChangedReceiver);
         HamaApp.DEV_SERVER.close();
         IntelDevHelper.shutDown();
-        SerialPortHelper.getIns().stopReceiveThread();
-        SerialPortHelper.getIns().closeSerialPort();
         System.exit(0);
     }
 

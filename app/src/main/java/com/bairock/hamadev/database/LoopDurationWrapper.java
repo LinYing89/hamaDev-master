@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import com.bairock.iot.intelDev.linkage.loop.LoopDuration;
-import com.bairock.iot.intelDev.linkage.timing.MyTime;
 
 /**
  *

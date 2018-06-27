@@ -42,12 +42,10 @@ import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.DevStateHelper;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.DeviceAssistent;
-import com.bairock.iot.intelDev.device.GuaguaMouth;
 import com.bairock.iot.intelDev.device.MainCodeHelper;
 import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectClimateContainer;
-import com.bairock.iot.intelDev.device.devcollect.DevCollectSignalContainer;
 import com.bairock.iot.intelDev.device.devcollect.Pressure;
 import com.bairock.iot.intelDev.device.remoter.RemoterContainer;
 import com.bairock.iot.intelDev.linkage.LinkageHelper;
@@ -56,8 +54,7 @@ import com.bairock.iot.intelDev.linkage.guagua.GuaguaHelper;
 import com.bairock.iot.intelDev.linkage.timing.WeekHelper;
 import com.bairock.iot.intelDev.user.DevGroup;
 import com.bairock.iot.intelDev.user.User;
-
-import org.jetbrains.annotations.NotNull;
+import com.tencent.tac.TACApplication;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -373,6 +370,8 @@ public class WelcomeActivity extends AppCompatActivity {
                     theActivity.startActivity(new Intent(theActivity, LoginActivity.class));
                 }else{
                     MainActivity.IS_ADMIN = HamaApp.USER.getName().equals("admin");
+                    String userId = HamaApp.USER.getName() + "_" +HamaApp.DEV_GROUP.getName();
+                    TACApplication.bindUserId(userId);
                     theActivity.startActivity(new Intent(theActivity, MainActivity.class));
                 }
                 theActivity.finish();
