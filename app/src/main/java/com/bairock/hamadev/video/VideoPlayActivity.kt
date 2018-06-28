@@ -35,8 +35,9 @@ import com.videogo.util.LocalInfo
 import com.videogo.util.LogUtil
 import com.videogo.util.Utils
 import java.util.*
+import java.util.concurrent.Executors
 
-class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
+class VideoPlayActivity : AppCompatActivity(), Handler.Callback, VerifyCodeInput.VerifyCodeInputListener {
 
     companion object {
         private const val TAG = "RealPlayerActivity"
@@ -115,6 +116,14 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
             mEZPlayer!!.release()
         }
         RecyclerAdapterElectricalCamera.handler = null
+    }
+
+    override fun onInputVerifyCode(verifyCode: String) {
+        LogUtil.debugLog(TAG, "verify code is $verifyCode")
+        DataManager.setDeviceSerialVerifyCode(cameraInfo!!.deviceSerial, verifyCode)
+        if (mEZPlayer != null) {
+            startRealPlay()
+        }
     }
 
     private fun initLocalInfo(){
@@ -220,7 +229,7 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
         if (this.isFinishing) {
             return
         }
-        GetCamersInfoListTask().execute()
+        GetCamersInfoListTask().executeOnExecutor(Executors.newCachedThreadPool())
     }
 
     private fun addCameraList(result: List<EZDeviceInfo>) {
@@ -419,6 +428,11 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback {
             ErrorCode.ERROR_WEB_HARDWARE_SIGNATURE_OP_ERROR -> {
             }
             ErrorCode.ERROR_TRANSF_TERMINAL_BINDING -> txt = "请在萤石客户端关闭终端绑定"
+            ErrorCode.ERROR_INNER_VERIFYCODE_NEED,
+            ErrorCode.ERROR_INNER_VERIFYCODE_ERROR ->{
+                DataManager.setDeviceSerialVerifyCode(cameraInfo!!.deviceSerial, null)
+                VerifyCodeInput.VerifyCodeInputDialog(this, this).show()
+            }
             ErrorCode.ERROR_EXTRA_SQUARE_NO_SHARING -> txt = Utils.getErrorTip(this, R.string.realplay_play_fail, errorCode)
             else -> txt = Utils.getErrorTip(this, R.string.realplay_play_fail, errorCode)
         }

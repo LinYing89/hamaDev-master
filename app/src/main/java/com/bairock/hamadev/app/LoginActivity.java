@@ -275,12 +275,14 @@ public class LoginActivity extends AppCompatActivity {
                 if(HamaApp.DEV_GROUP.getListLinkageHolder().isEmpty()){
                     initLinkageHolder();
                 }
+
                 //MainActivity.FIRST_LOGIN = true;
                 MainActivity.IS_ADMIN = false;
                 Config.INSTANCE.setNeedLogin(this, false);
 
                 String userId = HamaApp.USER.getName() + "_" +HamaApp.DEV_GROUP.getName();
                 TACApplication.bindUserId(userId);
+                //HamaApp.setTokenTag();
 
                 return true;
             }

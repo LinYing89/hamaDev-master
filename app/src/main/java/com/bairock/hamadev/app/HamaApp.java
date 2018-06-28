@@ -22,6 +22,7 @@ import com.bairock.iot.intelDev.device.devswitch.SubDev;
 import com.bairock.iot.intelDev.user.DevGroup;
 import com.bairock.iot.intelDev.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tencent.tac.messaging.TACMessagingToken;
 import com.videogo.openapi.EZOpenSDK;
 
 import java.util.ArrayList;
@@ -42,7 +43,9 @@ public class HamaApp extends Application {
 
     public static boolean NET_CONNECTED;
     public static boolean SERVER_CONNECTED;
+//    public static boolean BIND_TAG_SUCCESS;
 
+    //public static TACMessagingToken tacMessagingToken = null;
     public static int abnormalColorId;
     public static int stateKaiColorId;
 
@@ -236,4 +239,24 @@ public class HamaApp extends Application {
         String appKey = "3a2cb8b66afb494cb03b273257d3ddd1";
         EZOpenSDK.initLib(this, appKey);
     }
+
+    public static String getGroupTag(){
+        String tag = null;
+        if(HamaApp.USER != null && HamaApp.USER.getName() != null){
+            tag = HamaApp.USER.getName() + "_" + HamaApp.DEV_GROUP.getName();
+        }
+        return tag;
+    }
+
+    /**
+     * 信鸽SDK，为设备绑定tag，方便服务器给同一账号的多个设备推送信息
+     */
+//    public static void setTokenTag(){
+//        String tag = getGroupTag();
+//        //如果已绑定成功过，不再重复绑定
+//        if(!BIND_TAG_SUCCESS && null != tag && null != tacMessagingToken){
+//            tacMessagingToken.bindTag(HamaApp.HAMA_CONTEXT, tag);
+//            BIND_TAG_SUCCESS = true;
+//        }
+//    }
 }
