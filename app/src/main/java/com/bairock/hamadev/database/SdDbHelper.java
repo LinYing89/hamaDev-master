@@ -109,6 +109,15 @@ public class SdDbHelper extends SQLiteOpenHelper {
                 ")"
         );
 
+        //创建alarm trigger表
+        db.execSQL("create table " + TabAlarmTrigger.NAME + "(" +
+                TabAlarmTrigger.Cols.ID + " PRIMARY KEY NOT NULL, " +
+                TabAlarmTrigger.Cols.ENABLE + ", " +
+                TabAlarmTrigger.Cols.MESSAGE + ", " +
+                TabAlarmTrigger.Cols.DEV_ALARM_ID +
+                ")"
+        );
+
         //创建remote key表
         db.execSQL("create table " + TabRemoterKey.NAME + "(" +
                 TabRemoterKey.Cols.ID + " PRIMARY KEY NOT NULL, " +
@@ -358,6 +367,7 @@ public class SdDbHelper extends SQLiteOpenHelper {
     private static void cleanDb(){
         CollectPropertyDao.get(HamaApp.HAMA_CONTEXT).clean();
         ValueTriggerDao.Companion.get(HamaApp.HAMA_CONTEXT).clean();
+        AlarmTriggerDao.Companion.get(HamaApp.HAMA_CONTEXT).clean();
         RemoterKeyDao.Companion.get(HamaApp.HAMA_CONTEXT).clean();
         DevGroupDao.get(HamaApp.HAMA_CONTEXT).clean();
         DeviceDao.get(HamaApp.HAMA_CONTEXT).clean();

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 
+import com.bairock.hamadev.communication.MyOnAlarmTriggedListener;
 import com.bairock.hamadev.communication.MyOnGearNeedToAutoListener;
 import com.bairock.hamadev.communication.MyOnValueTriggedListener;
 import com.bairock.hamadev.media.Media;
@@ -43,6 +44,7 @@ import com.bairock.iot.intelDev.device.DevStateHelper;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.DeviceAssistent;
 import com.bairock.iot.intelDev.device.MainCodeHelper;
+import com.bairock.iot.intelDev.device.alarm.DevAlarm;
 import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectClimateContainer;
@@ -162,6 +164,8 @@ public class WelcomeActivity extends AppCompatActivity {
             cp.setOnSimulatorChangedListener(new MyOnSimulatorChangedListener());
             cp.setOnUnitSymbolChangedListener(new MyOnUnitSymbolChangedListener());
             cp.setOnValueTriggedListener(new MyOnValueTriggedListener());
+        }else if(device instanceof DevAlarm){
+            ((DevAlarm) device).setOnAlarmTriggedListener(new MyOnAlarmTriggedListener());
         }
     }
 
@@ -254,8 +258,12 @@ public class WelcomeActivity extends AppCompatActivity {
 
         DevCollectClimateContainer climateContainer = (DevCollectClimateContainer)DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_CLIMATE_CONTAINER, "9999");
 
+        DevAlarm devAlarm = (DevAlarm) DeviceAssistent.createDeviceByMcId(MainCodeHelper.YAN_WU, "9999");
+
         coordinator.addChildDev(pressure);
         coordinator.addChildDev(climateContainer);
+        coordinator.addChildDev(devAlarm);
+
         devGroup.addDevice(coordinator);
 
         SdDbHelper.replaceDbUser(user);

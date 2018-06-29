@@ -6,10 +6,10 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
-    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:name=".app.HamaApp"
@@ -21,9 +21,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".app.WelcomeActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
-            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,79 +33,79 @@
         </activity>
         <activity
             android:name=".settings.SearchActivity"
-            android:label="设备"
             android:configChanges="orientation|screenSize"
+            android:label="设备"
             android:screenOrientation="landscape" />
         <activity
             android:name=".settings.ChildElectricalActivity"
-            android:label="子设备"
             android:configChanges="orientation|screenSize"
+            android:label="子设备"
             android:screenOrientation="landscape" />
         <activity
             android:name=".app.MainActivity"
-            android:screenOrientation="landscape"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".app.LoginActivity"
-            android:label="登录"
             android:configChanges="orientation|screenSize"
+            android:label="登录"
             android:screenOrientation="landscape" />
         <activity
             android:name=".linkage.LinkageActivity"
-            android:label="连锁"
             android:configChanges="orientation|screenSize"
+            android:label="连锁"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".linkage.EditChainActivity"
-            android:label="连锁"
             android:configChanges="orientation|screenSize"
+            android:label="连锁"
             android:screenOrientation="landscape" />
         <activity
             android:name=".linkage.ConditionActivity"
-            android:label="条件"
             android:configChanges="orientation|screenSize"
+            android:label="条件"
             android:screenOrientation="landscape" />
         <activity
             android:name=".linkage.timing.EditTimingActivity"
-            android:label="定时"
             android:configChanges="orientation|screenSize"
+            android:label="定时"
             android:screenOrientation="landscape" />
         <activity
             android:name=".linkage.timing.TimerActivity"
-            android:label="定时设置"
             android:configChanges="orientation|screenSize"
+            android:label="定时设置"
             android:screenOrientation="landscape" />
         <activity
             android:name=".linkage.loop.EditLoopActivity"
-            android:label="循环"
             android:configChanges="orientation|screenSize"
+            android:label="循环"
             android:screenOrientation="landscape" />
         <activity
             android:name=".linkage.loop.DurationListActivity"
-            android:label="循环区间列表"
             android:configChanges="orientation|screenSize"
+            android:label="循环区间列表"
             android:screenOrientation="landscape" />
         <activity
             android:name=".linkage.loop.DurationActivity"
-            android:label="循环区间设置"
             android:configChanges="orientation|screenSize"
+            android:label="循环区间设置"
             android:screenOrientation="landscape" />
         <activity
             android:name=".linkage.guagua.EditGuaguaActivity"
-            android:label="呱呱"
             android:configChanges="orientation|screenSize"
+            android:label="呱呱"
             android:screenOrientation="landscape" />
         <activity
             android:name=".linkage.guagua.EditGuaguaEffectActivity"
-            android:label="呱呱设置"
             android:configChanges="orientation|screenSize"
+            android:label="呱呱设置"
             android:screenOrientation="landscape" />
         <activity
             android:name=".settings.SortActivity"
-            android:label="排序"
             android:configChanges="orientation|screenSize"
+            android:label="排序"
             android:screenOrientation="landscape" />
         <activity
             android:name=".communication.DeviceMsgMonitorActivity"
@@ -114,34 +114,34 @@
 
         <receiver
             android:name=".receiver.NetworkConnectChangedReceiver"
-            android:enabled="true"
             android:configChanges="orientation|screenSize"
+            android:enabled="true"
             android:exported="false" />
 
         <activity
             android:name=".settings.UdpLogActivity"
-            android:label="UDP收(左)发(右)信息监控"
             android:configChanges="orientation|screenSize"
+            android:label="UDP收(左)发(右)信息监控"
             android:screenOrientation="landscape" />
         <activity
             android:name=".settings.TcpLogActivity"
-            android:label="TCP收(左)发(右)信息监控"
             android:configChanges="orientation|screenSize"
+            android:label="TCP收(左)发(右)信息监控"
             android:screenOrientation="landscape" />
         <activity
             android:name=".settings.BridgesStateActivity"
-            android:label="连接状态(列表可点)"
             android:configChanges="orientation|screenSize"
+            android:label="连接状态(列表可点)"
             android:screenOrientation="landscape" />
         <activity
             android:name=".settings.BridgeMsgActivity"
-            android:label="设备网络信息"
             android:configChanges="orientation|screenSize"
+            android:label="设备网络信息"
             android:screenOrientation="landscape" />
         <activity
             android:name=".settings.DevCollectSettingActivity"
-            android:label="参数设置"
             android:configChanges="orientation|screenSize"
+            android:label="参数设置"
             android:screenOrientation="landscape" />
         <activity
             android:name=".settings.BridgeMsgTestActivity"
@@ -149,14 +149,14 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".settings.DevSwitchAttributeSettingActivity"
-            android:label="参数设置"
             android:configChanges="orientation|screenSize"
+            android:label="参数设置"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".settings.SettingsActivity2"
-            android:label="@string/title_activity_settings2"
             android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_settings2"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.videogo.main.EzvizWebViewActivity"
@@ -178,8 +178,7 @@
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name="com.bairock.hamadev.receiver.MessageReceiver">
+        <receiver android:name=".receiver.MessageReceiver">
             <intent-filter>
                 <action android:name="com.tencent.tac.messaging.action.CALLBACK" />
             </intent-filter>
@@ -187,8 +186,8 @@
 
         <activity
             android:name=".video.VideoPlayActivity"
-            android:screenOrientation="landscape"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".settings.SelectRemoterActivity"
@@ -198,17 +197,24 @@
             android:name=".settings.DragRemoteSetLayoutActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="landscape" />
-        <activity android:name=".app.DragRemoterActivity"
+        <activity
+            android:name=".app.DragRemoterActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".settings.ValueTriggerListActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".settings.ValueTriggerListActivity"
             android:configChanges="orientation|screenSize"
-            android:label="值变化提醒列表"/>
-        <activity android:name=".settings.ValueTriggerSettingActivity"
-            android:screenOrientation="landscape"
+            android:label="值变化提醒列表"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".settings.ValueTriggerSettingActivity"
             android:configChanges="orientation|screenSize"
-            android:label="提醒设置"/>
+            android:label="提醒设置"
+            android:screenOrientation="landscape" />
+        <activity android:name=".settings.DevAlarmSettingActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="报警设置"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

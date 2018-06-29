@@ -36,6 +36,7 @@ import com.bairock.iot.intelDev.device.CtrlModel;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.OrderHelper;
+import com.bairock.iot.intelDev.device.alarm.DevAlarm;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectSignal;
 import com.bairock.iot.intelDev.device.devcollect.DevCollectSignalContainer;
@@ -362,6 +363,9 @@ public class SearchActivity extends AppCompatActivity {
             }else if(IntelDevHelper.OPERATE_DEVICE instanceof Remoter){
                 DragRemoteSetLayoutActivity.Companion.setREMOTER((Remoter)IntelDevHelper.OPERATE_DEVICE);
                 startActivity(new Intent(SearchActivity.this, DragRemoteSetLayoutActivity.class));
+            }else if(IntelDevHelper.OPERATE_DEVICE instanceof DevAlarm){
+                DevAlarmSettingActivity.Companion.setDEVICE((DevAlarm)IntelDevHelper.OPERATE_DEVICE);
+                startActivity(new Intent(SearchActivity.this, DevAlarmSettingActivity.class));
             }
         }
     };

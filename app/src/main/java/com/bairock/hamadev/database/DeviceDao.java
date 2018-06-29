@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.bairock.iot.intelDev.device.Coordinator;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
+import com.bairock.iot.intelDev.device.alarm.DevAlarm;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
-import com.bairock.iot.intelDev.device.devcollect.ValueTrigger;
 import com.bairock.iot.intelDev.device.remoter.Remoter;
 import com.bairock.iot.intelDev.device.remoter.RemoterKey;
 
@@ -123,6 +123,9 @@ public class DeviceDao {
             for(RemoterKey remoterKey : ((Remoter)device).getListRemoterKey()){
                 remoterKeyDao.add(remoterKey);
             }
+        }else if(device instanceof DevAlarm){
+            AlarmTriggerDao alarmTriggerDao = AlarmTriggerDao.Companion.get(mContext);
+            alarmTriggerDao.add(((DevAlarm)device).getTrigger());
         }
     }
 
@@ -138,6 +141,9 @@ public class DeviceDao {
             for(RemoterKey remoterKey : ((Remoter)device).getListRemoterKey()){
                 remoterKeyDao.delete(remoterKey);
             }
+        }else if(device instanceof DevAlarm){
+            AlarmTriggerDao alarmTriggerDao = AlarmTriggerDao.Companion.get(mContext);
+            alarmTriggerDao.delete(((DevAlarm)device).getTrigger());
         }
         mDatabase.delete(DbSb.TabDevice.NAME, DbSb.TabDevice.Cols.ID + "=?", new String[]{device.getId()});
     }
@@ -215,6 +221,7 @@ public class DeviceDao {
         }
         initDevCollect(device);
         initRemoter(device);
+        initDevAlarm(device);
     }
 
     private void initDevCollect(Device device){
@@ -233,6 +240,14 @@ public class DeviceDao {
             for(RemoterKey remoterKey : listKey){
                 remoter.addRemoterKey(remoterKey);
             }
+        }
+    }
+
+    private void initDevAlarm(Device device){
+        if(device instanceof DevAlarm){
+            DevAlarm devAlarm = (DevAlarm)device;
+            AlarmTriggerDao alarmTriggerDao = AlarmTriggerDao.Companion.get(mContext);
+            devAlarm.setTrigger(alarmTriggerDao.find(devAlarm));
         }
     }
 

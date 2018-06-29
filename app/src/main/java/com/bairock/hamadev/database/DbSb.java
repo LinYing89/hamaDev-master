@@ -284,6 +284,38 @@ public class DbSb {
     }
 
     /**
+     * alarm trigger 报警触发器表
+     */
+    public static final class TabAlarmTrigger {
+        /**
+         * 数据表表名
+         */
+        public static final String NAME = "alarmTrigger";
+
+        /**
+         * 数据表列
+         */
+        public static final class Cols {
+            /**
+             * 主键，uuid
+             */
+            public static final String ID = "id";
+            /**
+             * 使能
+             */
+            public static final String ENABLE = "enable";
+            /**
+             * 触发信息
+             */
+            public static final String MESSAGE = "message";
+            /**
+             * 报警设备外键
+             */
+            public static final String DEV_ALARM_ID = "devAlarm_id";
+        }
+    }
+
+    /**
      * collect property 采集设备属性数据表
      */
     public static final class TabRemoterKey {
