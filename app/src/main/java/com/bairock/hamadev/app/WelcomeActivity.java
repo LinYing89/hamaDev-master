@@ -372,7 +372,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     MainActivity.IS_ADMIN = HamaApp.USER.getName().equals("admin");
                     String userId = HamaApp.getGroupTag();
                     TACApplication.bindUserId(userId);
-                    //HamaApp.setTokenTag();
+                    HamaApp.setTokenTag();
                     theActivity.startActivity(new Intent(theActivity, MainActivity.class));
                 }
                 theActivity.finish();

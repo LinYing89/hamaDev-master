@@ -6,6 +6,7 @@ import com.bairock.hamadev.app.ElectricalCtrlFragment;
 import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.database.Config;
 import com.bairock.hamadev.database.DeviceDao;
+import com.bairock.iot.intelDev.device.CtrlModel;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.Gear;
 import com.bairock.iot.intelDev.device.IStateDev;
@@ -19,7 +20,10 @@ import com.bairock.iot.intelDev.device.OrderHelper;
 public class MyOnGearChangedListener implements Device.OnGearChangedListener{
     @Override
     public void onGearChanged(Device device, Gear gear) {
-        PadClient.getIns().send(OrderHelper.getOrderMsg(OrderHelper.FEEDBACK_HEAD  + device.getLongCoding() + OrderHelper.SEPARATOR + "b" + device.getGear()));
+        //本地设备才往服务器发送状态，远程设备只接收服务器状态
+        if(device.findSuperParent().getCtrlModel() == CtrlModel.LOCAL) {
+            PadClient.getIns().send(OrderHelper.getOrderMsg(OrderHelper.FEEDBACK_HEAD + device.getLongCoding() + OrderHelper.SEPARATOR + "b" + device.getGear()));
+        }
         refreshUi(device);
         updateDeviceDao(device);
     }

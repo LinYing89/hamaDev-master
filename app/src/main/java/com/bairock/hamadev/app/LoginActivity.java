@@ -282,7 +282,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 String userId = HamaApp.USER.getName() + "_" +HamaApp.DEV_GROUP.getName();
                 TACApplication.bindUserId(userId);
-                //HamaApp.setTokenTag();
+                HamaApp.setTokenTag();
 
                 return true;
             }

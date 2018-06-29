@@ -14,14 +14,12 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.bairock.hamadev"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 3
         versionName '3.21'
         multiDexEnabled true //Add this
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        android.compileOptions.sourceCompatibility 1.8
-        android.compileOptions.targetCompatibility 1.8
         vectorDrawables.useSupportLibrary = true
         signingConfig signingConfigs.config
 
@@ -42,7 +40,10 @@ android {
             }
         }
         debug {
+            minifyEnabled false
             versionNameSuffix 'debug'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     compileOptions {

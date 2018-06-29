@@ -43,17 +43,21 @@ public class HamaApp extends Application {
 
     public static boolean NET_CONNECTED;
     public static boolean SERVER_CONNECTED;
-//    public static boolean BIND_TAG_SUCCESS;
+    public static boolean BIND_TAG_SUCCESS;
 
-    //public static TACMessagingToken tacMessagingToken = null;
+    public static TACMessagingToken tacMessagingToken = null;
     public static int abnormalColorId;
     public static int stateKaiColorId;
+
+    @Override   protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        MultiDex.install(this);
         //SERVER_IP = "192.168.2.100";
         //URL_ROOT = "http://" + SERVER_IP + ":8080/hamaSer";
         //DevServer.PORT = 8000;
@@ -223,19 +227,10 @@ public class HamaApp extends Application {
     }
 
     private void initSDK() {
-        /**
-         * sdk日志开关，正式发布需要去掉
-         */
         EZOpenSDK.showSDKLog(true);
 
-        /**
-         * 设置是否支持P2P取流,详见api
-         */
         EZOpenSDK.enableP2P(true);
 
-        /**
-         * APP_KEY请替换成自己申请的
-         */
         String appKey = "3a2cb8b66afb494cb03b273257d3ddd1";
         EZOpenSDK.initLib(this, appKey);
     }
@@ -251,12 +246,12 @@ public class HamaApp extends Application {
     /**
      * 信鸽SDK，为设备绑定tag，方便服务器给同一账号的多个设备推送信息
      */
-//    public static void setTokenTag(){
-//        String tag = getGroupTag();
-//        //如果已绑定成功过，不再重复绑定
-//        if(!BIND_TAG_SUCCESS && null != tag && null != tacMessagingToken){
-//            tacMessagingToken.bindTag(HamaApp.HAMA_CONTEXT, tag);
-//            BIND_TAG_SUCCESS = true;
-//        }
-//    }
+    public static void setTokenTag(){
+        String tag = getGroupTag();
+        //如果已绑定成功过，不再重复绑定
+        if(!BIND_TAG_SUCCESS && null != tag && null != tacMessagingToken){
+            tacMessagingToken.bindTag(HamaApp.HAMA_CONTEXT, tag);
+            BIND_TAG_SUCCESS = true;
+        }
+    }
 }

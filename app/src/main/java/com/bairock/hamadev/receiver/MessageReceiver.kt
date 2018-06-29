@@ -2,7 +2,6 @@ package com.bairock.hamadev.receiver
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.bairock.hamadev.app.HamaApp
 import com.tencent.tac.messaging.TACMessagingReceiver
 import com.tencent.tac.messaging.TACMessagingText
@@ -29,13 +28,13 @@ class MessageReceiver : TACMessagingReceiver() {
     }
 
     override fun onRegisterResult(p0: Context?, p1: Int, p2: TACMessagingToken?) {
+        Log.e("errorCode", p1.toString() + "?")
         if (p2 != null) {
-//            HamaApp.tacMessagingToken = p2
-//            HamaApp.setTokenTag()
             val token = p2.tokenString
             Log.e("receiver", token)
+            HamaApp.tacMessagingToken = p2
+            HamaApp.setTokenTag()
         }
-        Log.e("errorCode", p1.toString() + "?")
     }
 
     override fun onNotificationClicked(p0: Context?, p1: TACNotification?, p2: PushChannel?) {

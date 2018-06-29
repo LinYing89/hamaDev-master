@@ -224,6 +224,10 @@ public class PadClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void queueDevice(Device device){
+        //本地设备才往服务器发送状态，远程设备只接收服务器状态
+        if(device.findSuperParent().getCtrlModel() == CtrlModel.REMOTE) {
+            return;
+        }
         if(device.isNormal()){
             HamaApp.sendOrder(device, device.createInitOrder(), true);
         }else{

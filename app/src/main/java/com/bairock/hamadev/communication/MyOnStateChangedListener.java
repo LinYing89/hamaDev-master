@@ -9,6 +9,7 @@ import com.bairock.hamadev.app.ElectricalCtrlFragment;
 import com.bairock.hamadev.app.HamaApp;
 import com.bairock.hamadev.database.Config;
 import com.bairock.iot.intelDev.communication.RefreshCollectorValueHelper;
+import com.bairock.iot.intelDev.device.CtrlModel;
 import com.bairock.iot.intelDev.device.DevStateHelper;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.IStateDev;
@@ -36,7 +37,8 @@ public class MyOnStateChangedListener implements Device.OnStateChangedListener {
         //Log.e(TAG, "onNormalToAbnormal " + device.getCoding());
         refreshSearchUi(device);
         HamaApp.addOfflineDevCoding(device);
-        if(!(device instanceof SubDev)) {
+        //本地设备才往服务器发送状态，远程设备只接收服务器状态
+        if(!(device instanceof SubDev) && device.findSuperParent().getCtrlModel() == CtrlModel.LOCAL) {
             PadClient.getIns().send(device.createAbnormalOrder());
         }
         if(device instanceof DevCollectClimateContainer){
