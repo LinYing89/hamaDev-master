@@ -141,6 +141,7 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.e("SearchAct", "onDestroy");
         HamaApp.DEV_GROUP.removeOnDeviceCollectionChangedListener(onDeviceCollectionChangedListener);
         RecyclerAdapterDevice.handler = null;
         adapterEleHolder = null;
