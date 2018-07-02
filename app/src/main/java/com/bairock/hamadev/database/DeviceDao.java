@@ -12,6 +12,7 @@ import com.bairock.iot.intelDev.device.alarm.DevAlarm;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
 import com.bairock.iot.intelDev.device.remoter.Remoter;
 import com.bairock.iot.intelDev.device.remoter.RemoterKey;
+import com.bairock.iot.intelDev.linkage.device.DeviceLinkage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +111,11 @@ public class DeviceDao {
     private void addDevice(Device device){
         ContentValues values1 = getContentValues(device);
         mDatabase.insert(DbSb.TabDevice.NAME, null, values1);
+
+        DeviceLinkageDao deviceLinkageDao = DeviceLinkageDao.Companion.get(mContext);
+        for(DeviceLinkage deviceLinkage : device.getListDeviceLinkage()){
+            deviceLinkageDao.add(deviceLinkage);
+        }
 
         if(device instanceof DevHaveChild){
             for(Device dev : ((DevHaveChild)device).getListDev()){

@@ -11,6 +11,7 @@ import com.bairock.iot.intelDev.linkage.Linkage;
 import com.bairock.iot.intelDev.linkage.LinkageCondition;
 import com.bairock.iot.intelDev.linkage.LinkageHolder;
 import com.bairock.iot.intelDev.linkage.SubChain;
+import com.bairock.iot.intelDev.linkage.device.DeviceLinkage;
 import com.bairock.iot.intelDev.linkage.loop.LoopDuration;
 import com.bairock.iot.intelDev.linkage.loop.ZLoop;
 import com.bairock.iot.intelDev.linkage.timing.Timing;
@@ -126,6 +127,17 @@ public class SdDbHelper extends SQLiteOpenHelper {
                 TabRemoterKey.Cols.NUMBER + ", " +
                 TabRemoterKey.Cols.LOCATION_X + ", " +
                 TabRemoterKey.Cols.LOCATION_Y +
+                ")"
+        );
+
+        //创建deviceLinkage表
+        db.execSQL("create table " + TabDeviceLinkage.NAME + "(" +
+                TabDeviceLinkage.Cols.ID + " PRIMARY KEY NOT NULL, " +
+                TabDeviceLinkage.Cols.SWITCH_MODEL + ", " +
+                TabDeviceLinkage.Cols.VALUE1 + ", " +
+                TabDeviceLinkage.Cols.VALUE2 + ", " +
+                TabDeviceLinkage.Cols.SOURCE_DEVICE_ID + ", " +
+                TabDeviceLinkage.Cols.TARGET_DEV_ID +
                 ")"
         );
 
@@ -380,6 +392,7 @@ public class SdDbHelper extends SQLiteOpenHelper {
         UserDao.get(HamaApp.HAMA_CONTEXT).clean();
         WeekHelperDao.get(HamaApp.HAMA_CONTEXT).clean();
         ZTimerDao.get(HamaApp.HAMA_CONTEXT).clean();
+        DeviceLinkageDao.Companion.get(HamaApp.HAMA_CONTEXT).clean();
     }
 
     public static void replaceDbUser(User user){
@@ -455,7 +468,10 @@ public class SdDbHelper extends SQLiteOpenHelper {
         DeviceDao deviceDao = DeviceDao.get(HamaApp.HAMA_CONTEXT);
         List<Device> listDevice = deviceDao.findIncludeDeleted();
 
+        DeviceLinkageDao deviceLinkageDao = DeviceLinkageDao.Companion.get(HamaApp.HAMA_CONTEXT);
         for (Device device : listDevice){
+            List<DeviceLinkage> listDeviceLinkage = deviceLinkageDao.find(device, listDevice);
+            device.setListDeviceLinkage(listDeviceLinkage);
             group.addDevice(device);
         }
 

@@ -8,7 +8,7 @@
     tools:context="com.bairock.hamadev.settings.DevCollectSettingActivity">
 
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -22,9 +22,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:minWidth="500dp"
+            android:layout_gravity="center_horizontal"
             android:orientation="vertical">
 
             <TableLayout
@@ -143,8 +144,13 @@
                 <Button
                     android:id="@+id/btnValueTrigged"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="值变化提醒"/>
+                <Button
+                    android:id="@+id/btnValueLinkage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="值变化连锁"/>
 
             </TableLayout>
 
@@ -323,6 +329,5 @@
                     android:textColor="@color/back" />
             </LinearLayout>
         </LinearLayout>
-
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

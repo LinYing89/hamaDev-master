@@ -59,7 +59,9 @@ import com.bairock.iot.intelDev.user.User;
 import com.tencent.tac.TACApplication;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -72,10 +74,48 @@ public class WelcomeActivity extends AppCompatActivity {
         //判断是否需要登陆
         //new SharedHelper().getNeedLogin();
 
-        WeekHelper.ARRAY_WEEKS = new String[]{"日","一","二","三","四","五","六",};
-
         ToMainTask toMainTask = new ToMainTask(this);
         toMainTask.execute();
+    }
+
+    private void initMainCodeInfo(){
+        Map<String, String> map = new HashMap<>();
+        map.put(MainCodeHelper.XIE_TIAO_QI, "协调器");
+        map.put(MainCodeHelper.GUAGUA_MOUTH, "呱呱嘴");
+        map.put(MainCodeHelper.MEN_JIN, "门禁");
+        map.put(MainCodeHelper.YE_WEI, "液位计");
+        map.put(MainCodeHelper.COLLECTOR_SIGNAL, "信号采集器");
+        map.put(MainCodeHelper.COLLECTOR_SIGNAL_CONTAINER, "多功能信号采集器");
+        map.put(MainCodeHelper.COLLECTOR_CLIMATE_CONTAINER, "多功能气候采集器");
+        map.put(MainCodeHelper.YAN_WU, "烟雾探测器");
+        map.put(MainCodeHelper.WEN_DU, "温度");
+        map.put(MainCodeHelper.SHI_DU, "湿度");
+        map.put(MainCodeHelper.JIA_QUAN, "甲醛");
+        map.put(MainCodeHelper.KG_1LU_2TAI, "一路开关");
+        map.put(MainCodeHelper.KG_2LU_2TAI, "两路开关");
+        map.put(MainCodeHelper.KG_3LU_2TAI, "三路开关");
+        map.put(MainCodeHelper.KG_XLU_2TAI, "多路开关");
+        map.put(MainCodeHelper.KG_3TAI, "三态开关");
+        map.put(MainCodeHelper.YAO_KONG, "遥控器");
+        map.put(MainCodeHelper.CHA_ZUO, "插座");
+        map.put(MainCodeHelper.SMC_WU, "未知");
+        map.put(MainCodeHelper.SMC_REMOTER_CHUANG_LIAN, "窗帘");
+        map.put(MainCodeHelper.SMC_REMOTER_DIAN_SHI, "电视");
+        map.put(MainCodeHelper.SMC_REMOTER_KONG_TIAO, "空调");
+        map.put(MainCodeHelper.SMC_REMOTER_TOU_YING, "投影仪");
+        map.put(MainCodeHelper.SMC_REMOTER_MU_BU, "投影幕布");
+        map.put(MainCodeHelper.SMC_REMOTER_SHENG_JIANG_JIA, "升降架");
+        map.put(MainCodeHelper.SMC_REMOTER_ZI_DING_YI, "自定义");
+        map.put(MainCodeHelper.SMC_DENG, "灯");
+        map.put(MainCodeHelper.SMC_CHUANG_HU, "窗帘");
+        map.put(MainCodeHelper.SMC_FA_MEN, "阀门");
+        map.put(MainCodeHelper.SMC_BING_XIANG, "冰箱");
+        map.put(MainCodeHelper.SMC_XI_YI_JI, "洗衣机");
+        map.put(MainCodeHelper.SMC_WEI_BO_LU, "微波炉");
+        map.put(MainCodeHelper.SMC_YIN_XIANG, "音箱");
+        map.put(MainCodeHelper.SMC_SHUI_LONG_TOU, "水龙头");
+
+        MainCodeHelper.getIns().setManCodeInfo(map);
     }
 
     public static void initUser(){
@@ -159,13 +199,13 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         if(device instanceof DevCollect){
             CollectProperty cp = ((DevCollect) device).getCollectProperty();
-            cp.setOnCurrentValueChanged(new MyOnCurrentValueChangedListener());
+            cp.addOnCurrentValueChangedListener(MyOnCurrentValueChangedListener.INSTANCE);
             cp.setOnSignalSourceChangedListener(new MyOnSignalSourceChangedListener());
             cp.setOnSimulatorChangedListener(new MyOnSimulatorChangedListener());
             cp.setOnUnitSymbolChangedListener(new MyOnUnitSymbolChangedListener());
             cp.setOnValueTriggedListener(new MyOnValueTriggedListener());
         }else if(device instanceof DevAlarm){
-            ((DevAlarm) device).setOnAlarmTriggedListener(new MyOnAlarmTriggedListener());
+            ((DevAlarm) device).addOnAlarmTriggedListener(MyOnAlarmTriggedListener.INSTANCE);
         }
     }
 
@@ -253,16 +293,18 @@ public class WelcomeActivity extends AppCompatActivity {
         devGroupDao.clean();
         devGroupDao.add(devGroup);
 
-        Coordinator coordinator = (Coordinator)DeviceAssistent.createDeviceByMcId(MainCodeHelper.XIE_TIAO_QI, "9999");
+        Coordinator coordinator = (Coordinator)DeviceAssistent.createDeviceByMcId(MainCodeHelper.XIE_TIAO_QI, "9999", devGroup);
         Pressure pressure = (Pressure)DeviceAssistent.createDeviceByMcId(MainCodeHelper.YE_WEI, "9999");
 
-        DevCollectClimateContainer climateContainer = (DevCollectClimateContainer)DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_CLIMATE_CONTAINER, "9999");
+        DevCollectClimateContainer climateContainer = (DevCollectClimateContainer)DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_CLIMATE_CONTAINER, "9999", devGroup);
 
-        DevAlarm devAlarm = (DevAlarm) DeviceAssistent.createDeviceByMcId(MainCodeHelper.YAN_WU, "9999");
+        DevAlarm devAlarm = (DevAlarm) DeviceAssistent.createDeviceByMcId(MainCodeHelper.YAN_WU, "9999", devGroup);
+        DevAlarm devMenJin = (DevAlarm) DeviceAssistent.createDeviceByMcId(MainCodeHelper.MEN_JIN, "9999", devGroup);
 
         coordinator.addChildDev(pressure);
         coordinator.addChildDev(climateContainer);
         coordinator.addChildDev(devAlarm);
+        coordinator.addChildDev(devMenJin);
 
         devGroup.addDevice(coordinator);
 
@@ -302,6 +344,11 @@ public class WelcomeActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             //try {
 
+            //星期信息设为中文
+            WeekHelper.ARRAY_WEEKS = new String[]{"日","一","二","三","四","五","六",};
+            //设备主编码描述设为中文
+            mActivity.get().initMainCodeInfo();
+
                 //获取屏幕宽高
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 mActivity.get().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -311,7 +358,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 //没有可搜索设备时单机测试用
 //                testDevice();
 //                testDeviceBx();
-//                testCoordinator();
+                testCoordinator();
 //                testRemoterContainer();
                 initUser();
 

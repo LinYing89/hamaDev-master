@@ -356,6 +356,49 @@ public class DbSb {
     }
 
     /**
+     * device linkage 设备连锁表
+     */
+    public static final class TabDeviceLinkage {
+        /**
+         * 数据表表名
+         */
+        public static final String NAME = "deviceLinkage";
+
+        /**
+         * 数据表列
+         */
+        public static final class Cols {
+            /**
+             * 主键，uuid
+             */
+            public static final String ID = "id";
+            /**
+             * 开关模式
+             * 0表示等于值1开，等于值2关
+             * 1表示小于值1开，大于值2关
+             * 2 表示小于值1关，大于值2开
+             */
+            public static final String SWITCH_MODEL = "switchModel";
+            /**
+             * 值1
+             */
+            public static final String VALUE1 = "value1";
+            /**
+             * 值2
+             */
+            public static final String VALUE2 = "value2";
+            /**
+             * 源设备
+             */
+            public static final String SOURCE_DEVICE_ID = "sourceDevice_id";
+            /**
+             * 目标设备
+             */
+            public static final String TARGET_DEV_ID = "targetDev_id";
+        }
+    }
+
+    /**
      * linkage holder 根连锁数据表
      */
     public static final class TabLinkageHolder {

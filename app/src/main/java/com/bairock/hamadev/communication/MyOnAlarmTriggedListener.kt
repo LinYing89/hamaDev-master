@@ -16,8 +16,9 @@ import android.content.Context
 import android.support.v4.app.NotificationCompat
 import com.bairock.hamadev.R
 import com.bairock.hamadev.app.MainActivity
+import com.bairock.hamadev.media.Media
 
-class MyOnAlarmTriggedListener : DevAlarm.OnAlarmTriggedListener {
+object MyOnAlarmTriggedListener : DevAlarm.OnAlarmTriggedListener {
     override fun onAlarmTrigged(p0: AlarmTrigger) {
         Log.e("OnAlarm", p0.devAlarm.name + " " + p0.message)
         //如果服务器已连接，本地不提醒，只允许服务器推送提醒，如果服务器未连接，本地推送提醒
@@ -37,6 +38,7 @@ class MyOnAlarmTriggedListener : DevAlarm.OnAlarmTriggedListener {
     }
 
     private fun pushLocal(title : String, content : String){
+        Media.playAlarm()
         val localMsg = TACMessagingLocalMessage()
         localMsg.setType(MessageType.NOTIFICATION)
         localMsg.title = title

@@ -211,10 +211,13 @@
             android:configChanges="orientation|screenSize"
             android:label="提醒设置"
             android:screenOrientation="landscape" />
-        <activity android:name=".settings.DevAlarmSettingActivity"
+        <activity
+            android:name=".settings.DevAlarmSettingActivity"
             android:configChanges="orientation|screenSize"
             android:label="报警设置"
             android:screenOrientation="landscape" />
+        <activity android:name=".settings.ValueChangeLinkageActivity" />
+        <activity android:name=".settings.DeviceLinkageSettingActivity"></activity>
     </application>
 
 </manifest>
