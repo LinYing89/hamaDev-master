@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import com.bairock.hamadev.R
-import com.bairock.hamadev.settings.DragRemoteSetLayoutActivity
 import com.bairock.hamadev.zview.DragRemoterKeyButton
 import com.bairock.iot.intelDev.device.remoter.Remoter
 import com.bairock.iot.intelDev.device.remoter.RemoterKey
@@ -48,11 +47,11 @@ class DragRemoterActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        DragRemoteSetLayoutActivity.REMOTER = null
+        REMOTER = null
     }
 
     private fun initListButtons() {
-        for (remoterKey in DragRemoteSetLayoutActivity.REMOTER!!.listRemoterKey) {
+        for (remoterKey in REMOTER!!.listRemoterKey) {
             createAndAddDragRemoterButton(remoterKey)
         }
     }
@@ -97,13 +96,9 @@ class DragRemoterActivity : AppCompatActivity() {
     }
 
     private fun showPopUp(v: View) {
-        val layout = this.layoutInflater
-                .inflate(R.layout.edit_del, null)
-        val btnEdit = layout.findViewById(R.id.btnEdit) as Button
-        val btnDel = layout.findViewById(R.id.btnDel) as Button
-
-        val popupWindow = PopupWindow(layout, RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT)
+        val btnStudy = Button(this)
+        btnStudy.text = "学习"
+        val popupWindow = PopupWindow(btnStudy, Constant.dip2px(100f),  Constant.dip2px(46f))
 
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true
@@ -113,7 +108,7 @@ class DragRemoterActivity : AppCompatActivity() {
         v.getLocationOnScreen(location)
 
         popupWindow.showAsDropDown(v)
-        btnEdit.setOnClickListener {
+        btnStudy.setOnClickListener {
             popupWindow.dismiss()
         }
     }

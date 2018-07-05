@@ -721,4 +721,37 @@ public class DbSb {
             public static final String ZLOOP_ID = "zLoop_id";
         }
     }
+
+    /**
+     * alarm message 报警信息数据表
+     */
+    public static final class TabAlarmMessage {
+        /**
+         * 数据表表名
+         */
+        public static final String NAME = "alarmmessage";
+
+        /**
+         * 数据表列
+         */
+        public static final class Cols {
+            /**
+             * 主键，uuid
+             */
+            public static final String ID = "id";
+            /**
+             * 设备名
+             */
+            public static final String NAME = "name";
+            /**
+             * 报警信息
+             */
+            public static final String MESSAGE = "message";
+
+            /**
+             * 报警时间
+             */
+            public static final String TIME = "time";
+        }
+    }
 }

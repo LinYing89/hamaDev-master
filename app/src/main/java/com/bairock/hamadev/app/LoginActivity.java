@@ -21,7 +21,10 @@ import com.bairock.hamadev.database.UserDao;
 import com.bairock.iot.intelDev.communication.UdpServer;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
+import com.bairock.iot.intelDev.device.alarm.DevAlarm;
+import com.bairock.iot.intelDev.device.devcollect.CollectProperty;
 import com.bairock.iot.intelDev.device.devcollect.DevCollect;
+import com.bairock.iot.intelDev.device.devcollect.ValueTrigger;
 import com.bairock.iot.intelDev.device.remoter.Remoter;
 import com.bairock.iot.intelDev.device.remoter.RemoterKey;
 import com.bairock.iot.intelDev.linkage.ChainHolder;
@@ -30,6 +33,7 @@ import com.bairock.iot.intelDev.linkage.Linkage;
 import com.bairock.iot.intelDev.linkage.LinkageCondition;
 import com.bairock.iot.intelDev.linkage.LinkageHolder;
 import com.bairock.iot.intelDev.linkage.SubChain;
+import com.bairock.iot.intelDev.linkage.device.DeviceLinkage;
 import com.bairock.iot.intelDev.linkage.guagua.GuaguaHolder;
 import com.bairock.iot.intelDev.linkage.loop.LoopDuration;
 import com.bairock.iot.intelDev.linkage.loop.LoopHolder;
@@ -282,7 +286,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 String userId = HamaApp.USER.getName() + "_" +HamaApp.DEV_GROUP.getName();
                 TACApplication.bindUserId(userId);
-                HamaApp.setTokenTag();
+                HamaApp.bindTokenTag();
 
                 return true;
             }
@@ -356,12 +360,21 @@ public class LoginActivity extends AppCompatActivity {
                 setDeviceId(device1);
             }
         }
+        for(DeviceLinkage deviceLinkage : device.getListDeviceLinkage()){
+            deviceLinkage.setId(UUID.randomUUID().toString());
+        }
         if(device instanceof DevCollect){
-            ((DevCollect) device).getCollectProperty().setId(UUID.randomUUID().toString());
+            CollectProperty collectProperty = ((DevCollect) device).getCollectProperty();
+            collectProperty.setId(UUID.randomUUID().toString());
+            for(ValueTrigger trigger : collectProperty.getListValueTrigger()){
+                trigger.setId(UUID.randomUUID().toString());
+            }
         }else if(device instanceof Remoter){
             for(RemoterKey remoterKey : ((Remoter)device).getListRemoterKey()){
                 remoterKey.setId(UUID.randomUUID().toString());
             }
+        }else if(device instanceof DevAlarm){
+            ((DevAlarm)device).getTrigger().setId(UUID.randomUUID().toString());
         }
     }
 

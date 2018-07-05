@@ -79,7 +79,7 @@ public class VerifyCodeInput {
         // 使用布局中的视图创建AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         message1.setText("");
-        message2.setText("您的视频已加密，请输入密码进行查看，初始密码为机身标签上的验证码，如果没有验证码，请输入ABCDEF（密码区分大小写）");
+        message2.setText("您的视频已加密，您可以到萤石云视频客户端app中关闭视频加密，或输入密码进行查看，初始密码为机身标签上的验证码，如果没有验证码，请输入ABCDEF（密码区分大小写）");
         builder.setTitle("请输入设备验证码");
         builder.setView(passwordErrorLayout);
         builder.setPositiveButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

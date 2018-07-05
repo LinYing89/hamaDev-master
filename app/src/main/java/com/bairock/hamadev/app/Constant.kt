@@ -1,5 +1,7 @@
 package com.bairock.hamadev.app
 
+import com.ezviz.stream.Utils
+
 object Constant {
     /**
      * screen width
@@ -16,7 +18,8 @@ object Constant {
     var titleHeight: Int = 0
 
     fun getRemoterKeyWidth(): Int{
-        return px2dip(500f)
+//        return com.videogo.util.Utils.px2dip(HamaApp.HAMA_CONTEXT, 50f)
+        return dip2px(50f)
     }
 
     fun dip2px(dpValue: Float): Int {

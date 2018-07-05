@@ -88,6 +88,7 @@ public class MyMessageAnalysiser extends MessageAnalysiser {
                 if(null == device1){
                     device1 = DeviceAssistent.createDeviceByCoding(coding);
                     if(device1 != null){
+                        HamaApp.DEV_GROUP.createDefaultDeviceName(device1);
                         coordinator.addChildDev(device1);
                         DeviceDao deviceDao = DeviceDao.get(HamaApp.HAMA_CONTEXT);
                         deviceDao.add(device1);
@@ -126,6 +127,7 @@ public class MyMessageAnalysiser extends MessageAnalysiser {
 
     private void addNewDevice(Device device){
         if(EspTouchAddDevice.CONFIGING){
+            HamaApp.DEV_GROUP.createDefaultDeviceName(device);
             EspTouchAddDevice.DEVICE = device;
         }
     }

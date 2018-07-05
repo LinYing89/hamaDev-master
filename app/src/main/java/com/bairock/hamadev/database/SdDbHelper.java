@@ -223,6 +223,15 @@ public class SdDbHelper extends SQLiteOpenHelper {
                 ")"
         );
 
+        //创建alarm message数据表
+        db.execSQL("create table " + TabAlarmMessage.NAME + "(" +
+                TabAlarmMessage.Cols.ID + " PRIMARY KEY NOT NULL, " +
+                TabAlarmMessage.Cols.NAME + ", " +
+                TabAlarmMessage.Cols.MESSAGE + ", " +
+                TabAlarmMessage.Cols.TIME +
+                ")"
+        );
+
 //        db.execSQL("PRAGMA foreign_keys=ON;");
 //
 //        db.execSQL("ALTER table " + TabCollectProperty.NAME +

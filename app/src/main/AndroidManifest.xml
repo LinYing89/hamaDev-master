@@ -217,7 +217,8 @@
             android:label="报警设置"
             android:screenOrientation="landscape" />
         <activity android:name=".settings.ValueChangeLinkageActivity" />
-        <activity android:name=".settings.DeviceLinkageSettingActivity"></activity>
+        <activity android:name=".settings.DeviceLinkageSettingActivity" />
+        <activity android:name=".remote.StudyKeyActivity"></activity>
     </application>
 
 </manifest>

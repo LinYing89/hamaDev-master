@@ -154,6 +154,8 @@ class ValueTriggerListActivity : AppCompatActivity() {
             1 -> {
                 //删除
                 ValueTriggerDao.get(this).delete(valueTrigger!!)
+                collectProperty!!.listValueTrigger.remove(valueTrigger!!)
+                adapterValueTrigger.notifyDataSetChanged()
             }
         }
 

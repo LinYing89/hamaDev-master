@@ -15,30 +15,32 @@ import android.app.PendingIntent
 import android.content.Context
 import android.support.v4.app.NotificationCompat
 import com.bairock.hamadev.R
+import com.bairock.hamadev.app.AlarmMessageHelper
 import com.bairock.hamadev.app.MainActivity
-import com.bairock.hamadev.media.Media
+import com.bairock.iot.intelDev.device.CtrlModel
 
 object MyOnAlarmTriggedListener : DevAlarm.OnAlarmTriggedListener {
     override fun onAlarmTrigged(p0: AlarmTrigger) {
         Log.e("OnAlarm", p0.devAlarm.name + " " + p0.message)
-        //如果服务器已连接，本地不提醒，只允许服务器推送提醒，如果服务器未连接，本地推送提醒
-        if(!PadClient.getIns().isLinked) {
-            pushLocal("报警", p0.devAlarm.name + " " + p0.message)
-            //myPushLocal("报警", p0.devAlarm.name + " " + p0.message)
-//            val manager = HamaApp.HAMA_CONTEXT.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//            val notification = NotificationCompat.Builder(HamaApp.HAMA_CONTEXT)
-//                    .setContentText(p0.devAlarm.name + " " + p0.message)
-//                    .setContentTitle("报警")
-//                    .setSmallIcon(R.mipmap.ic_launcher)
-//                    .setAutoCancel(true)//点击通知头自动取消
-//                    .setDefaults(Notification.DEFAULT_ALL)
-//                    .build()
-//            manager.notify(1, notification)
+        //如果设备是本地模式，则本地推送消息，否则服务器推送提醒
+        if(p0.devAlarm.ctrlModel == CtrlModel.LOCAL){
+            val content = p0.devAlarm.name + " " + p0.message
+            //TTSHelper.speech(content)
+            pushLocal("报警", content)
+            AlarmMessageHelper.add(p0.devAlarm.name, content)
         }
     }
 
+    override fun onAlarmTriggedRelieve(p0: AlarmTrigger) {
+        AlarmMessageHelper.remove(p0.devAlarm.name)
+    }
+
+    override fun onAlarmTrigging(p0: AlarmTrigger?) {
+
+    }
+
     private fun pushLocal(title : String, content : String){
-        Media.playAlarm()
+        //Media.playAlarm()
         val localMsg = TACMessagingLocalMessage()
         localMsg.setType(MessageType.NOTIFICATION)
         localMsg.title = title

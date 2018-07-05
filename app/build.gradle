@@ -87,6 +87,8 @@ dependencies {
     implementation 'com.tencent.tac:tac-core:1.1.2'
     implementation 'com.tencent.tac:tac-messaging:1.1.2'
     implementation 'com.tencent.tac:tac-crash:1.1.2'
+
+    //implementation 'com.sunfusheng:marqueeview:<latest-version>'
 }
 repositories {
     mavenCentral()

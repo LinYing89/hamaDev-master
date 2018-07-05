@@ -16,6 +16,7 @@ import com.bairock.iot.intelDev.device.remoter.Remoter
 import com.bairock.iot.intelDev.device.remoter.RemoterKey
 import android.graphics.drawable.BitmapDrawable
 import android.widget.*
+import com.bairock.hamadev.app.HamaApp
 
 
 /**
@@ -159,8 +160,8 @@ class DragRemoteSetLayoutActivity : AppCompatActivity(), View.OnTouchListener {
         val btnEdit = layout.findViewById(R.id.btnEdit) as Button
         val btnDel = layout.findViewById(R.id.btnDel) as Button
 
-        val popupWindow = PopupWindow(layout, RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT)
+        val popupWindow = PopupWindow(layout, Constant.dip2px(120f),
+                Constant.dip2px(120f))
 
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true

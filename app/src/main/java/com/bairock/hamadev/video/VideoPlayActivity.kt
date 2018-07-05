@@ -1,7 +1,10 @@
 package com.bairock.hamadev.video
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.graphics.drawable.BitmapDrawable
 import android.os.*
@@ -20,7 +23,9 @@ import com.bairock.hamadev.R
 import com.bairock.hamadev.adapter.AdapterVideoDevice
 import com.bairock.hamadev.adapter.RecyclerAdapterElectricalCamera
 import com.bairock.hamadev.adapter.VideoDevicePagerAdapter
+import com.bairock.hamadev.app.AlarmMessageHelper
 import com.bairock.hamadev.app.HamaApp
+import com.bairock.hamadev.zview.MarqueeView
 import com.videogo.constant.Constant
 import com.videogo.errorlayer.ErrorInfo
 import com.videogo.exception.BaseException
@@ -50,6 +55,8 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback, VerifyCodeInput
          * 设置视频质量成功
          */
         const val MSG_SET_VEDIOMODE_FAIL = 106
+
+        const val UPDATE_ALARM_TEXT_ACTION = "com.bairock.hamadev.updateAlarm"
     }
 
     /**
@@ -66,10 +73,13 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback, VerifyCodeInput
     private lateinit var btnPtz: ImageButton
     private lateinit var btnQuality: Button
 
+    private lateinit var txtApp : TextView
+
     private lateinit var listViewElectrical: RecyclerView
 
     private lateinit var vpDevices : ViewPager
     private lateinit var bottomNavigationView : BottomNavigationView
+    private lateinit var txtAlarmMessage : MarqueeView
 
     private var mPtzPopupWindow: PopupWindow? = null
     var mPtzControlLy : LinearLayout? = null
@@ -98,6 +108,19 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback, VerifyCodeInput
     private lateinit var mLocalInfo: LocalInfo
     private var mHandler: Handler? = null
 
+    private var br = object : BroadcastReceiver(){
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            if(UPDATE_ALARM_TEXT_ACTION == p1!!.action){
+                if(AlarmMessageHelper.listMessage.isEmpty()) {
+                    txtAlarmMessage.visibility = View.GONE
+                }else {
+                    txtAlarmMessage.visibility = View.VISIBLE
+                    txtAlarmMessage.startWithList(AlarmMessageHelper.listMessage)
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_play)
@@ -107,11 +130,15 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback, VerifyCodeInput
         setListener()
         getCameraInfoList()
         mHandler = Handler(this)
+
+        val intentFilter = IntentFilter()
+		intentFilter.addAction(UPDATE_ALARM_TEXT_ACTION)
+		registerReceiver(br, intentFilter);
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
+        unregisterReceiver(br);
         if (mEZPlayer != null) {
             mEZPlayer!!.release()
         }
@@ -146,8 +173,13 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback, VerifyCodeInput
         mRealPlaySh = mRealPlaySv.holder
         btnPtz = findViewById(R.id.btnPtz)
         btnQuality = findViewById(R.id.btnQuality)
+        txtApp = findViewById(R.id.txtApp)
         listViewElectrical = findViewById(R.id.listViewElectrical)
         listViewElectrical.layoutManager = GridLayoutManager(this, 2)
+        txtAlarmMessage = findViewById(R.id.txtAlarmMessage)
+//        AlarmMessageHelper.add("烟雾探测器3", "报警3")
+//        AlarmMessageHelper.add("门禁3", "门禁3")
+        txtAlarmMessage.startWithList(AlarmMessageHelper.listMessage)
         val listIStateDev = HamaApp.DEV_GROUP.findListIStateDev(true)
         listIStateDev.sort()
         val adapterElectrical = RecyclerAdapterElectricalCamera(this, listIStateDev)
@@ -215,6 +247,16 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback, VerifyCodeInput
             override fun onPageSelected(position: Int) {
             }
         })
+        txtApp.setOnClickListener {
+            // 通过包名获取要跳转的app，创建intent对象
+            val intent = packageManager.getLaunchIntentForPackage("com.videogo")
+            // 这里如果intent为空，就说名没有安装要跳转的应用
+            if (intent != null) {
+                startActivity(intent)
+            } else {
+                Toast.makeText(applicationContext, "没有安装萤石云视频app", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun setDeviceAdapter(){
@@ -430,6 +472,7 @@ class VideoPlayActivity : AppCompatActivity(), Handler.Callback, VerifyCodeInput
             ErrorCode.ERROR_TRANSF_TERMINAL_BINDING -> txt = "请在萤石客户端关闭终端绑定"
             ErrorCode.ERROR_INNER_VERIFYCODE_NEED,
             ErrorCode.ERROR_INNER_VERIFYCODE_ERROR ->{
+                //输入验证码
                 DataManager.setDeviceSerialVerifyCode(cameraInfo!!.deviceSerial, null)
                 VerifyCodeInput.VerifyCodeInputDialog(this, this).show()
             }

@@ -3,6 +3,7 @@ package com.bairock.hamadev.app;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -28,6 +29,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.bairock.hamadev.R;
 import com.bairock.hamadev.adapter.SectionsPagerAdapter;
@@ -42,6 +44,7 @@ import com.bairock.hamadev.receiver.NetworkConnectChangedReceiver;
 import com.bairock.hamadev.settings.BridgesStateActivity;
 import com.bairock.hamadev.settings.SearchActivity;
 import com.bairock.hamadev.settings.SettingsActivity2;
+import com.bairock.hamadev.zview.MarqueeView;
 import com.bairock.iot.intelDev.user.IntelDevHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.videogo.openapi.EZOpenSDK;
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static boolean IS_ADMIN;
-    public static String subTitle = "呱呱物联:智能物联网控制器";
+    //public static String subTitle = "呱呱物联:智能物联网控制器";
     public static String VERSION_NAME = "";
 
     public static final int UPLOAD_FAIL = 3;
@@ -63,30 +66,53 @@ public class MainActivity extends AppCompatActivity
     public static final int REFRESH_TITLE = 8;
     public static MyHandler handler = null;
 
+    public static final String UPDATE_ALARM_TEXT_ACTION = "com.bairock.hamadev.updateAlarm";
+
     public static String strEnsure;
     public static String strCancel;
 
     private Toolbar toolbar;
+    private MarqueeView txtAlarmMessage;
     private ProgressDialog progressFileDialog;
     private VersionTask versionTask;
     private PackageInfo packageInfo;
 
     private NetworkConnectChangedReceiver networkConnectChangedReceiver;
 
+    private BroadcastReceiver br = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(UPDATE_ALARM_TEXT_ACTION.equals(intent.getAction())){
+                if(AlarmMessageHelper.INSTANCE.getListMessage().isEmpty()) {
+                    txtAlarmMessage.setVisibility(View.GONE);
+                }else {
+                    txtAlarmMessage.setVisibility(View.VISIBLE);
+                    txtAlarmMessage.startWithList(AlarmMessageHelper.INSTANCE.getListMessage());
+                }
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setLogo(R.mipmap.ic_logo_white);
+        //toolbar.setLogo(R.mipmap.ic_logo_white);
         packageInfo = getAppVersionCode(this);
         //toolbar.setTitle(UserHelper.getUser().getName() + UserHelper.getUser().getPetName());
         if (null != packageInfo) {
             VERSION_NAME = packageInfo.versionName;
-            subTitle += " v" + VERSION_NAME;
+            //subTitle += " v" + VERSION_NAME;
         }
         toolbar.setTitle(HamaApp.USER.getName() + "-" + HamaApp.DEV_GROUP.getName() + ":" + HamaApp.DEV_GROUP.getPetName());
-        toolbar.setSubtitle(subTitle);
+        //toolbar.setSubtitle(subTitle);
+
+        txtAlarmMessage = findViewById(R.id.txtAlarmMessage);
+
+//        AlarmMessageHelper.INSTANCE.add("烟雾探测器3", "报警3");
+//        AlarmMessageHelper.INSTANCE.add("门禁3", "门禁3");
+        txtAlarmMessage.startWithList(AlarmMessageHelper.INSTANCE.getListMessage());
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -117,12 +143,18 @@ public class MainActivity extends AppCompatActivity
 
         handler = new MyHandler(MainActivity.this);
 
+        //注册网络状态变化广播
         networkConnectChangedReceiver = new NetworkConnectChangedReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filter.addAction("android.net.wifi.STATE_CHANGE");
         registerReceiver(networkConnectChangedReceiver, filter);
+
+        //注册报警信息更新广播
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(UPDATE_ALARM_TEXT_ACTION);
+        registerReceiver(br, intentFilter);
 
         if (!IS_ADMIN) {
             //尝试连接服务器
@@ -201,6 +233,7 @@ public class MainActivity extends AppCompatActivity
                     .setPositiveButton(strEnsure,
                             (dialog, whichButton) -> {
                                 Config.INSTANCE.setNeedLogin(MainActivity.this, true);
+                                HamaApp.unbindTokenTag();
                                 finish();
                             }).show();
         } else if (id == R.id.nav_log) {
@@ -215,22 +248,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            new AlertDialog.Builder(MainActivity.this)
-                    .setMessage("退出程序")
-                    .setNegativeButton(strCancel, null)
-                    .setPositiveButton(strEnsure,
-                            (dialog, which) -> finish()).show();
+            moveTaskToBack(true);
             return true;
-        } else {
-            return super.onKeyDown(keyCode, event);
         }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(networkConnectChangedReceiver);
+        unregisterReceiver(br);
         HamaApp.DEV_SERVER.close();
         IntelDevHelper.shutDown();
         System.exit(0);
@@ -266,11 +294,11 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case REFRESH_TITLE:
                     if (!HamaApp.NET_CONNECTED) {
-                        theActivity.toolbar.setSubtitle(subTitle + "(网络未连接)");
+                        theActivity.toolbar.setSubtitle("(网络未连接)");
                     } else if (!HamaApp.SERVER_CONNECTED) {
-                        theActivity.toolbar.setSubtitle(subTitle + "(服务器未连接)");
+                        theActivity.toolbar.setSubtitle("(服务器未连接)");
                     } else {
-                        theActivity.toolbar.setSubtitle(subTitle);
+                        theActivity.toolbar.setSubtitle("");
                     }
                     break;
             }

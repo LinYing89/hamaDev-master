@@ -2,7 +2,9 @@ package com.bairock.hamadev.receiver
 
 import android.content.Context
 import android.util.Log
+import com.bairock.hamadev.app.AlarmMessageHelper
 import com.bairock.hamadev.app.HamaApp
+import com.bairock.hamadev.media.Media
 import com.tencent.tac.messaging.TACMessagingReceiver
 import com.tencent.tac.messaging.TACMessagingText
 import com.tencent.tac.messaging.TACMessagingToken
@@ -14,6 +16,7 @@ class MessageReceiver : TACMessagingReceiver() {
     override fun onNotificationArrived(p0: Context?, p1: TACNotification?, p2: PushChannel?) {
         //Toast.makeText(p0, "收到通知消息：$p2", Toast.LENGTH_LONG).show()
         Log.e("messaging", "MyReceiver::onNotificationArrived : notification is $p1 pushChannel $p2")
+        Media.playAlarm()
     }
 
     override fun onBindTagResult(p0: Context?, p1: Int, p2: String?) {
@@ -22,6 +25,17 @@ class MessageReceiver : TACMessagingReceiver() {
     }
 
     override fun onMessageArrived(p0: Context?, p1: TACMessagingText?, p2: PushChannel?) {
+        val map = p1!!.customContent
+        val name = map["name"]
+        val triggerStyle = map["trigger"]!!.toInt()
+
+        if(triggerStyle == 0 || triggerStyle == 1) {
+            //报警中
+            AlarmMessageHelper.add(name!!, p1.content)
+        }else{
+            //解除报警
+            AlarmMessageHelper.remove(name!!)
+        }
     }
 
     override fun onUnregisterResult(p0: Context?, p1: Int) {
@@ -33,7 +47,7 @@ class MessageReceiver : TACMessagingReceiver() {
             val token = p2.tokenString
             Log.e("receiver", token)
             HamaApp.tacMessagingToken = p2
-            HamaApp.setTokenTag()
+            HamaApp.bindTokenTag()
         }
     }
 

@@ -41,6 +41,7 @@ public class DevCollectSettingActivity extends AppCompatActivity {
     private EditText etxtCalibration;
     private Button btnCalibration;
     private Button btnValueTrigged;
+    private Button btnValueLinkage;
     private Button btnSave;
     private Button btnCancel;
 
@@ -100,6 +101,7 @@ public class DevCollectSettingActivity extends AppCompatActivity {
         spinnerSignalSource = findViewById(R.id.spinnerSignalSource);
         btnCalibration = findViewById(R.id.btnCalibration);
         btnValueTrigged = findViewById(R.id.btnValueTrigged);
+        btnValueLinkage= findViewById(R.id.btnValueLinkage);
         btnSave = findViewById(R.id.btnSave);
         btnCancel = findViewById(R.id.btnCancel);
 
@@ -111,6 +113,7 @@ public class DevCollectSettingActivity extends AppCompatActivity {
         spinnerSignalSource.setOnItemSelectedListener(onItemSelectedListener);
         btnCalibration.setOnClickListener(onClickListener);
         btnValueTrigged.setOnClickListener(onClickListener);
+        btnValueLinkage.setOnClickListener(onClickListener);
         btnSave.setOnClickListener(onClickListener);
         btnCancel.setOnClickListener(onClickListener);
     }
@@ -132,23 +135,22 @@ public class DevCollectSettingActivity extends AppCompatActivity {
     }
 
     private void initSourceLayout(int position){
-        switch (position){
-            case 0:
-                tabrow_Aa_Ab.setVisibility(View.VISIBLE);
-                tabrow_a_b.setVisibility(View.GONE);
-                break;
-            case 1:
-                tabrow_Aa_Ab.setVisibility(View.VISIBLE);
-                tabrow_a_b.setVisibility(View.GONE);
-                break;
-            case 2:
-                tabrow_Aa_Ab.setVisibility(View.VISIBLE);
-                tabrow_a_b.setVisibility(View.VISIBLE);
-                break;
-            case 3:
-                tabrow_Aa_Ab.setVisibility(View.GONE);
-                tabrow_a_b.setVisibility(View.GONE);
-                break;
+        if (position == 0) {
+            tabrow_Aa_Ab.setVisibility(View.VISIBLE);
+            tabrow_a_b.setVisibility(View.GONE);
+
+        } else if (position == 1) {
+            tabrow_Aa_Ab.setVisibility(View.VISIBLE);
+            tabrow_a_b.setVisibility(View.GONE);
+
+        } else if (position == 2) {
+            tabrow_Aa_Ab.setVisibility(View.VISIBLE);
+            tabrow_a_b.setVisibility(View.VISIBLE);
+
+        } else if (position == 3) {
+            tabrow_Aa_Ab.setVisibility(View.GONE);
+            tabrow_a_b.setVisibility(View.GONE);
+
         }
     }
 
@@ -272,6 +274,11 @@ public class DevCollectSettingActivity extends AppCompatActivity {
             case R.id.btnValueTrigged:
                 ValueTriggerListActivity.Companion.setCollectProperty(collectProperty);
                 startActivity(new Intent(this, ValueTriggerListActivity.class));
+                break;
+            case R.id.btnValueLinkage:
+                ValueChangeLinkageActivity.Companion.setDEVICE(devCollectSignal);
+                startActivity(new Intent(this, ValueChangeLinkageActivity.class));
+                break;
             case R.id.btnSave:
                 save();
                 finish();

@@ -13,6 +13,10 @@
         <item>OFF</item>
         <item>ON</item>
     </string-array>
+    <string-array name="array_switch_action">
+        <item>关</item>
+        <item>开</item>
+    </string-array>
     <string-array name="array_trigger_style">
         <item>百分比</item>
         <item>值</item>

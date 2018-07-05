@@ -9,68 +9,102 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:background="@android:color/black">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
 
-        <SurfaceView
-            android:id="@+id/realplay_sv"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_centerInParent="false"
-            android:background="@android:color/transparent" />
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
+            android:background="@android:color/black">
 
-        <include layout="@layout/realplay_loading_layout" />
-
-        <LinearLayout
-            android:id="@+id/llTitleBar"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/back_tra"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/imgBtnBack"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
-
-            <Spinner
-                android:id="@+id/spinnerDevices"
+            <SurfaceView
+                android:id="@+id/realplay_sv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
-        </LinearLayout>
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="false"
+                android:background="@android:color/transparent" />
 
-        <LinearLayout
-            android:id="@+id/llCtrl"
+            <include layout="@layout/realplay_loading_layout" />
+
+            <LinearLayout
+                android:id="@+id/llTitleBar"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/back_tra"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/imgBtnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
+
+                <TextView
+                    android:id="@+id/txtApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/gray_text"
+                    android:gravity="center"
+                    android:text="客户端"/>
+                <Spinner
+                    android:id="@+id/spinnerDevices"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llCtrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnPtz"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/yuntai_normal" />
+
+            <Button
+                android:id="@+id/btnQuality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:background="@android:color/transparent"
+                android:text="标清"
+                android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/btnPtz"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="6dp"
-            android:layout_marginStart="6dp"
-            android:background="@drawable/yuntai_normal" />
-
-        <Button
-            android:id="@+id/btnQuality"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:layout_marginStart="6dp"
-            android:background="@android:color/transparent"
-            android:text="标清"
-            android:textColor="@color/white" />
-
-        </LinearLayout>
+            android:background="@color/back">
+            <com.bairock.hamadev.zview.MarqueeView
+                android:id="@+id/txtAlarmMessage"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:mvAnimDuration="1000"
+                app:mvDirection="bottom_to_top"
+                app:mvInterval="3000"
+                app:mvTextColor="@color/abnormal"
+                app:mvTextSize="14sp"
+                app:mvSingleLine="true"/>
+        </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout

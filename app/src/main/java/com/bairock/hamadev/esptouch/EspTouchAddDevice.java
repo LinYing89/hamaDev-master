@@ -308,8 +308,7 @@ public class EspTouchAddDevice {
                     }
 
                     //添加到连锁内存表
-                    List<Device> listIStateDev = new ArrayList<>();
-                    DevGroup.findListIStateDev(listIStateDev, device, true);
+                    List<Device> listIStateDev = DevGroup.findListIStateDev(device, true);
                     for (Device device1 : listIStateDev) {
                         LinkageTab.getIns().addTabRow(device1);
                     }

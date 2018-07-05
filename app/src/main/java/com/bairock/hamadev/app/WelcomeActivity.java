@@ -294,7 +294,7 @@ public class WelcomeActivity extends AppCompatActivity {
         devGroupDao.add(devGroup);
 
         Coordinator coordinator = (Coordinator)DeviceAssistent.createDeviceByMcId(MainCodeHelper.XIE_TIAO_QI, "9999", devGroup);
-        Pressure pressure = (Pressure)DeviceAssistent.createDeviceByMcId(MainCodeHelper.YE_WEI, "9999");
+        Pressure pressure = (Pressure)DeviceAssistent.createDeviceByMcId(MainCodeHelper.YE_WEI, "9999", devGroup);
 
         DevCollectClimateContainer climateContainer = (DevCollectClimateContainer)DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_CLIMATE_CONTAINER, "9999", devGroup);
 
@@ -358,7 +358,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 //没有可搜索设备时单机测试用
 //                testDevice();
 //                testDeviceBx();
-                testCoordinator();
+//                testCoordinator();
 //                testRemoterContainer();
                 initUser();
 
@@ -427,7 +427,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     MainActivity.IS_ADMIN = HamaApp.USER.getName().equals("admin");
                     String userId = HamaApp.getGroupTag();
                     TACApplication.bindUserId(userId);
-                    HamaApp.setTokenTag();
+                    HamaApp.bindTokenTag();
                     theActivity.startActivity(new Intent(theActivity, MainActivity.class));
                 }
                 theActivity.finish();

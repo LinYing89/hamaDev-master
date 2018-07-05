@@ -246,12 +246,22 @@ public class HamaApp extends Application {
     /**
      * 信鸽SDK，为设备绑定tag，方便服务器给同一账号的多个设备推送信息
      */
-    public static void setTokenTag(){
+    public static void bindTokenTag(){
         String tag = getGroupTag();
         //如果已绑定成功过，不再重复绑定
         if(!BIND_TAG_SUCCESS && null != tag && null != tacMessagingToken){
             tacMessagingToken.bindTag(HamaApp.HAMA_CONTEXT, tag);
             BIND_TAG_SUCCESS = true;
+        }
+    }
+    /**
+     * 信鸽SDK，为设备解除绑定tag
+     */
+    public static void unbindTokenTag(){
+        String tag = getGroupTag();
+        //如果已绑定成功过，不再重复绑定
+        if(null != tag && null != tacMessagingToken){
+            tacMessagingToken.unbindTag(HamaApp.HAMA_CONTEXT, tag);
         }
     }
 }
