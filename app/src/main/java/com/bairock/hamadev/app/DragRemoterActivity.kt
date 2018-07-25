@@ -1,6 +1,8 @@
 package com.bairock.hamadev.app
 
-import android.graphics.drawable.BitmapDrawable
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,6 +11,7 @@ import android.widget.Button
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import com.bairock.hamadev.R
+import com.bairock.hamadev.remote.StudyKeyActivity
 import com.bairock.hamadev.zview.DragRemoterKeyButton
 import com.bairock.iot.intelDev.device.remoter.Remoter
 import com.bairock.iot.intelDev.device.remoter.RemoterKey
@@ -68,6 +71,10 @@ class DragRemoterActivity : AppCompatActivity() {
             showPopUp(p0)
             false
         }
+        rb.setOnClickListener{
+            val remoterKey1 = (it as DragRemoterKeyButton).remoterKey
+            HamaApp.sendOrder(remoterKey1.remoter.parent, remoterKey1.createCtrlKeyOrder(), true)
+        }
         listDragRemoterBtn.add(rb)
     }
 
@@ -96,13 +103,14 @@ class DragRemoterActivity : AppCompatActivity() {
     }
 
     private fun showPopUp(v: View) {
+        val rb = v as DragRemoterKeyButton
         val btnStudy = Button(this)
         btnStudy.text = "学习"
         val popupWindow = PopupWindow(btnStudy, Constant.dip2px(100f),  Constant.dip2px(46f))
 
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true
-        popupWindow.setBackgroundDrawable(BitmapDrawable())
+        popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val location = IntArray(2)
         v.getLocationOnScreen(location)
@@ -110,6 +118,8 @@ class DragRemoterActivity : AppCompatActivity() {
         popupWindow.showAsDropDown(v)
         btnStudy.setOnClickListener {
             popupWindow.dismiss()
+            StudyKeyActivity.remoterKey = rb.remoterKey
+            startActivity(Intent(this, StudyKeyActivity::class.java))
         }
     }
 }

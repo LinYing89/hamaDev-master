@@ -218,7 +218,9 @@
             android:screenOrientation="landscape" />
         <activity android:name=".settings.ValueChangeLinkageActivity" />
         <activity android:name=".settings.DeviceLinkageSettingActivity" />
-        <activity android:name=".remote.StudyKeyActivity"></activity>
+        <activity android:name=".remote.StudyKeyActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
     </application>
 
 </manifest>

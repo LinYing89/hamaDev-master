@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity
     public static String strCancel;
 
     private Toolbar toolbar;
+    private String title;
     private MarqueeView txtAlarmMessage;
     private ProgressDialog progressFileDialog;
     private VersionTask versionTask;
@@ -105,7 +106,8 @@ public class MainActivity extends AppCompatActivity
             VERSION_NAME = packageInfo.versionName;
             //subTitle += " v" + VERSION_NAME;
         }
-        toolbar.setTitle(HamaApp.USER.getName() + "-" + HamaApp.DEV_GROUP.getName() + ":" + HamaApp.DEV_GROUP.getPetName());
+        title = HamaApp.USER.getName() + "-" + HamaApp.DEV_GROUP.getName() + ":" + HamaApp.DEV_GROUP.getPetName();
+        toolbar.setTitle(title);
         //toolbar.setSubtitle(subTitle);
 
         txtAlarmMessage = findViewById(R.id.txtAlarmMessage);
@@ -273,7 +275,6 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void handleMessage(Message msg) {
-            // TODO handler
             MainActivity theActivity = mActivity.get();
             switch (msg.what) {
                 case UPLOAD_FAIL:
@@ -294,11 +295,11 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case REFRESH_TITLE:
                     if (!HamaApp.NET_CONNECTED) {
-                        theActivity.toolbar.setSubtitle("(网络未连接)");
+                        theActivity.toolbar.setTitle(theActivity.title + "(网络未连接)");
                     } else if (!HamaApp.SERVER_CONNECTED) {
-                        theActivity.toolbar.setSubtitle("(服务器未连接)");
+                        theActivity.toolbar.setTitle(theActivity.title + "(服务器未连接)");
                     } else {
-                        theActivity.toolbar.setSubtitle("");
+                        theActivity.toolbar.setTitle(theActivity.title);
                     }
                     break;
             }

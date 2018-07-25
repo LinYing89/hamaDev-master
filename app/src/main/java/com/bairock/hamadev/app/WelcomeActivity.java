@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 
 import com.bairock.hamadev.communication.MyOnAlarmTriggedListener;
 import com.bairock.hamadev.communication.MyOnGearNeedToAutoListener;
+import com.bairock.hamadev.communication.MyOnRemoterOrderSuccessListener;
 import com.bairock.hamadev.communication.MyOnValueTriggedListener;
 import com.bairock.hamadev.media.Media;
 import com.bairock.hamadev.R;
@@ -192,6 +193,9 @@ public class WelcomeActivity extends AppCompatActivity {
             //协调器添加子设备集合改变监听器
             if(devHaveChild instanceof Coordinator){
                 devHaveChild.addOnDeviceCollectionChangedListener(new MyOnDevHaveChildeOnCollectionChangedListener());
+            }else if(devHaveChild instanceof RemoterContainer){
+                devHaveChild.addOnDeviceCollectionChangedListener(new MyOnDevHaveChildeOnCollectionChangedListener());
+                ((RemoterContainer) devHaveChild).setOnRemoterOrderSuccessListener(new MyOnRemoterOrderSuccessListener());
             }
             for(Device device1 : devHaveChild.getListDev()){
                 setDeviceListener(device1, onStateChangedListener, onGearChangedListener, onCtrlModelChangedListener);
