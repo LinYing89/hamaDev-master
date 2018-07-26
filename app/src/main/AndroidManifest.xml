@@ -219,6 +219,7 @@
         <activity android:name=".settings.ValueChangeLinkageActivity" />
         <activity android:name=".settings.DeviceLinkageSettingActivity" />
         <activity android:name=".remote.StudyKeyActivity"
+            android:label="学习按键"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Dialog"/>
     </application>

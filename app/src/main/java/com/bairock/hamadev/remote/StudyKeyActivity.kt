@@ -1,13 +1,12 @@
 package com.bairock.hamadev.remote
 
-import android.arch.core.executor.TaskExecutor
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.View
+import android.view.Window
 import android.widget.*
 import com.bairock.hamadev.R
 import com.bairock.hamadev.app.HamaApp
@@ -45,6 +44,13 @@ class StudyKeyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_study_key)
+
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true)
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.title = remoterKey!!.name
+        }
 
         findViews()
         setListener()
@@ -122,7 +128,8 @@ class StudyKeyActivity : AppCompatActivity() {
             R.id.btnStudy ->{
                 HamaApp.sendOrder(remoterKey!!.remoter.parent, remoterKey!!.createStudyKeyOrder(), true)
                 btnStudy.visibility = View.GONE
-                showWait()
+                txtInfo.text = "请将实体遥控器对准智能遥控器,并按一下想要学习的按键"
+           showWait()
             }
             R.id.btnTest ->{
                 HamaApp.sendOrder(remoterKey!!.remoter.parent, remoterKey!!.createTestKeyOrder(), true)

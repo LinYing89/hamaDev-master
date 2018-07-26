@@ -11,6 +11,8 @@ import android.widget.Button
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import com.bairock.hamadev.R
+import com.bairock.hamadev.database.Config
+import com.bairock.hamadev.media.Media
 import com.bairock.hamadev.remote.StudyKeyActivity
 import com.bairock.hamadev.zview.DragRemoterKeyButton
 import com.bairock.iot.intelDev.device.remoter.Remoter
@@ -72,6 +74,9 @@ class DragRemoterActivity : AppCompatActivity() {
             false
         }
         rb.setOnClickListener{
+            if (Config.ctrlRing) {
+                Media.playCtrlRing()
+            }
             val remoterKey1 = (it as DragRemoterKeyButton).remoterKey
             HamaApp.sendOrder(remoterKey1.remoter.parent, remoterKey1.createCtrlKeyOrder(), true)
         }

@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity
 
         if (!IS_ADMIN) {
             //尝试连接服务器
+            CheckServerConnect.running = true;
             IntelDevHelper.executeThread(new CheckServerConnect());
         }
     }
@@ -262,6 +263,7 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(networkConnectChangedReceiver);
         unregisterReceiver(br);
         HamaApp.DEV_SERVER.close();
+        CheckServerConnect.running = false;
         IntelDevHelper.shutDown();
         System.exit(0);
     }

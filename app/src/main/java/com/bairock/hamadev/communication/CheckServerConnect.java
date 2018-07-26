@@ -14,9 +14,11 @@ import java.util.Map;
 
 public class CheckServerConnect extends Thread {
 
+    public static boolean running;
+
     @Override
     public void run() {
-        while(true){
+        while(running && !isInterrupted()){
             try {
                 if(!MainActivity.IS_ADMIN) {
                     if (!PadClient.getIns().isLinked()) {

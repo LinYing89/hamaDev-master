@@ -9,11 +9,14 @@ import com.bairock.hamadev.database.DeviceDao
 import com.bairock.iot.intelDev.device.Device
 import com.bairock.iot.intelDev.device.IStateDev
 import com.bairock.iot.intelDev.device.devcollect.DevCollect
+import com.bairock.iot.intelDev.user.MyHome
 
-class MyOnNameChangedListener : Device.OnNameChangedListener {
-    override fun onNameChanged(p0: Device, p1: String?) {
-        refreshUi(p0)
-        updateDeviceDao(p0)
+class MyOnNameChangedListener : MyHome.OnNameChangedListener {
+    override fun onNameChanged(p0: MyHome, p1: String?) {
+        if(p0 is Device){
+            refreshUi(device = p0)
+            updateDeviceDao(device = p0)
+        }
     }
 
     private fun refreshUi(device: Device) {

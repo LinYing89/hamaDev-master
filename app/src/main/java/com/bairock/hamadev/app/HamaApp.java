@@ -81,19 +81,19 @@ public class HamaApp extends Application {
     }
 
     public static String getLoginUrl() {
-        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/ClientLoginServlet";
+        return "http://" + Config.INSTANCE.getServerName() + ":8081/hamaSer/ClientLoginServlet";
     }
 
     public static String getPortUrl() {
-        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/GetPortServlet";
+        return "http://" + Config.INSTANCE.getServerName() + ":8081/hamaSer/GetPortServlet";
     }
 
     public static String getCompareVersionUrl(int appVc) {
-        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/CompareAppVersion?appVc=" + appVc + "&debug=" + LogUtils.INSTANCE.getAPP_DBG();
+        return "http://" + Config.INSTANCE.getServerName() + ":8081/hamaSer/CompareAppVersion?appVc=" + appVc + "&debug=" + LogUtils.INSTANCE.getAPP_DBG();
     }
 
     public static String getDownloadAppUrl(String appName) {
-        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/Download?appName=" + appName + "&debug=" + LogUtils.INSTANCE.getAPP_DBG();
+        return "http://" + Config.INSTANCE.getServerName() + ":8081/hamaSer/Download?appName=" + appName + "&debug=" + LogUtils.INSTANCE.getAPP_DBG();
     }
 
     public static void addOfflineDevCoding(Device device) {
