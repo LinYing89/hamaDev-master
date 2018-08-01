@@ -17,7 +17,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 3
-        versionName '3.21'
+        versionName '3.3'
         multiDexEnabled true //Add this
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -73,7 +73,6 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.yanzhenjie:recyclerview-swipe:1.1.4'
-    implementation 'com.hikvision.ezviz:ezviz-sdk:4.8.3'
     testImplementation 'junit:junit:4.12'
     //    debugApi 'com.amitshekhar.android:debug-db:1.0.0'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind

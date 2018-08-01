@@ -41,10 +41,10 @@ public class ConditionActivity extends AppCompatActivity {
     private Spinner spinnerSymbol;
     //spinnerTriggerStyle = (Spinner)findViewById(R.id.spinnerTriggerStyle);
     //private Spinner spinnerTriggerStyle;
-    private Spinner spinnerValue = (Spinner)findViewById(R.id.spinnerValue);
+    private Spinner spinnerValue;
     private EditText editValue;
     private Button btnSave;
-    private Button btnCancel = (Button)findViewById(R.id.btn_cancel);
+    private Button btnCancel;
 
     private List<Device> listDevice;
 
@@ -88,8 +88,10 @@ public class ConditionActivity extends AppCompatActivity {
         spinnerLogic = findViewById(R.id.spinnerLogic);
         spinnerDevice = findViewById(R.id.spinnerDevices);
         spinnerSymbol = findViewById(R.id.spinnerSymbol);
+        spinnerValue = findViewById(R.id.spinnerValue);
         editValue = findViewById(R.id.etxtValue);
         btnSave = findViewById(R.id.btn_save);
+        btnCancel = findViewById(R.id.btn_cancel);
     }
 
     private void setSpinners(){

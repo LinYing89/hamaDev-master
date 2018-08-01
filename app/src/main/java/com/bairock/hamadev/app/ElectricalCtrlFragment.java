@@ -19,7 +19,6 @@ import com.bairock.hamadev.R;
 import com.bairock.hamadev.adapter.RecyclerAdapterElectrical3;
 import com.bairock.hamadev.adapter.RecyclerAdapterElectricalList;
 import com.bairock.hamadev.database.Config;
-import com.bairock.hamadev.video.VideoElectricalFragment;
 import com.bairock.iot.intelDev.device.DevHaveChild;
 import com.bairock.iot.intelDev.device.Device;
 import com.bairock.iot.intelDev.device.IStateDev;
@@ -259,9 +258,6 @@ public class ElectricalCtrlFragment extends Fragment {
                     break;
                 case NOTIFY_ADAPTER:
                     theActivity.adapterElectrical.handler.obtainMessage(msg.arg1, msg.obj).sendToTarget();
-                    if(null != VideoElectricalFragment.Companion.getHandler()){
-                        VideoElectricalFragment.Companion.getHandler().handleMessage(msg);
-                    }
             }
         }
     }

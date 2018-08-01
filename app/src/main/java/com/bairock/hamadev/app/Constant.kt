@@ -1,7 +1,5 @@
 package com.bairock.hamadev.app
 
-import com.ezviz.stream.Utils
-
 object Constant {
     /**
      * screen width

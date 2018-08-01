@@ -1,9 +1,7 @@
 package com.bairock.hamadev.app
 
 import com.bairock.hamadev.database.AlarmMessage
-import java.sql.Time
 import android.content.Intent
-import com.bairock.hamadev.video.VideoPlayActivity
 
 
 object AlarmMessageHelper {

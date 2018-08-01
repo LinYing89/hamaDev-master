@@ -23,7 +23,6 @@ import com.bairock.iot.intelDev.user.DevGroup;
 import com.bairock.iot.intelDev.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencent.tac.messaging.TACMessagingToken;
-import com.videogo.openapi.EZOpenSDK;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,24 +73,23 @@ public class HamaApp extends Application {
 
         LogUtils.INSTANCE.init(this);
 
-        initSDK();
 //        AudioPlayUtil.init(this);
     }
 
     public static String getLoginUrl() {
-        return "http://" + Config.INSTANCE.getServerName() + ":8081/hamaSer/ClientLoginServlet";
+        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/ClientLoginServlet";
     }
 
     public static String getPortUrl() {
-        return "http://" + Config.INSTANCE.getServerName() + ":8081/hamaSer/GetPortServlet";
+        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/GetPortServlet";
     }
 
     public static String getCompareVersionUrl(int appVc) {
-        return "http://" + Config.INSTANCE.getServerName() + ":8081/hamaSer/CompareAppVersion?appVc=" + appVc + "&debug=" + LogUtils.INSTANCE.getAPP_DBG();
+        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/CompareAppVersion?appVc=" + appVc + "&debug=" + LogUtils.INSTANCE.getAPP_DBG();
     }
 
     public static String getDownloadAppUrl(String appName) {
-        return "http://" + Config.INSTANCE.getServerName() + ":8081/hamaSer/Download?appName=" + appName + "&debug=" + LogUtils.INSTANCE.getAPP_DBG();
+        return "http://" + Config.INSTANCE.getServerName() + "/hamaSer/Download?appName=" + appName + "&debug=" + LogUtils.INSTANCE.getAPP_DBG();
     }
 
     public static void addOfflineDevCoding(Device device) {
@@ -218,19 +216,6 @@ public class HamaApp extends Application {
             }
         }
         return json;
-    }
-
-    public static EZOpenSDK getOpenSDK() {
-        return EZOpenSDK.getInstance();
-    }
-
-    private void initSDK() {
-        EZOpenSDK.showSDKLog(true);
-
-        EZOpenSDK.enableP2P(true);
-
-        String appKey = "3a2cb8b66afb494cb03b273257d3ddd1";
-        EZOpenSDK.initLib(this, appKey);
     }
 
     public static String getGroupTag(){

@@ -158,18 +158,6 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_settings2"
             android:screenOrientation="landscape" />
-        <activity
-            android:name="com.videogo.main.EzvizWebViewActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="landscape" />
-
-        <receiver
-            android:name=".video.EzvizBroadcastReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.videogo.action.OAUTH_SUCCESS_ACTION" />
-            </intent-filter>
-        </receiver>
         <receiver
             android:name=".receiver.DownloadReceiver"
             android:enabled="true"
@@ -184,11 +172,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".video.VideoPlayActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".settings.SelectRemoterActivity"
             android:configChanges="orientation|screenSize"
