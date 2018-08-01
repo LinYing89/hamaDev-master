@@ -60,8 +60,6 @@ public class HamaApp extends Application {
 
         //SERVER_IP = "192.168.2.100";
         //URL_ROOT = "http://" + SERVER_IP + ":8080/hamaSer";
-        //DevServer.PORT = 8000;
-
         //Stetho.initializeWithDefaults(this);
 //        DebugDB.getAddressLog();
         HAMA_CONTEXT = this.getApplicationContext();
