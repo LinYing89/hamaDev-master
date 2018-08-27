@@ -222,7 +222,6 @@ public class WelcomeActivity extends AppCompatActivity {
         userDao.addUser(user);
 
         DevGroup devGroup = new DevGroup("1", "a123", "g1");
-        devGroup.setId(UUID.randomUUID().toString());
         user.addGroup(devGroup);
         DevGroupDao devGroupDao = DevGroupDao.get(HamaApp.HAMA_CONTEXT);
         devGroupDao.clean();
@@ -247,7 +246,6 @@ public class WelcomeActivity extends AppCompatActivity {
         userDao.addUser(user);
 
         DevGroup devGroup = new DevGroup("1", "a123", "g1");
-        devGroup.setId(UUID.randomUUID().toString());
         user.addGroup(devGroup);
         DevGroupDao devGroupDao = DevGroupDao.get(HamaApp.HAMA_CONTEXT);
         devGroupDao.clean();
@@ -264,11 +262,11 @@ public class WelcomeActivity extends AppCompatActivity {
 //        coordinator.addChildDev(devCollectSignal2);
 //        coordinator.addChildDev(devCollectSignal3);
 
-        Device device = DeviceAssistent.createDeviceByMcId(MainCodeHelper.KG_3LU_2TAI, "9999");
-        devGroup.addDevice(device);
-
-        Device device1 = DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_CLIMATE_CONTAINER, "9999");
-        devGroup.addDevice(device1);
+//        Device device = DeviceAssistent.createDeviceByMcId(MainCodeHelper.KG_3LU_2TAI, "9999");
+//        devGroup.addDevice(device);
+//
+//        Device device1 = DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_CLIMATE_CONTAINER, "9999");
+//        devGroup.addDevice(device1);
 
 //        DevCollectSignalContainer devCollectSignalContainer = (DevCollectSignalContainer)DeviceAssistent.createDeviceByMcId(MainCodeHelper.COLLECTOR_SIGNAL_CONTAINER, "9996");
 //        devGroup.addDevice(devCollectSignalContainer);
@@ -291,7 +289,6 @@ public class WelcomeActivity extends AppCompatActivity {
         userDao.addUser(user);
 
         DevGroup devGroup = new DevGroup("1", "a123", "g1");
-        devGroup.setId(UUID.randomUUID().toString());
         user.addGroup(devGroup);
         DevGroupDao devGroupDao = DevGroupDao.get(HamaApp.HAMA_CONTEXT);
         devGroupDao.clean();
@@ -324,7 +321,6 @@ public class WelcomeActivity extends AppCompatActivity {
         userDao.addUser(user);
 
         DevGroup devGroup = new DevGroup("1", "a123", "g1");
-        devGroup.setId(UUID.randomUUID().toString());
         user.addGroup(devGroup);
         DevGroupDao devGroupDao = DevGroupDao.get(HamaApp.HAMA_CONTEXT);
         devGroupDao.clean();
@@ -360,7 +356,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 Constant.INSTANCE.setDisplayHeight(displayMetrics.heightPixels);
 
                 //没有可搜索设备时单机测试用
-//                testDevice();
+                testDevice();
 //                testDeviceBx();
 //                testCoordinator();
 //                testRemoterContainer();

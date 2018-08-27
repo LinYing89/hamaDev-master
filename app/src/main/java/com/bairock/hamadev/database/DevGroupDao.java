@@ -32,7 +32,7 @@ public class DevGroupDao {
 
     private static ContentValues getContentValues(DevGroup group) {
         ContentValues values = new ContentValues();
-        values.put(DbSb.TabDevGroup.Cols.ID, group.getId());
+        //values.put(DbSb.TabDevGroup.Cols.ID, group.getId());
         values.put(DbSb.TabDevGroup.Cols.NAME, group.getName());
         values.put(DbSb.TabDevGroup.Cols.PET_NAME, group.getPetName());
         values.put(DbSb.TabDevGroup.Cols.PSD, group.getPsd());
@@ -49,7 +49,7 @@ public class DevGroupDao {
         ContentValues values = getContentValues(group);
         mDatabase.update(DbSb.TabDevGroup.NAME, values,
                 "id = ?",
-                new String[] { group.getId() });
+                new String[] { String.valueOf(group.getId()) });
     }
 
     public DevGroup find() {

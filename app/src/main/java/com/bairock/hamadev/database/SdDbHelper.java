@@ -52,7 +52,7 @@ public class SdDbHelper extends SQLiteOpenHelper {
         );
         //创建devGroup表
         db.execSQL("create table " + TabDevGroup.NAME + "(" +
-                TabDevGroup.Cols.ID + " PRIMARY KEY NOT NULL, " +
+                TabDevGroup.Cols.ID + " integer primary key autoincrement, " +
                 TabDevGroup.Cols.NAME + ", " +
                 TabDevGroup.Cols.PET_NAME + ", " +
                 TabDevGroup.Cols.PSD + ", " +

@@ -17,7 +17,7 @@ class GroupCursorWrapper extends CursorWrapper {
     }
 
     DevGroup getDevGroup() {
-        String id = getString(getColumnIndex(DbSb.TabDevGroup.Cols.ID));
+        long id = Long.valueOf(getString(getColumnIndex(DbSb.TabDevGroup.Cols.ID)));
         String name = getString(getColumnIndex(DbSb.TabDevGroup.Cols.NAME));
         String petName = getString(getColumnIndex(DbSb.TabDevGroup.Cols.PET_NAME));
         String psd = getString(getColumnIndex(DbSb.TabDevGroup.Cols.PSD));

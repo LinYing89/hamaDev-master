@@ -88,8 +88,8 @@ public class LinkageHolderDao {
         return createLinkageHolder(cursor);
     }
 
-    public List<LinkageHolder> findByDevGroupId(String devGroupId) {
-        LinkageHolderWrapper cursor = query(DbSb.TabLinkageHolder.Cols.DEVGROUP_ID + " =?", new String[]{devGroupId});
+    public List<LinkageHolder> findByDevGroupId(long devGroupId) {
+        LinkageHolderWrapper cursor = query(DbSb.TabLinkageHolder.Cols.DEVGROUP_ID + " =?", new String[]{String.valueOf(devGroupId)});
         return createLinkageHolder(cursor);
     }
 

@@ -215,16 +215,20 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
             showProgressDialog("上传");
-            UploadClient uploadClient = new UploadClient();
-            uploadClient.link();
+            UpDownloadHelper helper = new UpDownloadHelper(handler);
+            helper.uploadUser();
+//            UploadClient uploadClient = new UploadClient();
+//            uploadClient.link();
         } else if (id == R.id.nav_download) {
             if (IS_ADMIN) {
                 Snackbar.make(getWindow().getDecorView(), "未登录，不能下载", Snackbar.LENGTH_SHORT).show();
                 return true;
             }
             showProgressDialog("下载");
-            DownloadClient downloadClient = new DownloadClient();
-            downloadClient.link();
+            UpDownloadHelper helper = new UpDownloadHelper(handler);
+            helper.downloadUser(HamaApp.USER.getName());
+//            DownloadClient downloadClient = new DownloadClient();
+//            downloadClient.link();
         } else if (id == R.id.nav_exit) {
             new AlertDialog.Builder(MainActivity.this)
                     .setMessage("确定退出账号吗")
@@ -276,19 +280,19 @@ public class MainActivity extends AppCompatActivity
             MainActivity theActivity = mActivity.get();
             switch (msg.what) {
                 case UPLOAD_FAIL:
-                    Snackbar.make(theActivity.toolbar, "上传失败", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(theActivity.toolbar, "上传失败:" + msg.obj, Snackbar.LENGTH_LONG).show();
                     theActivity.closeProgressDialog();
                     break;
                 case UPLOAD_OK:
-                    Snackbar.make(theActivity.toolbar, "上传成功", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(theActivity.toolbar, "上传成功", Snackbar.LENGTH_LONG).show();
                     theActivity.closeProgressDialog();
                     break;
                 case DOWNLOAD_FAIL:
-                    Snackbar.make(theActivity.toolbar, "下载失败", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(theActivity.toolbar, "下载失败:" + msg.obj, Snackbar.LENGTH_LONG).show();
                     theActivity.closeProgressDialog();
                     break;
                 case DOWNLOAD_OK:
-                    Snackbar.make(theActivity.toolbar, "下载成功", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(theActivity.toolbar, "下载成功", Snackbar.LENGTH_LONG).show();
                     theActivity.closeProgressDialog();
                     break;
                 case REFRESH_TITLE:
